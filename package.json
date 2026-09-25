@@ -18,6 +18,16 @@
     "sectors:probe": "tsx scripts/sectors-probe.ts",
     "format": "prettier --write ."
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "prisma",
+      "@prisma/client",
+      "@prisma/engines",
+      "@nestjs/core",
+      "sharp"
+    ]
+  },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "prettier": "^3.4.0",
