@@ -30,6 +30,15 @@ importers:
         specifier: ^3.24.0
         version: 3.25.76
 
+  packages/sectors:
+    dependencies:
+      '@counterpoint/domain':
+        specifier: workspace:*
+        version: link:../domain
+      zod:
+        specifier: ^3.24.0
+        version: 3.25.76
+
 packages:
 
   '@esbuild/aix-ppc64@0.28.2':
