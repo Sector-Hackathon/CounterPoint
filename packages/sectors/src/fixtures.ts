@@ -143,9 +143,9 @@ export const DEV_FIXTURE: FixtureSet = {
   dividends: {
     BBRI: {
       payments: [
-        { date: '2023-03-30', amountPerShare: 288 },
-        { date: '2024-03-28', amountPerShare: 319 },
-        { date: '2025-04-10', amountPerShare: 343 },
+        { date: '2024-03-28', amountPerShare: 288 },
+        { date: '2025-04-10', amountPerShare: 319 },
+        { date: '2026-04-09', amountPerShare: 343 },
       ],
       annualYieldsPct: [
         { year: 2022, yieldPct: 5.2 },

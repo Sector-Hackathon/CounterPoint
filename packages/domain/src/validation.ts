@@ -7,6 +7,7 @@ export interface ValidationIssue {
 }
 
 const PERIOD_TOKENS = [
+  /\b\d{4}-\d{2}-\d{2}\b/g,
   /\bFY\s?\d{4}\b/gi,
   /\b\d{4}\s?Q[1-4]\b/gi,
   /\bQ[1-4]\s?\d{4}\b/gi,

@@ -16,6 +16,11 @@ export interface CheckDefinition {
   metrics: string[];
   /** Whitelisted tools able to produce those metrics. */
   tools: ToolName[];
+  /**
+   * Counterchecks only become eligible once one of these checks has weakened the claim.
+   * This is what makes the investigation path evidence-dependent rather than a fixed checklist.
+   */
+  triggeredBy?: string[];
   /** Deterministic evaluation; `ok: false` marks the evidence invalid for this check. */
   evaluate(values: MetricValues, t: Thresholds): Calc<CheckOutcome>;
 }
@@ -107,6 +112,7 @@ export const absoluteGrowthV1: EvidenceContract = {
       description: 'Net margin fell year-on-year',
       metrics: ['net_margin_change_pp'],
       tools: ['get_quarterly_financials'],
+      triggeredBy: ['revenue_earnings_divergence', 'earnings_growth'],
       evaluate: (v, t) =>
         ok(v.net_margin_change_pp! <= -t.marginDeteriorationPp! ? 'weakens' : 'neutral'),
     },
@@ -315,10 +321,22 @@ export function assess(
   return 'SUPPORTED';
 }
 
-/** Checks still worth investigating: required first, then counterchecks. */
+/**
+ * Checks still worth investigating: required first, then counterchecks. Triggered counterchecks
+ * appear only after one of their trigger checks has weakened the claim.
+ */
 export function openChecks(contract: EvidenceContract, states: CheckState[]): CheckDefinition[] {
   const pending = new Set(states.filter((s) => s.status === 'pending').map((s) => s.checkId));
+  const weakened = new Set(
+    states.filter((s) => s.status === 'completed' && s.outcome === 'weakens').map((s) => s.checkId),
+  );
   return contract.checks
     .filter((c) => pending.has(c.id))
+    .filter((c) => !c.triggeredBy || c.triggeredBy.some((t) => weakened.has(t)))
     .sort((a, b) => (a.kind === b.kind ? 0 : a.kind === 'required' ? -1 : 1));
+}
+
+/** Checks that weakened the claim — the contradictions the replanner reacts to. */
+export function contradictions(states: CheckState[]): string[] {
+  return states.filter((s) => s.status === 'completed' && s.outcome === 'weakens').map((s) => s.checkId);
 }

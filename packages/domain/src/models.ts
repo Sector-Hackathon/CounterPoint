@@ -105,9 +105,19 @@ export const ClaimReport = z.object({
   }),
   supports: z.array(ReportStatement),
   weakens: z.array(ReportStatement),
+  context: z.array(ReportStatement),
   missing: z.array(z.string()),
   interpretation: ReportStatement.nullable(),
   stopReason: StopReason.nullable(),
+  peerSet: z
+    .object({
+      policyVersion: z.string(),
+      period: z.string(),
+      included: z.array(z.string()),
+      excluded: z.array(z.object({ ticker: z.string(), reason: z.string() })),
+      minPeers: z.number().int(),
+    })
+    .nullable(),
 });
 export type ClaimReport = z.infer<typeof ClaimReport>;
 

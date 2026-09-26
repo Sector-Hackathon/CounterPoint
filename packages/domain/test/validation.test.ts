@@ -33,6 +33,10 @@ describe('validation', () => {
     ]);
   });
 
+  it('ignores ISO dates when extracting numbers', () => {
+    expect(extractNumbers('P/E vs peer median -24.0% (as of 2026-09-24)').map((n) => n.value)).toEqual([-24]);
+  });
+
   it('accepts numbers that match cited evidence at display precision', () => {
     expect(validateStatement({ text: 'Revenue grew 12.3% YoY.', evidenceIds: ['ev-1'] }, evidence)).toEqual([]);
     expect(

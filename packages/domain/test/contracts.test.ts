@@ -95,6 +95,14 @@ describe('evidence contracts', () => {
     expect(assess(relativeValuationV1, states, 'YES')).toBe('UNVERIFIABLE');
   });
 
+  it('only opens triggered counterchecks after a contradiction', () => {
+    const steady = evaluateChecks(absoluteGrowthV1, [ev('revenue_yoy_pct', 15), ev('earnings_yoy_pct', 16)]);
+    expect(openChecks(absoluteGrowthV1, steady).map((c) => c.id)).not.toContain('margin_deterioration');
+
+    const diverging = evaluateChecks(absoluteGrowthV1, [ev('revenue_yoy_pct', 15), ev('earnings_yoy_pct', -4)]);
+    expect(openChecks(absoluteGrowthV1, diverging).map((c) => c.id)).toContain('margin_deterioration');
+  });
+
   it('lists open required checks before counterchecks', () => {
     const states = evaluateChecks(absoluteGrowthV1, [ev('revenue_yoy_pct', 15)]);
     const open = openChecks(absoluteGrowthV1, states).map((c) => c.kind);
