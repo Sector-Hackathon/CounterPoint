@@ -32,6 +32,9 @@ importers:
       '@counterpoint/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@counterpoint/eval':
+        specifier: workspace:*
+        version: link:../../packages/eval
       '@counterpoint/sectors':
         specifier: workspace:*
         version: link:../../packages/sectors
@@ -63,6 +66,9 @@ importers:
       prisma:
         specifier: ^6.2.0
         version: 6.19.3(typescript@5.9.3)
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
 
   apps/web:
     dependencies:
@@ -87,6 +93,15 @@ importers:
     dependencies:
       zod:
         specifier: ^3.24.0
+        version: 3.25.76
+
+  packages/eval:
+    dependencies:
+      '@counterpoint/domain':
+        specifier: workspace:*
+        version: link:../domain
+      zod:
+        specifier: ^3.25.0
         version: 3.25.76
 
   packages/sectors:

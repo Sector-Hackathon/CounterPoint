@@ -43,10 +43,10 @@ export class ClaimsService {
 }
 
 const RULES: { type: ClaimType; comparison: 'ABSOLUTE' | 'HISTORICAL' | 'PEER'; re: RegExp }[] = [
-  { type: 'FORWARD_LOOKING', comparison: 'ABSOLUTE', re: /\b(akan|bakal|target|will|going to|to the moon|naik ke|potensi naik)\b/i },
-  { type: 'RELATIVE_VALUATION', comparison: 'PEER', re: /\b(valuasi|valuation|murah|cheap|mahal|expensive|undervalued|per|pbv|p\/e|p\/bv)\b/i },
-  { type: 'DIVIDEND_LEVEL', comparison: 'HISTORICAL', re: /\b(dividen|dividend|yield)\b/i },
-  { type: 'ABSOLUTE_GROWTH', comparison: 'HISTORICAL', re: /\b(growth|tumbuh|pertumbuhan|bertumbuh|laba naik|revenue naik|earnings)\b/i },
+  { type: 'FORWARD_LOOKING', comparison: 'ABSOLUTE', re: /\b(akan|bakal|pasti|target|will|going to|to the moon|naik ke|potensi naik|rerating)\b/i },
+  { type: 'RELATIVE_VALUATION', comparison: 'PEER', re: /\b(valuasi\w*|valuation|murah|cheap|mahal|expensive|undervalued|per|pbv|p\/e|p\/bv)\b/i },
+  { type: 'DIVIDEND_LEVEL', comparison: 'HISTORICAL', re: /\b(dividen\w*|dividend\w*|yield)\b/i },
+  { type: 'ABSOLUTE_GROWTH', comparison: 'HISTORICAL', re: /\b(growth|tumbuh\w*|pertumbuhan\w*|bertumbuh|laba naik|revenue naik|earnings)\b/i },
 ];
 
 /**
