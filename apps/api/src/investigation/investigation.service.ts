@@ -1,0 +1,102 @@
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
+import type { SectorsDataSource } from '@counterpoint/sectors';
+import { PrismaService } from '../prisma/prisma.service';
+import { LlmService } from '../llm/llm.service';
+import { SECTORS_SOURCE } from '../sectors/sectors.module';
+import { ReportsService } from '../reports/reports.service';
+import { toClaim } from '../common/mappers';
+import { DeterministicPlanner, investigateClaim, type Planner } from './engine';
+import { LlmPlanner } from './llm-planner';
+
+@Injectable()
+export class InvestigationService {
+  private readonly logger = new Logger(InvestigationService.name);
+  private readonly running = new Set<string>();
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly llm: LlmService,
+    private readonly reports: ReportsService,
+    @Inject(SECTORS_SOURCE) private readonly source: SectorsDataSource,
+  ) {}
+
+  private planner(): Planner {
+    return this.llm.available ? new LlmPlanner(this.llm) : new DeterministicPlanner();
+  }
+
+  /** Idempotent: a session already investigating or finished is left untouched. */
+  async start(sessionId: string): Promise<boolean> {
+    if (this.running.has(sessionId)) return false;
+    const updated = await this.prisma.thesisSession.updateMany({
+      where: { id: sessionId, status: 'CLAIMS_EXTRACTED' },
+      data: { status: 'INVESTIGATING' },
+    });
+    if (updated.count === 0) return false;
+    this.running.add(sessionId);
+    void this.run(sessionId).finally(() => this.running.delete(sessionId));
+    return true;
+  }
+
+  private async run(sessionId: string) {
+    const started = Date.now();
+    try {
+      const claims = await this.prisma.claim.findMany({ where: { sessionId }, orderBy: { ordinal: 'asc' } });
+      const planner = this.planner();
+      let partial = false;
+
+      for (const row of claims) {
+        const claim = toClaim(row);
+        const result = await investigateClaim(claim, {
+          source: this.source,
+          planner,
+          newId: randomUUID,
+          onTrace: async (t) => {
+            await this.prisma.executionTrace.create({
+              data: {
+                id: t.id,
+                claimId: t.claimId,
+                sequence: t.sequence,
+                action: t.action,
+                reason: t.reason,
+                startedAt: new Date(t.startedAt),
+                finishedAt: t.finishedAt ? new Date(t.finishedAt) : null,
+                evidenceIds: t.evidenceIds,
+                resultStatus: t.resultStatus,
+                stopReason: t.stopReason,
+                planner: planner.name,
+              },
+            });
+          },
+        });
+
+        if (result.evidence.length) {
+          await this.prisma.evidenceItem.createMany({ data: result.evidence.map((e) => ({ ...e })) });
+        }
+        await this.prisma.claim.update({
+          where: { id: claim.id },
+          data: {
+            assessment: result.assessment,
+            stopReason: result.stopReason,
+            checkStates: { states: result.states, coverage: result.coverage } as object,
+            peerSet: (result.peerSet as object | null) ?? undefined,
+          },
+        });
+        if (result.stopReason === 'BUDGET_EXHAUSTED' || result.stopReason === 'ERROR') partial = true;
+        this.logger.log(
+          JSON.stringify({ event: 'claim_investigated', sessionId, claimId: claim.id, stopReason: result.stopReason, assessment: result.assessment, toolCalls: result.trace.filter((t) => t.action.startsWith('get_')).length }),
+        );
+      }
+
+      await this.reports.build(sessionId);
+      await this.prisma.thesisSession.update({ where: { id: sessionId }, data: { status: partial ? 'PARTIAL' : 'COMPLETED' } });
+      this.logger.log(JSON.stringify({ event: 'session_completed', sessionId, ms: Date.now() - started }));
+    } catch (err) {
+      this.logger.error(`investigation failed for ${sessionId}: ${(err as Error).stack}`);
+      await this.prisma.thesisSession.update({
+        where: { id: sessionId },
+        data: { status: 'FAILED', error: (err as Error).message },
+      });
+    }
+  }
+}

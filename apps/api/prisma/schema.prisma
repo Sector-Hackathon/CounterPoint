@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ThesisSession {
+  id            String   @id @default(uuid())
+  rawThesis     String
+  status        String
+  dataMode      String
+  error         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  finalReportId String?
+
+  entities Entity[]
+  claims   Claim[]
+  reports  Report[]
+}
+
+model Entity {
+  id               String  @id @default(uuid())
+  sessionId        String
+  mention          String
+  ticker           String?
+  canonicalName    String?
+  resolutionStatus String
+  candidates       Json    @default("[]")
+  isPrimary        Boolean @default(false)
+
+  session ThesisSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+}
+
+model Claim {
+  id             String  @id @default(uuid())
+  sessionId      String
+  ordinal        Int
+  originalText   String
+  normalizedText String
+  ticker         String?
+  entityMention  String?
+  claimType      String
+  comparisonType String
+  timeScope      String?
+  verifiability  String
+  contractId     String?
+  assessment     String?
+  scopeNote      String?
+  stopReason     String?
+  checkStates    Json?
+  peerSet        Json?
+  extractor      String
+
+  session  ThesisSession    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  evidence EvidenceItem[]
+  trace    ExecutionTrace[]
+
+  @@index([sessionId])
+}
+
+model EvidenceItem {
+  id                 String   @id @default(uuid())
+  claimId            String
+  checkId            String
+  metric             String
+  ticker             String
+  value              Float?
+  unit               String
+  economicPeriod     String?
+  comparisonPeriod   String?
+  observationDate    String?
+  retrievalTime      String
+  sourceLocator      String
+  derivedFrom        String[]
+  calculationVersion String?
+  status             String
+  note               String?
+  createdAt          DateTime @default(now())
+
+  claim Claim @relation(fields: [claimId], references: [id], onDelete: Cascade)
+
+  @@index([claimId])
+}
+
+model ExecutionTrace {
+  id           String    @id @default(uuid())
+  claimId      String
+  sequence     Int
+  action       String
+  reason       String
+  startedAt    DateTime
+  finishedAt   DateTime?
+  evidenceIds  String[]
+  resultStatus String
+  stopReason   String?
+  planner      String?
+
+  claim Claim @relation(fields: [claimId], references: [id], onDelete: Cascade)
+
+  @@index([claimId, sequence])
+}
+
+model Report {
+  id               String   @id @default(uuid())
+  sessionId        String
+  content          Json
+  validationStatus String
+  validationIssues Json     @default("[]")
+  modelVersion     String?
+  promptVersion    String?
+  createdAt        DateTime @default(now())
+
+  session ThesisSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+}
