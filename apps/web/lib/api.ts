@@ -98,7 +98,17 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     headers: { 'content-type': 'application/json', ...(init?.headers ?? {}) },
     cache: 'no-store',
   });
-  if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
+  if (!res.ok) {
+    const body = await res.text();
+    let message = body;
+    try {
+      const parsed = JSON.parse(body) as { message?: unknown };
+      if (typeof parsed.message === 'string') message = parsed.message;
+    } catch {
+      // non-JSON error body; show it as-is
+    }
+    throw new Error(message || `Request failed (${res.status})`);
+  }
   return res.json() as Promise<T>;
 }
 

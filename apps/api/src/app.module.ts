@@ -9,6 +9,7 @@ import { ReportsService } from './reports/reports.service';
 import { InvestigationService } from './investigation/investigation.service';
 import { ThesisService } from './thesis/thesis.service';
 import { ThesisController } from './thesis/thesis.controller';
+import { UsageLimiter } from './thesis/usage-limiter';
 import { EvidenceController } from './evidence/evidence.controller';
 
 @Controller()
@@ -32,6 +33,6 @@ class HealthController {
 @Module({
   imports: [PrismaModule, SectorsModule],
   controllers: [HealthController, ThesisController, EvidenceController],
-  providers: [LlmService, ClaimsService, EntityService, ReportsService, InvestigationService, ThesisService],
+  providers: [LlmService, ClaimsService, EntityService, ReportsService, InvestigationService, ThesisService, UsageLimiter],
 })
 export class AppModule {}

@@ -1,4 +1,5 @@
-import { BadRequestException, Body, Controller, Get, HttpCode, NotFoundException, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpCode, Ip, NotFoundException, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import { UsageLimiter } from './usage-limiter';
 import { z } from 'zod';
 import { ThesisService } from './thesis.service';
 import { InvestigationService } from '../investigation/investigation.service';
@@ -19,11 +20,13 @@ export class ThesisController {
     private readonly theses: ThesisService,
     private readonly investigation: InvestigationService,
     private readonly reports: ReportsService,
+    private readonly limiter: UsageLimiter,
   ) {}
 
   @Post()
-  async create(@Body() body: unknown) {
+  async create(@Body() body: unknown, @Ip() ip: string) {
     const { thesis } = parse(CreateThesis, body);
+    await this.limiter.check(ip);
     const session = await this.theses.create(thesis);
     return { id: session.id, status: session.status };
   }
