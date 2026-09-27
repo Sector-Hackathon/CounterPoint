@@ -87,7 +87,7 @@ export const absoluteGrowthV1: EvidenceContract = {
     {
       id: 'growth_deceleration',
       kind: 'counter',
-      description: 'Revenue growth slowed materially versus the prior quarter',
+      description: 'Revenue growth trend versus the prior quarter (deceleration check)',
       metrics: ['revenue_yoy_pct', 'revenue_yoy_pct_prev_quarter'],
       tools: ['get_quarterly_financials'],
       evaluate: (v, t) =>
@@ -100,7 +100,7 @@ export const absoluteGrowthV1: EvidenceContract = {
     {
       id: 'revenue_earnings_divergence',
       kind: 'counter',
-      description: 'Earnings growth lags revenue growth materially',
+      description: 'Earnings growth versus revenue growth (divergence check)',
       metrics: ['revenue_yoy_pct', 'earnings_yoy_pct'],
       tools: ['get_quarterly_financials'],
       evaluate: (v, t) =>
@@ -109,7 +109,7 @@ export const absoluteGrowthV1: EvidenceContract = {
     {
       id: 'margin_deterioration',
       kind: 'counter',
-      description: 'Net margin fell year-on-year',
+      description: 'Net margin change year-on-year (deterioration check)',
       metrics: ['net_margin_change_pp'],
       tools: ['get_quarterly_financials'],
       triggeredBy: ['revenue_earnings_divergence', 'earnings_growth'],
@@ -153,7 +153,7 @@ export const dividendLevelV1: EvidenceContract = {
     {
       id: 'dividend_recency',
       kind: 'required',
-      description: 'A dividend was paid within the relevant period',
+      description: 'Time since the latest dividend payment (recency check)',
       metrics: ['last_dividend_age_days'],
       tools: ['get_dividend_history'],
       evaluate: (v, t) =>
@@ -162,7 +162,7 @@ export const dividendLevelV1: EvidenceContract = {
     {
       id: 'one_off_dividend',
       kind: 'counter',
-      description: 'Latest dividend is a spike versus prior payments',
+      description: 'Latest dividend versus prior payments (one-off check)',
       metrics: ['latest_dividend_vs_prior_median_pct'],
       tools: ['get_dividend_history'],
       evaluate: (v, t) =>
@@ -171,7 +171,7 @@ export const dividendLevelV1: EvidenceContract = {
     {
       id: 'payout_coverage',
       kind: 'counter',
-      description: 'Dividends exceed earnings',
+      description: 'Payout ratio (coverage check)',
       metrics: ['payout_ratio_pct'],
       tools: ['get_dividend_history', 'get_annual_financials'],
       evaluate: (v, t) => ok(v.payout_ratio_pct! > t.maxPayoutPct! ? 'weakens' : 'neutral'),
@@ -204,7 +204,7 @@ export const relativeValuationV1: EvidenceContract = {
     {
       id: 'peer_set',
       kind: 'required',
-      description: 'Frozen valid peer set meets minimum size',
+      description: 'Size of the frozen valid peer set',
       metrics: ['peer_count'],
       tools: ['get_peer_candidates'],
       evaluate: (v, t) =>
@@ -223,7 +223,7 @@ export const relativeValuationV1: EvidenceContract = {
     {
       id: 'pbv_cross_check',
       kind: 'counter',
-      description: 'Target is not below peer median on P/BV',
+      description: 'Target P/BV versus frozen peer median (cross-check)',
       metrics: ['pbv_vs_peer_median_pct'],
       tools: ['get_valuation_metrics', 'get_peer_candidates'],
       evaluate: (v) => ok(v.pbv_vs_peer_median_pct! >= 0 ? 'weakens' : 'neutral'),
