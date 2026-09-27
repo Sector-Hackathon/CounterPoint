@@ -38,7 +38,7 @@ pnpm dev:web                    # http://localhost:3000
 | Setting | Unset | Set |
 | --- | --- | --- |
 | `SECTORS_API_KEY` | Synthetic fixture data (`fixture:` locators, labelled in the UI) | Live Sectors API |
-| `ANTHROPIC_API_KEY` | Heuristic claim extractor + deterministic planner (labelled `heuristic-v1` / `deterministic-v1`) | Claude structured extraction, planner, and bounded interpretation (`LLM_MODEL`, default `claude-opus-5`) |
+| `LLM_PROVIDER` + that provider's key | Heuristic claim extractor + deterministic planner (labelled `heuristic-v1` / `deterministic-v1`) | LLM structured extraction, planner, and bounded interpretation. `openai` uses `OPENAI_API_KEY` / `OPENAI_MODEL`; `anthropic` uses `ANTHROPIC_API_KEY` / `ANTHROPIC_MODEL` |
 
 Assessments are always produced by deterministic contract rules, never by the LLM.
 
