@@ -7,6 +7,9 @@ import {
   adaptQuarterly,
   adaptSearch,
   adaptValuation,
+  peerQuery,
+  sanitizeSearchTerm,
+  searchQuery,
 } from './adapters';
 import { SectorsHttpClient, SectorsHttpError } from './http';
 import type { SectorsDataSource } from './types';
@@ -15,7 +18,8 @@ export class HttpSectorsDataSource implements SectorsDataSource {
   constructor(private readonly http: SectorsHttpClient) {}
 
   async searchCompanies(query: string) {
-    return adaptSearch(await this.http.get(ENDPOINTS.search()), query);
+    if (sanitizeSearchTerm(query).length < 2) return [];
+    return adaptSearch(await this.http.get(ENDPOINTS.companies(), searchQuery(query)));
   }
 
   async getCompanyProfile(ticker: string) {
@@ -44,9 +48,6 @@ export class HttpSectorsDataSource implements SectorsDataSource {
   }
 
   async getPeerCandidates(subsector: string) {
-    return adaptPeerCandidates(
-      await this.http.get(ENDPOINTS.subsectorCompanies(), { sub_sector: subsector }),
-      subsector,
-    );
+    return adaptPeerCandidates(await this.http.get(ENDPOINTS.companies(), peerQuery(subsector)), subsector);
   }
 }

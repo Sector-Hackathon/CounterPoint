@@ -68,6 +68,6 @@ Results are written to `evals/results/` (git-ignored). Only measured results sho
 
 ## Status
 
-Scaffold implementing the P0 vertical slice. Before relying on live data, run the data spike (`pnpm sectors:probe BBRI`) and verify the endpoint and field mapping in `packages/sectors/src/adapters.ts`. Contract thresholds are marked provisional; see [docs/architecture.md](docs/architecture.md).
+P0 vertical slice verified end to end on live Sectors v2 data (see [docs/data-spike.md](docs/data-spike.md); run `pnpm --filter @counterpoint/api live-check`). Contract thresholds are still provisional; see [docs/architecture.md](docs/architecture.md).
 
 Information and analysis only; not investment advice.

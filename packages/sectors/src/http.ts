@@ -43,7 +43,7 @@ export class SectorsHttpClient {
 
   constructor(private readonly opts: SectorsHttpOptions) {
     if (!opts.apiKey) throw new Error('SECTORS_API_KEY is required');
-    this.baseUrl = (opts.baseUrl ?? 'https://api.sectors.app/v1').replace(/\/$/, '');
+    this.baseUrl = (opts.baseUrl ?? 'https://api.sectors.app/v2').replace(/\/$/, '');
     this.fetchImpl = opts.fetchImpl ?? fetch;
   }
 

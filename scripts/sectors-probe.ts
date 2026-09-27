@@ -9,7 +9,7 @@ import { join } from 'node:path';
 
 const ticker = (process.argv[2] ?? 'BBRI').toUpperCase();
 const apiKey = process.env.SECTORS_API_KEY;
-const base = (process.env.SECTORS_BASE_URL ?? 'https://api.sectors.app/v1').replace(/\/$/, '');
+const base = (process.env.SECTORS_BASE_URL ?? 'https://api.sectors.app/v2').replace(/\/$/, '');
 if (!apiKey) {
   console.error('SECTORS_API_KEY is not set');
   process.exit(1);
