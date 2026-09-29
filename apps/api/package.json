@@ -10,7 +10,7 @@
     "test": "vitest run",
     "eval": "tsx scripts/run-eval.ts",
     "live-check": "tsx scripts/live-check.ts",
-    "db:push": "prisma db push",
+    "db:push": "node --env-file-if-exists=../../.env node_modules/prisma/build/index.js db push",
     "db:generate": "prisma generate"
   },
   "dependencies": {
