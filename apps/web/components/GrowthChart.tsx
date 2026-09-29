@@ -16,8 +16,8 @@ const SERIES = [
 const W = 560;
 const H = 240;
 const PAD = { top: 20, right: 12, bottom: 28, left: 40 };
-const BAR = 18;
-const GAP = 2;
+const BAR = 26;
+const GAP = 3;
 const R = 4;
 
 /** Bar with only the data end rounded; the baseline end stays square. */

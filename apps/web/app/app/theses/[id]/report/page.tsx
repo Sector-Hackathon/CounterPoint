@@ -21,30 +21,36 @@ export default function Report() {
       .catch((err: Error) => setError(err.message));
   }, [id]);
 
-  if (error) return <main><p className="error" role="alert">{error}</p></main>;
-  if (!report || !session) return <main><p className="muted">Loading report…</p></main>;
+  if (error) return <p className="error" role="alert">{error}</p>;
+  if (!report || !session) return <p className="muted">Loading report…</p>;
 
   const claimText = new Map(session.claims.map((c) => [c.id, c]));
 
   return (
-    <main>
-      <p><Link href={`/theses/${id}`}>← Investigation</Link></p>
-      <h1>Evidence report</h1>
-      <blockquote className="card" style={{ margin: 0 }}>“{session.rawThesis}”</blockquote>
-      <div className="row" style={{ marginTop: 10 }}>
-        <span className="tag">Validation: {report.validationStatus}</span>
-        {session.dataMode === 'fixture' && <span className="tag">Synthetic fixture data — not live Sectors</span>}
+    <>
+      <div className="page-head">
+        <div>
+          <p style={{ margin: '0 0 6px' }}><Link href={`/app/theses/${id}`}>← Investigation</Link></p>
+          <h1>Evidence report</h1>
+        </div>
+        <div className="row">
+          <span className="tag">Validation: {report.validationStatus}</span>
+          {session.dataMode === 'fixture' && <span className="tag">Synthetic fixture data, not live Sectors</span>}
+        </div>
       </div>
+      <blockquote className="card" style={{ margin: 0 }}>“{session.rawThesis}”</blockquote>
       {report.validationStatus === 'REPAIRED' && (
         <p className="muted">Some statements were removed because a number could not be traced to stored evidence.</p>
       )}
 
-      {report.claims.map((c) => (
-        <ClaimSection key={c.claimId} report={c} claim={claimText.get(c.claimId)} />
-      ))}
+      <div className="stack" style={{ marginTop: 16 }}>
+        {report.claims.map((c) => (
+          <ClaimSection key={c.claimId} report={c} claim={claimText.get(c.claimId)} />
+        ))}
+      </div>
 
-      <p className="notice">{report.disclaimer}</p>
-    </main>
+      <p className="notice" style={{ marginTop: 20 }}>{report.disclaimer}</p>
+    </>
   );
 }
 

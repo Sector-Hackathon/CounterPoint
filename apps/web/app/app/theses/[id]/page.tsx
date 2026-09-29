@@ -41,70 +41,78 @@ export default function Investigation() {
     return () => clearInterval(t);
   }, [session, load]);
 
-  if (error) return <main><p className="error" role="alert">{error}</p></main>;
-  if (!session) return <main><p className="muted">Loading…</p></main>;
+  if (error) return <p className="error" role="alert">{error}</p>;
+  if (!session) return <p className="muted">Loading…</p>;
 
   const done = session.status === 'COMPLETED' || session.status === 'PARTIAL';
 
   return (
-    <main>
-      <p><Link href="/">← New thesis</Link></p>
-      <h1>Investigation</h1>
+    <>
+      <div className="page-head">
+        <div>
+          <p style={{ margin: '0 0 6px' }}><Link href="/app/verify">← New check</Link></p>
+          <h1>Investigation</h1>
+        </div>
+        <div className="row">
+          {session.status === 'CLAIMS_EXTRACTED' && (
+            <button onClick={async () => { await api.investigate(id); void load(); }}>Investigate evidence</button>
+          )}
+          {done && <Link className="button" href={`/app/theses/${id}/report`}>View evidence report</Link>}
+        </div>
+      </div>
+
       <blockquote className="card" style={{ margin: 0 }}>“{session.rawThesis}”</blockquote>
 
       <div className="row" style={{ marginTop: 12 }} aria-live="polite">
         <span className="tag">{session.status.replace('_', ' ')}</span>
-        <span>{STATUS_TEXT[session.status] ?? session.status}</span>
-        {session.dataMode === 'fixture' && <span className="tag">Synthetic fixture data — not live Sectors</span>}
+        <span className="muted">{STATUS_TEXT[session.status] ?? session.status}</span>
+        {session.dataMode === 'fixture' && <span className="tag">Synthetic fixture data, not live Sectors</span>}
       </div>
       {session.error && <p className="error">{session.error}</p>}
 
       <h2>Detected companies</h2>
       {session.entities.length === 0 && <p className="muted">No company detected yet.</p>}
-      {session.entities.map((e) => (
-        <EntityRow key={e.id} sessionId={id} entity={e} onConfirmed={setSession} />
-      ))}
+      <div className="stack">
+        {session.entities.map((e) => (
+          <EntityRow key={e.id} sessionId={id} entity={e} onConfirmed={setSession} />
+        ))}
+      </div>
 
       <h2>Claims</h2>
-      {session.claims.map((c) => (
-        <section key={c.id} className="card">
-          <div className="row">
-            <AssessmentBadge value={c.assessment} />
-            <span className="tag">{c.claimType.replace(/_/g, ' ')}</span>
-            <span className="tag">Verifiable: {c.verifiability}</span>
-            {c.ticker && <span className="tag">{c.ticker}</span>}
-          </div>
-          <p style={{ margin: '10px 0 4px' }}><strong>“{c.originalText}”</strong></p>
-          <p className="muted" style={{ margin: 0 }}>{c.normalizedText}</p>
-          {c.scopeNote && <p className="muted">{c.scopeNote}</p>}
+      <div className="stack">
+        {session.claims.map((c) => (
+          <section key={c.id} className="card">
+            <div className="row">
+              <AssessmentBadge value={c.assessment} />
+              <span className="tag">{c.claimType.replace(/_/g, ' ')}</span>
+              <span className="tag">Verifiable: {c.verifiability}</span>
+              {c.ticker && <span className="tag">{c.ticker}</span>}
+            </div>
+            <p style={{ margin: '12px 0 4px' }}><strong>“{c.originalText}”</strong></p>
+            <p className="muted" style={{ margin: 0 }}>{c.normalizedText}</p>
+            {c.scopeNote && <p className="muted">{c.scopeNote}</p>}
 
-          {c.trace.length > 0 && (
-            <details open={!done}>
-              <summary>Execution trace ({c.trace.filter((t) => t.action.startsWith('get_')).length} tool calls)</summary>
-              <ol className="trace">
-                {c.trace.map((t) => (
-                  <li key={t.id}>
-                    <span className="action">{t.action}</span>{' '}
-                    {t.resultStatus !== 'OK' && <span className="tag">{t.resultStatus}</span>} {t.reason}
-                    {t.stopReason && <span className="tag"> stop: {t.stopReason}</span>}
-                  </li>
-                ))}
-              </ol>
-            </details>
-          )}
-        </section>
-      ))}
-      {session.claims.length > 0 && (
-        <p className="muted">Extracted by {session.claims[0]!.extractor}.</p>
-      )}
-
-      <div className="row" style={{ marginTop: 16 }}>
-        {session.status === 'CLAIMS_EXTRACTED' && (
-          <button onClick={async () => { await api.investigate(id); void load(); }}>Investigate evidence</button>
-        )}
-        {done && <Link className="button" href={`/theses/${id}/report`}>View evidence report</Link>}
+            {c.trace.length > 0 && (
+              <details open={!done} style={{ marginTop: 10 }}>
+                <summary>Agent trace ({c.trace.filter((t) => t.action.startsWith('get_')).length} tool calls)</summary>
+                <ol className="trace">
+                  {c.trace.map((t) => (
+                    <li key={t.id} data-kind={t.action.startsWith('get_') ? 'tool' : t.action === 'REPLAN' ? 'replan' : 'step'}>
+                      <span className="action">{t.action}</span>{' '}
+                      {t.resultStatus !== 'OK' && <span className="tag">{t.resultStatus}</span>} {t.reason}
+                      {t.stopReason && <> <span className="tag">stop: {t.stopReason}</span></>}
+                    </li>
+                  ))}
+                </ol>
+              </details>
+            )}
+          </section>
+        ))}
       </div>
-    </main>
+      {session.claims.length > 0 && (
+        <p className="muted" style={{ fontSize: '0.85rem' }}>Extracted by {session.claims[0]!.extractor}.</p>
+      )}
+    </>
   );
 }
 
