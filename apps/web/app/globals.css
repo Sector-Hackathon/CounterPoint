@@ -11,6 +11,11 @@
   --st-not: #5b3b7a;
   --st-unverifiable: #5f5f5f;
   --radius: 10px;
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --axis-text: #898781;
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   color-scheme: light;
 }
@@ -28,6 +33,10 @@
     --st-partial: #d9b36b;
     --st-not: #b99ae0;
     --st-unverifiable: #a8a8a8;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --grid: #2c2c2a;
+    --axis: #383835;
     color-scheme: dark;
   }
 }
@@ -209,4 +218,218 @@ td {
 .error {
   color: var(--st-not);
   font-weight: 600;
+}
+
+/* Site navigation */
+.nav {
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.nav-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+}
+.nav a:hover {
+  color: var(--accent);
+}
+.nav .brand {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin-right: auto;
+}
+.preview-pill {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px dashed var(--muted);
+  color: var(--muted);
+  margin-left: 4px;
+  vertical-align: middle;
+}
+.preview-banner {
+  border: 1px dashed var(--muted);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+main.wide {
+  max-width: 1080px;
+}
+
+/* Grids */
+.grid {
+  display: grid;
+  gap: 14px;
+}
+.grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 18px;
+}
+@media (max-width: 760px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plan {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.plan.featured {
+  border: 2px solid var(--accent);
+}
+.plan .price {
+  font-size: 1.7rem;
+  font-weight: 800;
+}
+.plan ul {
+  padding-left: 18px;
+  margin: 4px 0 12px;
+  flex: 1;
+}
+
+.ws-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid transparent;
+  padding: 8px 10px;
+  font-weight: 500;
+}
+.ws-item[aria-current='true'] {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+/* Chart */
+.chart-wrap {
+  position: relative;
+}
+.chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.chart .gridline {
+  stroke: var(--grid);
+  stroke-width: 1;
+}
+.chart .baseline {
+  stroke: var(--axis);
+  stroke-width: 1;
+}
+.chart .tick {
+  fill: var(--axis-text);
+  font-size: 11px;
+}
+.chart .value-label {
+  fill: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+.legend {
+  display: flex;
+  gap: 16px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 6px 0;
+}
+.swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin-right: 6px;
+  vertical-align: baseline;
+}
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.82rem;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.12);
+  white-space: nowrap;
+  transform: translate(-50%, -110%);
+}
+
+/* Telegram mock */
+.chat {
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.88rem;
+}
+.bubble {
+  max-width: 88%;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.bubble.me {
+  align-self: flex-end;
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--accent);
+}
+.bubble .who {
+  font-size: 0.75rem;
+  font-weight: 700;
+  opacity: 0.75;
+}
+.bubble .actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.bubble .actions span {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3px 8px;
+  font-size: 0.78rem;
+  color: var(--accent);
+}
+
+input[type='email'],
+input[type='password'] {
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  color: inherit;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 }
