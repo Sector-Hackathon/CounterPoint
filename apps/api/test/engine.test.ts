@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { BUDGET, type Claim } from '@counterpoint/domain';
 import { DEV_FIXTURE, FixtureSectorsDataSource, type SectorsDataSource } from '@counterpoint/sectors';
 import { DeterministicPlanner, investigateClaim, type Planner } from '../src/investigation/engine';
-import { composeClaimReport, validateClaimReport } from '../src/reports/composer';
+import { composeClaimReport, interpretationLines, parseStoredClaims, validateClaimReport } from '../src/reports/composer';
 
 const source = new FixtureSectorsDataSource(DEV_FIXTURE);
 
@@ -241,5 +241,35 @@ describe('report composer', () => {
     for (const cond of report.changeConditions) {
       expect(r.evidence.some((e) => e.id === cond.evidenceId && e.value === cond.current)).toBe(true);
     }
+  });
+
+  it('does not run bullish counter-hypotheses on a bearish claim', async () => {
+    const c = claim({ claimType: 'RELATIVE_VALUATION', comparisonType: 'PEER', contractId: 'relative-valuation-v2', direction: 'bearish', normalizedText: 'BRIS is expensive versus peers', ticker: 'BRIS' });
+    const r = await run(c);
+    expect(r.trace.some((t) => ['roe_vs_peers', 'own_history', 'price_drawdown'].includes(t.checkId ?? ''))).toBe(false);
+    expect(composeClaimReport({ claim: c, ...r }).changeConditions).toEqual([]);
+  });
+
+  it('fills defaults on reports stored before counterpoint existed (finding 3)', () => {
+    const legacy = {
+      claims: [{
+        claimId: 'c', assessment: 'SUPPORTED', coverage: { required: 1, completed: 1, unavailable: 0, invalid: 0, label: 'l' },
+        supports: [], weakens: [], context: [], missing: [], interpretation: null, stopReason: 'SUFFICIENT', peerSet: null,
+      }],
+      disclaimer: 'd',
+    };
+    const [claimReport] = parseStoredClaims(legacy);
+    expect(claimReport!.counterpoint).toBeNull();
+    expect(claimReport!.changeConditions).toEqual([]);
+  });
+
+  it('gives the interpretation model the confirmed counterpoint lines (finding 5)', async () => {
+    const c = claim({ claimType: 'RELATIVE_VALUATION', comparisonType: 'PEER', contractId: 'relative-valuation-v2' });
+    const r = await run(c);
+    const section = composeClaimReport({ claim: c, ...r });
+    const lines = interpretationLines(section);
+    const confirmed = section.counterpoint!.hypotheses.filter((h) => h.status === 'confirmed');
+    expect(confirmed.length).toBeGreaterThan(0);
+    for (const h of confirmed) expect(lines.some((l) => l.text === h.statement!.text)).toBe(true);
   });
 });

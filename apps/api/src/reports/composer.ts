@@ -1,4 +1,5 @@
 import {
+  ClaimReport as ClaimReportSchema,
   type CheckState,
   type Claim,
   type ClaimReport,
@@ -46,6 +47,7 @@ const METRIC_LABELS: Record<string, string> = {
   drawdown_from_52w_high_pct: 'distance from past-year high',
   peer_median_roe_pct: 'peer median ROE',
   roe_vs_peer_median_pp: 'ROE vs peer median',
+  earnings_minus_revenue_growth_pp: 'net income growth minus revenue growth',
 };
 
 export function formatValue(e: EvidenceItem): string {
@@ -152,7 +154,7 @@ export function composeClaimReport(input: ComposeInput): ClaimReport {
         }
       : null,
     counterpoint: contract && claim.direction === 'bullish' ? { hypotheses, openQuestions: contract.openQuestions ?? [] } : null,
-    changeConditions: contract ? whatWouldChange(contract, states, evidence) : [],
+    changeConditions: contract ? whatWouldChange(contract, states, evidence, claim.direction) : [],
   };
 }
 
@@ -185,4 +187,18 @@ export function validateClaimReport(
     },
     issues,
   };
+}
+
+/** Parses stored report content through the schema so reports saved before v2 get the new defaults. */
+export function parseStoredClaims(content: unknown): ClaimReport[] {
+  const claims = (content as { claims?: unknown[] } | null)?.claims ?? [];
+  return claims.map((c) => ClaimReportSchema.parse(c));
+}
+
+/** Evidence lines the interpretation model may use: supports, weakens, context and confirmed counter-hypotheses. */
+export function interpretationLines(section: ClaimReport): ReportStatement[] {
+  const confirmed = (section.counterpoint?.hypotheses ?? [])
+    .filter((h) => h.status === 'confirmed' && h.statement)
+    .map((h) => h.statement!);
+  return [...section.supports, ...section.weakens, ...confirmed, ...section.context];
 }

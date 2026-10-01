@@ -57,15 +57,15 @@ describe('v2 contracts', () => {
   });
 
   it('confirms the earnings-outpacing-revenue hypothesis as weakens', () => {
-    const states = evaluateChecks(absoluteGrowthV2, [ev('revenue_yoy_pct', 5), ev('earnings_yoy_pct', 30)]);
+    const states = evaluateChecks(absoluteGrowthV2, [ev('earnings_minus_revenue_growth_pp', 25)]);
     const s = states.find((x) => x.checkId === 'earnings_outpacing_revenue') as CheckState;
     expect(s.status).toBe('completed');
     expect(s.outcome).toBe('weakens');
   });
 
-  it('inverts required and counter outcomes for bearish claims, not counterpoint ones', () => {
+  it('inverts required outcomes for bearish claims', () => {
     const states = evaluateChecks(absoluteGrowthV2, [ev('revenue_yoy_pct', 5), ev('earnings_yoy_pct', 30)], 'bearish');
     expect(states.find((x) => x.checkId === 'earnings_growth')!.outcome).toBe('weakens');
-    expect(states.find((x) => x.checkId === 'earnings_outpacing_revenue')!.outcome).toBe('weakens');
+    expect(states.find((x) => x.checkId === 'revenue_earnings_divergence')!.outcome).toBe('neutral');
   });
 });

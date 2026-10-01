@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { LlmService } from '../llm/llm.service';
 import { INTERPRETATION_SYSTEM, InterpretationSchema, PROMPT_VERSION } from '../llm/prompts';
 import { toClaim, toEvidence } from '../common/mappers';
-import { composeClaimReport, validateClaimReport } from './composer';
+import { composeClaimReport, interpretationLines, parseStoredClaims, validateClaimReport } from './composer';
 import type { StopReason, Coverage, Assessment } from '@counterpoint/domain';
 
 interface StoredCheckStates {
@@ -74,7 +74,7 @@ export class ReportsService {
 
   /** Optional bounded interpretation; any number or advice not backed by evidence is stripped by the validator. */
   private async interpret(claimText: string, section: ClaimReport) {
-    const statements = [...section.supports, ...section.weakens, ...section.context];
+    const statements = interpretationLines(section);
     if (!this.llm.available || statements.length === 0) return null;
     const lines = statements.map((s) => `[${s.evidenceIds.join(',')}] ${s.text}`).join('\n');
     try {
@@ -95,11 +95,11 @@ export class ReportsService {
   async latest(sessionId: string): Promise<Report | null> {
     const r = await this.prisma.report.findFirst({ where: { sessionId }, orderBy: { createdAt: 'desc' } });
     if (!r) return null;
-    const content = r.content as unknown as { claims: ClaimReport[]; disclaimer: string };
+    const content = r.content as unknown as { disclaimer: string };
     return {
       id: r.id,
       sessionId,
-      claims: content.claims,
+      claims: parseStoredClaims(r.content),
       disclaimer: content.disclaimer,
       validationStatus: r.validationStatus as Report['validationStatus'],
       validationIssues: (r.validationIssues as unknown as ValidationIssue[]).map((i) => `${i.kind}: ${i.detail}`),

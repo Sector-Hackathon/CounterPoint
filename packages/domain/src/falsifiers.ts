@@ -1,12 +1,20 @@
 import type { CheckState, EvidenceContract } from './contracts';
 import type { ChangeCondition, EvidenceItem } from './models';
+import type { ClaimDirection } from './ontology';
 
 /**
  * Deterministic "what would change this verdict" (final-week spec F2). For each completed
  * check that does not currently help the claim, states the contract threshold that would
  * flip it, next to the current value. No prediction: thresholds come from the versioned contract.
  */
-export function whatWouldChange(contract: EvidenceContract, states: CheckState[], evidence: EvidenceItem[]): ChangeCondition[] {
+export function whatWouldChange(
+  contract: EvidenceContract,
+  states: CheckState[],
+  evidence: EvidenceItem[],
+  direction: ClaimDirection = 'bullish',
+): ChangeCondition[] {
+  // Flip rules are written in the bullish frame; for a bearish claim they would read backwards.
+  if (direction === 'bearish') return [];
   const byMetric = new Map<string, EvidenceItem>();
   for (const e of evidence) byMetric.set(e.metric, e);
   const out: ChangeCondition[] = [];

@@ -365,7 +365,12 @@ const PHASE_ORDER: Record<CheckPhase, number> = { required: 0, counter: 1, count
  * Triggered counterchecks appear only after a trigger weakened the claim. Counter-hypotheses
  * appear only once no required check is pending, and stop after BUDGET.maxCounterpoints ran.
  */
-export function openChecks(contract: EvidenceContract, states: CheckState[], counterpointsRun = 0): CheckDefinition[] {
+export function openChecks(
+  contract: EvidenceContract,
+  states: CheckState[],
+  counterpointsRun = 0,
+  direction: ClaimDirection = 'bullish',
+): CheckDefinition[] {
   const pending = new Set(states.filter((s) => s.status === 'pending').map((s) => s.checkId));
   const weakened = new Set(
     states.filter((s) => s.status === 'completed' && s.outcome === 'weakens').map((s) => s.checkId),
@@ -374,7 +379,12 @@ export function openChecks(contract: EvidenceContract, states: CheckState[], cou
   return contract.checks
     .filter((c) => pending.has(c.id))
     .filter((c) => !c.triggeredBy || c.triggeredBy.some((t) => weakened.has(t)))
-    .filter((c) => phaseOf(c) !== 'counterpoint' || (!requiredPending && counterpointsRun < BUDGET.maxCounterpoints))
+    // The hypothesis catalog is written for bullish claims; a bearish claim's counterpoint is its inverted checks.
+    .filter(
+      (c) =>
+        phaseOf(c) !== 'counterpoint' ||
+        (direction === 'bullish' && !requiredPending && counterpointsRun < BUDGET.maxCounterpoints),
+    )
     .sort((a, b) => PHASE_ORDER[phaseOf(a)] - PHASE_ORDER[phaseOf(b)]);
 }
 

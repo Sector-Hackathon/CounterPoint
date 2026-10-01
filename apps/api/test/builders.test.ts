@@ -95,4 +95,14 @@ describe('counterpoint metric builders', () => {
     const y = await valueOf('yield_change_pct', 'BBRI', fx);
     expect(y.economicPeriod).toBe('FY2025');
   });
+
+  it('earnings minus revenue growth, latest quarter, derived from both growth items', async () => {
+    const items = await METRIC_BUILDERS.earnings_minus_revenue_growth_pp!(ctx('BBRI'), 'chk');
+    const gap = items.find((e) => e.metric === 'earnings_minus_revenue_growth_pp')!;
+    const rev = items.find((e) => e.metric === 'revenue_yoy_pct')!;
+    const earn = items.find((e) => e.metric === 'earnings_yoy_pct')!;
+    expect(gap.value).toBeCloseTo(earn.value! - rev.value!, 2);
+    expect(gap.derivedFrom).toEqual([earn.id, rev.id]);
+    expect(gap.economicPeriod).toBe('2025Q2');
+  });
 });

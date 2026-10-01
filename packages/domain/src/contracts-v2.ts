@@ -63,8 +63,9 @@ export const absoluteGrowthV2: EvidenceContract = {
       id: 'earnings_outpacing_revenue', kind: 'counter', phase: 'counterpoint',
       hypothesis: 'Is profit growing much faster than revenue, so the business itself is not growing as fast as earnings suggest?',
       description: 'Net income growth minus revenue growth, latest quarter',
-      metrics: ['revenue_yoy_pct', 'earnings_yoy_pct'], tools: ['get_quarterly_financials'],
-      evaluate: (v, t) => ok(v.earnings_yoy_pct! - v.revenue_yoy_pct! >= t.divergencePp! ? 'weakens' : 'neutral'),
+      // Dedicated metric: a counter-hypothesis must only resolve when it is actually run.
+      metrics: ['earnings_minus_revenue_growth_pp'], tools: ['get_quarterly_financials'],
+      evaluate: (v, t) => ok(v.earnings_minus_revenue_growth_pp! >= t.divergencePp! ? 'weakens' : 'neutral'),
     },
     {
       id: 'roe_trend', kind: 'counter', phase: 'counterpoint',

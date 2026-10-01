@@ -149,6 +149,36 @@ export const METRIC_BUILDERS: Record<string, Builder> = {
     return yoyMetric(ctx, checkId, s, anchor(s), 'netIncome', 'annual_earnings_yoy_pct');
   },
 
+  async earnings_minus_revenue_growth_pp(ctx, checkId) {
+    const s = await quarterly(ctx);
+    const at = anchor(s);
+    const earnings = yoyMetric(ctx, checkId, s, at, 'netIncome', 'earnings_yoy_pct');
+    const revenue = yoyMetric(ctx, checkId, s, at, 'revenue', 'revenue_yoy_pct');
+    const e = earnings.find((i) => i.metric === 'earnings_yoy_pct')!;
+    const r = revenue.find((i) => i.metric === 'revenue_yoy_pct')!;
+    const base = {
+      metric: 'earnings_minus_revenue_growth_pp',
+      unit: 'percentage_points' as const,
+      sourceLocator: s.sourceLocator,
+      retrievalTime: s.retrievedAt,
+      economicPeriod: e.economicPeriod,
+      comparisonPeriod: e.comparisonPeriod,
+    };
+    if (e.value === null || r.value === null) {
+      return [...earnings, ...revenue, ...unavailable(ctx, checkId, base, 'revenue or net income growth not available')];
+    }
+    return [
+      ...earnings,
+      ...revenue,
+      item(ctx, checkId, {
+        ...base,
+        value: Math.round((e.value - r.value) * 100) / 100,
+        derivedFrom: [e.id, r.id],
+        calculationVersion: CALCULATION_VERSION,
+      }),
+    ];
+  },
+
   async prior_fy_earnings_yoy_pct(ctx, checkId) {
     const s = await annual(ctx);
     const a = anchor(s);

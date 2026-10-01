@@ -148,7 +148,7 @@ export async function investigateClaim(claim: Claim, deps: InvestigationDeps): P
       stopNote = 'Session time limit reached; reporting what was found so far.';
       break;
     }
-    let eligible = openChecks(contract, states, counterpointsRun).filter((c) => !blockedTriggers.has(c.id));
+    let eligible = openChecks(contract, states, counterpointsRun, claim.direction).filter((c) => !blockedTriggers.has(c.id));
     const newlyTriggered = eligible.filter((c) => c.triggeredBy && !acceptedTriggers.has(c.id));
     if (newlyTriggered.length) {
       const cause = contradictions(states).join(', ');
