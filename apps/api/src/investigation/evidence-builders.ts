@@ -58,6 +58,9 @@ const dividends = (ctx: BuildContext) =>
   ctx.memo(`d:${ctx.ticker}`, () => ctx.source.getDividendHistory(ctx.ticker));
 const valuation = (ctx: BuildContext, ticker = ctx.ticker) =>
   ctx.memo(`v:${ticker}`, () => ctx.source.getValuation(ticker));
+const ratios = (ctx: BuildContext, ticker = ctx.ticker) =>
+  ctx.memo(`r:${ticker}`, () => ctx.source.getFinancialRatios(ticker));
+const prices = (ctx: BuildContext) => ctx.memo(`px:${ctx.ticker}`, () => ctx.source.getPriceRange(ctx.ticker));
 
 /** Anchor period: the latest period in the series. Metrics are never computed on an older fallback. */
 function anchor(series: FinancialSeries): Period | null {
@@ -144,6 +147,140 @@ export const METRIC_BUILDERS: Record<string, Builder> = {
   async annual_earnings_yoy_pct(ctx, checkId) {
     const s = await annual(ctx);
     return yoyMetric(ctx, checkId, s, anchor(s), 'netIncome', 'annual_earnings_yoy_pct');
+  },
+
+  async prior_fy_earnings_yoy_pct(ctx, checkId) {
+    const s = await annual(ctx);
+    const a = anchor(s);
+    return yoyMetric(ctx, checkId, s, a && { kind: 'annual', year: a.year - 1 }, 'netIncome', 'prior_fy_earnings_yoy_pct');
+  },
+
+  async roe_trend_pp(ctx, checkId) {
+    const r = await ratios(ctx);
+    const base = { metric: 'roe_trend_pp', unit: 'percentage_points' as const, sourceLocator: r.sourceLocator, retrievalTime: r.retrievedAt };
+    const years = r.records.filter((x): x is { year: number; roePct: number } => x.roePct !== null).slice(-4);
+    if (years.length < 4) return unavailable(ctx, checkId, base, `only ${years.length} years of ROE; need 4`);
+    const [p1, p2, p3, latest] = years as [(typeof years)[0], (typeof years)[0], (typeof years)[0], (typeof years)[0]];
+    const priorAvg = (p1.roePct + p2.roePct + p3.roePct) / 3;
+    const window = `FY${p1.year}-FY${p3.year}`;
+    const latestItem = item(ctx, checkId, { ...base, metric: 'roe_pct', unit: 'percent', value: latest.roePct, economicPeriod: `FY${latest.year}` });
+    const avgItem = item(ctx, checkId, {
+      ...base,
+      metric: 'roe_prior_3y_avg_pct',
+      unit: 'percent',
+      value: Math.round(priorAvg * 100) / 100,
+      economicPeriod: window,
+      calculationVersion: CALCULATION_VERSION,
+    });
+    return [
+      latestItem,
+      avgItem,
+      item(ctx, checkId, {
+        ...base,
+        value: Math.round((latest.roePct - priorAvg) * 100) / 100,
+        economicPeriod: `FY${latest.year}`,
+        comparisonPeriod: window,
+        derivedFrom: [latestItem.id, avgItem.id],
+        calculationVersion: CALCULATION_VERSION,
+      }),
+    ];
+  },
+
+  yield_change_pct: (ctx, checkId) => dividendChange(ctx, checkId, 'yield_change_pct'),
+  dps_change_pct: (ctx, checkId) => dividendChange(ctx, checkId, 'dps_change_pct'),
+
+  async pe_vs_own_history_pct(ctx, checkId) {
+    const v = await valuation(ctx);
+    const base = { metric: 'pe_vs_own_history_pct', unit: 'percent' as const, sourceLocator: v.sourceLocator, retrievalTime: v.retrievedAt, observationDate: v.asOf };
+    if (v.pe === null || v.pe <= 0) return unavailable(ctx, checkId, base, 'current P/E not comparable');
+    const latestYear = Math.max(...v.peHistory.map((h) => h.year), 0);
+    const prior = v.peHistory.filter((h) => h.year < latestYear && h.pe > 0).slice(-5);
+    if (prior.length < 3) return unavailable(ctx, checkId, base, `only ${prior.length} prior years of P/E; need 3`);
+    const med = median(prior.map((h) => h.pe));
+    const window = `FY${prior[0]!.year}-FY${prior[prior.length - 1]!.year}`;
+    const medItem = item(ctx, checkId, {
+      ...base,
+      metric: 'pe_own_history_median',
+      unit: 'ratio',
+      value: Math.round(med * 100) / 100,
+      economicPeriod: window,
+      calculationVersion: CALCULATION_VERSION,
+    });
+    const curItem = item(ctx, checkId, { ...base, metric: 'target_pe_for_history', unit: 'ratio', value: v.pe });
+    return [
+      medItem,
+      curItem,
+      item(ctx, checkId, {
+        ...base,
+        value: Math.round(((v.pe - med) / med) * 10_000) / 100,
+        comparisonPeriod: window,
+        derivedFrom: [curItem.id, medItem.id],
+        calculationVersion: CALCULATION_VERSION,
+      }),
+    ];
+  },
+
+  async drawdown_from_52w_high_pct(ctx, checkId) {
+    const p = await prices(ctx);
+    const base = { metric: 'drawdown_from_52w_high_pct', unit: 'percent' as const, sourceLocator: p.sourceLocator, retrievalTime: p.retrievedAt, observationDate: p.asOf };
+    if (p.lastClose === null || p.high52w === null || p.high52w <= 0) {
+      return unavailable(ctx, checkId, base, '52-week high or last close not reported');
+    }
+    const closeItem = item(ctx, checkId, { ...base, metric: 'last_close', unit: 'IDR', value: p.lastClose });
+    const highItem = item(ctx, checkId, { ...base, metric: 'high_52w', unit: 'IDR', value: p.high52w, observationDate: p.high52wDate });
+    return [
+      closeItem,
+      highItem,
+      item(ctx, checkId, {
+        ...base,
+        value: Math.round((p.lastClose / p.high52w - 1) * 10_000) / 100,
+        derivedFrom: [closeItem.id, highItem.id],
+        calculationVersion: CALCULATION_VERSION,
+      }),
+    ];
+  },
+
+  async roe_vs_peer_median_pp(ctx, checkId) {
+    const set = await freezePeerSet(ctx);
+    const own = await ratios(ctx);
+    const base = { metric: 'roe_vs_peer_median_pp', unit: 'percentage_points' as const, sourceLocator: own.sourceLocator, retrievalTime: own.retrievedAt };
+    const latest = [...own.records].reverse().find((x) => x.roePct !== null);
+    if (!latest) return unavailable(ctx, checkId, base, 'target ROE not reported');
+    const peerRoe = await Promise.all(
+      set.included.map(async (p) => (await ratios(ctx, p.ticker)).records.find((x) => x.year === latest.year)?.roePct ?? null),
+    );
+    const valid = peerRoe.filter((v): v is number => v !== null);
+    if (valid.length < ctx.minPeers) {
+      return unavailable(
+        ctx,
+        checkId,
+        { ...base, economicPeriod: `FY${latest.year}` },
+        `only ${valid.length} peers report FY${latest.year} ROE; need ${ctx.minPeers}`,
+      );
+    }
+    const med = median(valid);
+    const ownItem = item(ctx, checkId, { ...base, metric: 'roe_pct', unit: 'percent', value: latest.roePct, economicPeriod: `FY${latest.year}` });
+    const medItem = item(ctx, checkId, {
+      ...base,
+      metric: 'peer_median_roe_pct',
+      unit: 'percent',
+      value: Math.round(med * 100) / 100,
+      economicPeriod: `FY${latest.year}`,
+      sourceLocator: set.locator,
+      calculationVersion: CALCULATION_VERSION,
+      note: `n=${valid.length}; peers: ${set.included.map((p) => p.ticker).join(', ')}`,
+    });
+    return [
+      ownItem,
+      medItem,
+      item(ctx, checkId, {
+        ...base,
+        value: Math.round((latest.roePct! - med) * 100) / 100,
+        economicPeriod: `FY${latest.year}`,
+        derivedFrom: [ownItem.id, medItem.id],
+        calculationVersion: CALCULATION_VERSION,
+      }),
+    ];
   },
 
   async net_margin_change_pp(ctx, checkId) {
@@ -318,5 +455,40 @@ async function relativeToPeers(
       calculationVersion: CALCULATION_VERSION,
       note: `peers: ${set.included.map((p) => p.ticker).join(', ')}`,
     }),
+  ];
+}
+
+/**
+ * Yield change and dividend-per-share change over the latest two completed fiscal years present
+ * in both series. The retrieval year is excluded because Sectors reports it as a partial year.
+ */
+async function dividendChange(
+  ctx: BuildContext,
+  checkId: string,
+  metric: 'yield_change_pct' | 'dps_change_pct',
+): Promise<EvidenceItem[]> {
+  const d = await dividends(ctx);
+  const base = { metric, unit: 'percent' as const, sourceLocator: d.sourceLocator, retrievalTime: d.retrievedAt };
+  const currentYear = Number(d.retrievedAt.slice(0, 4));
+  const dpsByYear = new Map<number, number>();
+  for (const p of d.payments) {
+    const y = Number(p.date.slice(0, 4));
+    dpsByYear.set(y, (dpsByYear.get(y) ?? 0) + p.amountPerShare);
+  }
+  const yieldOf = (y: number) => d.annualYieldsPct.find((x) => x.year === y)?.yieldPct;
+  const years = d.annualYieldsPct
+    .map((y) => y.year)
+    .filter((y) => y < currentYear && dpsByYear.has(y) && dpsByYear.has(y - 1) && yieldOf(y - 1) !== undefined);
+  if (!years.length) {
+    return unavailable(ctx, checkId, base, 'no two consecutive completed years with both yield and dividend data');
+  }
+  const latest = Math.max(...years);
+  const [cur, prev] =
+    metric === 'yield_change_pct' ? [yieldOf(latest)!, yieldOf(latest - 1)!] : [dpsByYear.get(latest)!, dpsByYear.get(latest - 1)!];
+  const growth = yoyGrowthPct(cur, prev);
+  const where = { economicPeriod: `FY${latest}`, comparisonPeriod: `FY${latest - 1}` };
+  if (!growth.ok) return [item(ctx, checkId, { ...base, ...where, status: 'INVALID', note: growth.reason })];
+  return [
+    item(ctx, checkId, { ...base, ...where, value: Math.round(growth.value * 100) / 100, calculationVersion: CALCULATION_VERSION }),
   ];
 }

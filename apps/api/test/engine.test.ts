@@ -66,12 +66,19 @@ describe('investigation engine', () => {
     const r = await run(claim({ claimType: 'RELATIVE_VALUATION', comparisonType: 'PEER', contractId: 'relative-valuation-v2' }));
     expect(r.peerSet?.included.map((p) => p.ticker)).toEqual(['BBCA', 'BBNI', 'BMRI', 'BRIS']);
     expect(r.peerSet?.excluded.map((p) => p.ticker)).toContain('BBRI');
-    expect(r.assessment).toBe('SUPPORTED');
+    // v2: cheap on P/E, but the counterpoint confirms ROE 3.6 pp below the peer median
+    // (roe_vs_peers) and a 29% fall from the past-year high (price_drawdown).
+    expect(r.assessment).toBe('PARTIALLY_SUPPORTED');
+    const confirmed = r.states.filter((s) => s.outcome === 'weakens').map((s) => s.checkId);
+    expect(confirmed).toEqual(expect.arrayContaining(['roe_vs_peers', 'price_drawdown']));
   });
 
   it('assesses the dividend contract end to end', async () => {
     const r = await run(claim({ claimType: 'DIVIDEND_LEVEL', contractId: 'dividend-level-v2' }));
-    expect(r.assessment).toBe('SUPPORTED');
+    // v2: the yield rose 29.7% while dividend per share rose 10.8%, so the
+    // yield_from_price counter-hypothesis is confirmed.
+    expect(r.assessment).toBe('PARTIALLY_SUPPORTED');
+    expect(r.states.find((s) => s.checkId === 'yield_from_price')?.outcome).toBe('weakens');
     expect(r.coverage?.label).toBe('3 of 3 required checks available');
   });
 

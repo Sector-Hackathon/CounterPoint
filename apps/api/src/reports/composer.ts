@@ -28,6 +28,21 @@ const METRIC_LABELS: Record<string, string> = {
   peer_count: 'valid peers',
   pe_vs_peer_median_pct: 'P/E vs peer median',
   pbv_vs_peer_median_pct: 'P/BV vs peer median',
+  annual_earnings_yoy_pct: 'annual net income growth',
+  prior_fy_earnings_yoy_pct: 'prior-year net income growth',
+  roe_pct: 'ROE',
+  roe_prior_3y_avg_pct: 'prior three-year average ROE',
+  roe_trend_pp: 'ROE change',
+  yield_change_pct: 'yield change',
+  dps_change_pct: 'dividend per share change',
+  pe_own_history_median: 'own historical median P/E',
+  target_pe_for_history: 'current P/E',
+  pe_vs_own_history_pct: 'P/E vs own history',
+  last_close: 'last close',
+  high_52w: 'past-year high',
+  drawdown_from_52w_high_pct: 'distance from past-year high',
+  peer_median_roe_pct: 'peer median ROE',
+  roe_vs_peer_median_pp: 'ROE vs peer median',
 };
 
 export function formatValue(e: EvidenceItem): string {

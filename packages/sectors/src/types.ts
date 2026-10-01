@@ -46,6 +46,22 @@ export interface ValuationSnapshot extends Provenance {
   pe: number | null;
   pbv: number | null;
   dividendYieldPct: number | null;
+  /** P/E per fiscal year, ascending; the latest year is the current snapshot. */
+  peHistory: { year: number; pe: number }[];
+}
+
+export interface RatioSeries extends Provenance {
+  ticker: string;
+  /** ROE per fiscal year, ascending, in percent. */
+  records: { year: number; roePct: number | null }[];
+}
+
+export interface PriceRange extends Provenance {
+  ticker: string;
+  asOf: string | null;
+  lastClose: number | null;
+  high52w: number | null;
+  high52wDate: string | null;
 }
 
 export interface PeerCandidateRecord {
@@ -73,4 +89,6 @@ export interface SectorsDataSource {
   getDividendHistory(ticker: string): Promise<DividendHistory>;
   getValuation(ticker: string): Promise<ValuationSnapshot>;
   getPeerCandidates(subsector: string): Promise<PeerCandidates>;
+  getFinancialRatios(ticker: string): Promise<RatioSeries>;
+  getPriceRange(ticker: string): Promise<PriceRange>;
 }

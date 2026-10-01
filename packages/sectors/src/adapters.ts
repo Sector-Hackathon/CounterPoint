@@ -8,6 +8,8 @@ import type {
   FinancialPeriodRecord,
   FinancialSeries,
   PeerCandidates,
+  PriceRange,
+  RatioSeries,
   ValuationSnapshot,
 } from './types';
 
@@ -48,7 +50,16 @@ const RawReport = z
   .object({
     symbol: z.string(),
     company_name: z.string().nullish(),
-    overview: z.object({ sector: z.string().nullish(), sub_sector: z.string().nullish() }).passthrough().nullish(),
+    overview: z
+      .object({
+        sector: z.string().nullish(),
+        sub_sector: z.string().nullish(),
+        last_close_price: num,
+        latest_close_date: z.string().nullish(),
+        all_time_price: z.record(z.string(), z.record(z.string(), num)).nullish(),
+      })
+      .passthrough()
+      .nullish(),
     valuation: z
       .object({
         latest_close_date: z.string().nullish(),
@@ -62,6 +73,16 @@ const RawReport = z
       .object({
         historical_financials: z
           .array(z.object({ year: z.union([z.number(), z.string()]), revenue: num, earnings: num }).passthrough())
+          .nullish(),
+        historical_financial_ratio: z
+          .array(
+            z
+              .object({
+                year: z.union([z.number(), z.string()]),
+                profitability: z.object({ roe: num }).passthrough().nullish(),
+              })
+              .passthrough(),
+          )
           .nullish(),
       })
       .passthrough()
@@ -171,6 +192,39 @@ export function adaptValuation(res: SectorsResponse): ValuationSnapshot {
     pe: latest?.pe ?? null,
     pbv: latest?.pb ?? null,
     dividendYieldPct: r.dividend?.yield_ttm == null ? null : toPct(r.dividend.yield_ttm),
+    peHistory: (r.valuation?.historical_valuation ?? [])
+      .filter((h): h is typeof h & { pe: number } => h.pe !== null)
+      .map((h) => ({ year: Number(h.year), pe: h.pe }))
+      .sort((a, b) => a.year - b.year),
+    sourceLocator: res.locator,
+    retrievedAt: res.retrievedAt,
+  };
+}
+
+/** ROE per fiscal year from `financials.historical_financial_ratio` (fractions in the payload). */
+export function adaptRatios(res: SectorsResponse): RatioSeries {
+  const r = RawReport.parse(res.data);
+  return {
+    ticker: normalizeTicker(r.symbol),
+    records: (r.financials?.historical_financial_ratio ?? [])
+      .map((row) => ({ year: Number(row.year), roePct: row.profitability?.roe == null ? null : row.profitability.roe * 100 }))
+      .filter((x) => Number.isFinite(x.year))
+      .sort((a, b) => a.year - b.year),
+    sourceLocator: res.locator,
+    retrievedAt: res.retrievedAt,
+  };
+}
+
+/** Last close and 52-week high from `overview` (`all_time_price["52_w_high"]` is `{ date: price }`). */
+export function adaptPriceRange(res: SectorsResponse): PriceRange {
+  const r = RawReport.parse(res.data);
+  const high = Object.entries(r.overview?.all_time_price?.['52_w_high'] ?? {})[0];
+  return {
+    ticker: normalizeTicker(r.symbol),
+    asOf: r.overview?.latest_close_date ?? null,
+    lastClose: r.overview?.last_close_price ?? null,
+    high52w: high?.[1] ?? null,
+    high52wDate: high?.[0] ?? null,
     sourceLocator: res.locator,
     retrievedAt: res.retrievedAt,
   };

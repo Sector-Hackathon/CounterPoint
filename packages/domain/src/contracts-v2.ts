@@ -69,7 +69,7 @@ export const absoluteGrowthV2: EvidenceContract = {
     {
       id: 'roe_trend', kind: 'counter', phase: 'counterpoint',
       hypothesis: 'Is return on equity falling even while profit grows?',
-      description: 'Latest fiscal year ROE versus the average of the prior three years',
+      description: 'Latest fiscal year ROE versus its average over the prior three years',
       metrics: ['roe_trend_pp'], tools: ['get_annual_financials'],
       flip: { metric: 'roe_trend_pp', comparator: 'above', threshold: (t) => -t.roeDeclinePp!, label: 'ROE change vs prior 3-year average', unit: 'percentage_points' },
       evaluate: (v, t) => ok(v.roe_trend_pp! <= -t.roeDeclinePp! ? 'weakens' : 'neutral'),
@@ -110,7 +110,7 @@ export const dividendLevelV2: EvidenceContract = {
     {
       id: 'yield_from_price', kind: 'counter', phase: 'counterpoint',
       hypothesis: 'Did the yield rise mostly because the share price fell, not because the dividend grew?',
-      description: 'Change in annual yield versus change in dividend per share, latest two fiscal years',
+      description: 'Change in annual yield versus change in dividend per share, latest completed fiscal year',
       metrics: ['yield_change_pct', 'dps_change_pct'], tools: ['get_dividend_history'],
       evaluate: (v, t) => ok(v.yield_change_pct! >= t.yieldJumpPct! && v.dps_change_pct! < v.yield_change_pct! / 2 ? 'weakens' : 'neutral'),
     },
@@ -166,7 +166,7 @@ export const relativeValuationV2: EvidenceContract = {
     {
       id: 'own_history', kind: 'counter', phase: 'counterpoint',
       hypothesis: 'Is this P/E normal for this company, so it is not cheap by its own standards?',
-      description: 'Current P/E versus the median of its prior fiscal years (up to 5)',
+      description: 'Current P/E versus the median of its own prior fiscal years',
       metrics: ['pe_vs_own_history_pct'], tools: ['get_valuation_metrics'],
       flip: { metric: 'pe_vs_own_history_pct', comparator: 'below', threshold: () => 0, label: 'P/E versus own history', unit: 'percent' },
       evaluate: (v) => ok(v.pe_vs_own_history_pct! >= 0 ? 'weakens' : 'neutral'),
@@ -174,7 +174,7 @@ export const relativeValuationV2: EvidenceContract = {
     {
       id: 'price_drawdown', kind: 'counter', phase: 'counterpoint',
       hypothesis: 'Does the low valuation coincide with a large fall in the share price?',
-      description: 'Last close versus 52-week high',
+      description: 'Last close versus its high over the past year',
       metrics: ['drawdown_from_52w_high_pct'], tools: ['get_valuation_metrics'],
       evaluate: (v, t) => ok(v.drawdown_from_52w_high_pct! <= -t.drawdownPct! ? 'weakens' : 'neutral'),
     },

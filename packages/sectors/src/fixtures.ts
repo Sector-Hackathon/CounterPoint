@@ -13,7 +13,9 @@ export interface FixtureSet {
   quarterly: Record<string, { period: string; revenue: number | null; netIncome: number | null; eps?: number | null }[]>;
   annual: Record<string, { year: number; revenue: number | null; netIncome: number | null }[]>;
   dividends: Record<string, Omit<DividendHistory, 'ticker' | 'sourceLocator' | 'retrievedAt'>>;
-  valuation: Record<string, Omit<ValuationSnapshot, 'ticker' | 'sourceLocator' | 'retrievedAt'>>;
+  valuation: Record<string, Omit<ValuationSnapshot, 'ticker' | 'sourceLocator' | 'retrievedAt' | 'peHistory'> & { peHistory?: ValuationSnapshot['peHistory'] }>;
+  ratios?: Record<string, { year: number; roePct: number | null }[]>;
+  prices?: Record<string, { asOf: string; lastClose: number; high52w: number; high52wDate: string }>;
 }
 
 /**
@@ -81,7 +83,23 @@ export class FixtureSectorsDataSource implements SectorsDataSource {
 
   async getValuation(ticker: string): Promise<ValuationSnapshot> {
     const v = this.fx.valuation[ticker] ?? { asOf: null, pe: null, pbv: null, dividendYieldPct: null };
-    return { ticker, ...v, ...this.loc(`valuation/${ticker}`) };
+    return { ticker, peHistory: [], ...v, ...this.loc(`valuation/${ticker}`) };
+  }
+
+  async getFinancialRatios(ticker: string) {
+    return { ticker, records: this.fx.ratios?.[ticker] ?? [], ...this.loc(`ratios/${ticker}`) };
+  }
+
+  async getPriceRange(ticker: string) {
+    const p = this.fx.prices?.[ticker];
+    return {
+      ticker,
+      asOf: p?.asOf ?? null,
+      lastClose: p?.lastClose ?? null,
+      high52w: p?.high52w ?? null,
+      high52wDate: p?.high52wDate ?? null,
+      ...this.loc(`prices/${ticker}`),
+    };
   }
 
   async getPeerCandidates(subsector: string) {
@@ -132,10 +150,12 @@ export const DEV_FIXTURE: FixtureSet = {
   },
   annual: {
     BBRI: [
+      { year: 2022, revenue: 170_000, netIncome: 62_000 },
       { year: 2023, revenue: 185_000, netIncome: 60_400 },
       { year: 2024, revenue: 200_000, netIncome: 60_100 },
     ],
     BBCA: [
+      { year: 2022, revenue: 96_000, netIncome: 41_000 },
       { year: 2023, revenue: 105_000, netIncome: 48_600 },
       { year: 2024, revenue: 114_000, netIncome: 54_800 },
     ],
@@ -151,16 +171,34 @@ export const DEV_FIXTURE: FixtureSet = {
         { year: 2022, yieldPct: 5.2 },
         { year: 2023, yieldPct: 5.6 },
         { year: 2024, yieldPct: 7.4 },
+        { year: 2025, yieldPct: 9.6 },
       ],
       trailingYieldPct: 8.1,
       payoutRatioPct: 85,
     },
   },
   valuation: {
-    BBRI: { asOf: '2026-09-24', pe: 9.2, pbv: 1.9, dividendYieldPct: 8.1 },
+    BBRI: {
+      asOf: '2026-09-24', pe: 9.2, pbv: 1.9, dividendYieldPct: 8.1,
+      peHistory: [{ year: 2022, pe: 14.5 }, { year: 2023, pe: 14.3 }, { year: 2024, pe: 10.2 }, { year: 2025, pe: 9.7 }, { year: 2026, pe: 9.2 }],
+    },
     BMRI: { asOf: '2026-09-24', pe: 8.4, pbv: 1.5, dividendYieldPct: 7.9 },
     BBCA: { asOf: '2026-09-24', pe: 21.5, pbv: 4.2, dividendYieldPct: 3.1 },
-    BBNI: { asOf: '2026-09-24', pe: 7.1, pbv: 0.9, dividendYieldPct: 6.8 },
+    BBNI: {
+      asOf: '2026-09-24', pe: 7.1, pbv: 0.9, dividendYieldPct: 6.8,
+      peHistory: [{ year: 2023, pe: 9.0 }, { year: 2024, pe: 7.8 }, { year: 2025, pe: 6.9 }, { year: 2026, pe: 7.1 }],
+    },
     BRIS: { asOf: '2026-09-24', pe: 15.8, pbv: 2.4, dividendYieldPct: 1.2 },
+  },
+  ratios: {
+    BBRI: [{ year: 2021, roePct: 16.5 }, { year: 2022, roePct: 18.0 }, { year: 2023, roePct: 19.2 }, { year: 2024, roePct: 15.1 }],
+    BBCA: [{ year: 2021, roePct: 18.3 }, { year: 2022, roePct: 20.5 }, { year: 2023, roePct: 21.7 }, { year: 2024, roePct: 22.0 }],
+    BMRI: [{ year: 2024, roePct: 21.0 }],
+    BBNI: [{ year: 2024, roePct: 14.0 }],
+    BRIS: [{ year: 2024, roePct: 16.5 }],
+  },
+  prices: {
+    BBRI: { asOf: '2026-09-24', lastClose: 3600, high52w: 5100, high52wDate: '2025-11-03' },
+    BBNI: { asOf: '2026-09-24', lastClose: 4200, high52w: 4900, high52wDate: '2026-01-15' },
   },
 };

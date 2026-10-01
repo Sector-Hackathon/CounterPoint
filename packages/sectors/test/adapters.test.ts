@@ -2,7 +2,9 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   adaptDividends,
   adaptPeerCandidates,
+  adaptPriceRange,
   adaptQuarterly,
+  adaptRatios,
   adaptSearch,
   adaptValuation,
   peerQuery,
@@ -104,5 +106,40 @@ describe('SectorsHttpClient', () => {
     const client = new SectorsHttpClient({ apiKey: 'k', fetchImpl });
     await expect(client.get('/x')).rejects.toMatchObject({ status: 404 });
     expect(fetchImpl).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('counterpoint adapters', () => {
+  it('reads ROE per year as percent', () => {
+    const r = adaptRatios(res({
+      symbol: 'BBRI.JK',
+      financials: { historical_financial_ratio: [
+        { year: '2024', profitability: { roe: 0.19 } },
+        { year: '2025', profitability: { roe: null } },
+      ] },
+    }));
+    expect(r.records).toEqual([{ year: 2024, roePct: 19 }, { year: 2025, roePct: null }]);
+  });
+
+  it('reads the 52-week high and last close', () => {
+    const p = adaptPriceRange(res({
+      symbol: 'BBRI.JK',
+      overview: { last_close_price: 3600, latest_close_date: '2026-09-30', all_time_price: { '52_w_high': { '2025-11-03': 4050 } } },
+    }));
+    expect(p).toMatchObject({ lastClose: 3600, asOf: '2026-09-30', high52w: 4050, high52wDate: '2025-11-03' });
+  });
+
+  it('returns nulls when price fields are missing', () => {
+    const p = adaptPriceRange(res({ symbol: 'BBRI.JK', overview: {} }));
+    expect(p).toMatchObject({ lastClose: null, high52w: null });
+  });
+
+  it('keeps the P/E history', () => {
+    const v = adaptValuation(res({
+      symbol: 'BBRI.JK',
+      valuation: { latest_close_date: '2026-09-30', historical_valuation: [{ year: 2025, pe: 9.7, pb: 1.6 }, { year: 2026, pe: 7.6, pb: 1.5 }, { year: 2024, pe: null, pb: 1.9 }] },
+    }));
+    expect(v.pe).toBe(7.6);
+    expect(v.peHistory).toEqual([{ year: 2025, pe: 9.7 }, { year: 2026, pe: 7.6 }]);
   });
 });

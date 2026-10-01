@@ -3,8 +3,10 @@ import {
   adaptAnnual,
   adaptDividends,
   adaptPeerCandidates,
+  adaptPriceRange,
   adaptProfile,
   adaptQuarterly,
+  adaptRatios,
   adaptSearch,
   adaptValuation,
   peerQuery,
@@ -49,5 +51,15 @@ export class HttpSectorsDataSource implements SectorsDataSource {
 
   async getPeerCandidates(subsector: string) {
     return adaptPeerCandidates(await this.http.get(ENDPOINTS.companies(), peerQuery(subsector)), subsector);
+  }
+
+  /** Same URL as getAnnualFinancials, so the HTTP cache serves it. */
+  async getFinancialRatios(ticker: string) {
+    return adaptRatios(await this.http.get(ENDPOINTS.report(ticker), { sections: 'financials' }));
+  }
+
+  /** Same URL as getCompanyProfile, so the HTTP cache serves it. */
+  async getPriceRange(ticker: string) {
+    return adaptPriceRange(await this.http.get(ENDPOINTS.report(ticker), { sections: 'overview' }));
   }
 }
