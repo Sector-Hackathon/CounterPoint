@@ -8,3 +8,4 @@ export * from './contracts';
 export * from './contracts-v2';
 export * from './peers';
 export * from './validation';
+export * from './spans';

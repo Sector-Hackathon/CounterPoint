@@ -1,4 +1,5 @@
 import { BadRequestException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { locateSpan } from '@counterpoint/domain';
 import { PrismaService } from '../prisma/prisma.service';
 import { ClaimsService } from '../claims/claims.service';
 import { EntityService, type ResolvedEntity } from '../entity/entity.service';
@@ -52,6 +53,7 @@ export class ThesisService {
       await this.prisma.claim.createMany({
         data: extraction.claims.map((c, i) => {
           const scope = this.claims.toContract(c.claim_type, c.verifiability, c.scope_note);
+          const span = locateSpan(thesis, c.original_text);
           return {
             sessionId,
             ordinal: i,
@@ -63,6 +65,8 @@ export class ThesisService {
             comparisonType: c.comparison_type,
             timeScope: c.time_scope,
             extractor,
+            spanStart: span?.start ?? null,
+            spanEnd: span?.end ?? null,
             ...scope,
           };
         }),
