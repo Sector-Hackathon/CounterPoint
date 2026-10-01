@@ -114,6 +114,8 @@ export function composeClaimReport(input: ComposeInput): ClaimReport {
           minPeers: input.peerSet.minPeers,
         }
       : null,
+    counterpoint: null,
+    changeConditions: [],
   };
 }
 

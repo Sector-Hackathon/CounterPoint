@@ -44,9 +44,16 @@ export const StopReason = z.enum([
   'DUPLICATE',
   'OUT_OF_SCOPE',
   'BUDGET_EXHAUSTED',
+  'TIMEOUT',
   'ERROR',
 ]);
 export type StopReason = z.infer<typeof StopReason>;
+
+export const ClaimDirection = z.enum(['bullish', 'bearish']);
+export type ClaimDirection = z.infer<typeof ClaimDirection>;
+
+export const CheckPhase = z.enum(['required', 'counter', 'counterpoint']);
+export type CheckPhase = z.infer<typeof CheckPhase>;
 
 /** Whitelisted domain tools. The agent router rejects anything else. */
 export const ToolName = z.enum([
@@ -66,9 +73,10 @@ export const SUPPORTED_CLAIM_TYPES: readonly ClaimType[] = [
   'RELATIVE_VALUATION',
 ];
 
-/** Per-claim budget (PRD 11.1). */
+/** Per-claim budget (PRD 11.1, raised for counter-hypotheses per final-week spec §5). */
 export const BUDGET = {
-  maxToolCalls: 6,
+  maxToolCalls: 8,
   maxReplans: 2,
   transientRetries: 1,
+  maxCounterpoints: 3,
 } as const;

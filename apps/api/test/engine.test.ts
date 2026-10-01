@@ -21,6 +21,8 @@ function claim(overrides: Partial<Claim>): Claim {
     contractId: 'absolute-growth-v1',
     assessment: null,
     scopeNote: null,
+    direction: 'bullish',
+    span: null,
     ...overrides,
   };
 }

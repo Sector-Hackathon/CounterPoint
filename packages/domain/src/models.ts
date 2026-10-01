@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import {
   Assessment,
+  ClaimDirection,
   ClaimType,
   ComparisonType,
   ResolutionStatus,
@@ -31,6 +32,9 @@ export const Entity = z.object({
 });
 export type Entity = z.infer<typeof Entity>;
 
+export const Span = z.object({ start: z.number().int(), end: z.number().int() });
+export type Span = z.infer<typeof Span>;
+
 export const Claim = z.object({
   id: z.string(),
   sessionId: z.string(),
@@ -44,6 +48,8 @@ export const Claim = z.object({
   contractId: z.string().nullable(),
   assessment: Assessment.nullable(),
   scopeNote: z.string().nullable(),
+  direction: ClaimDirection.default('bullish'),
+  span: Span.nullable().default(null),
 });
 export type Claim = z.infer<typeof Claim>;
 
@@ -73,6 +79,9 @@ export type EvidenceItem = z.infer<typeof EvidenceItem>;
 export const TraceResult = z.enum(['OK', 'NO_DATA', 'ERROR', 'REJECTED']);
 export type TraceResult = z.infer<typeof TraceResult>;
 
+export const Expectation = z.enum(['supports', 'weakens', 'neutral']);
+export type Expectation = z.infer<typeof Expectation>;
+
 export const ExecutionTrace = z.object({
   id: z.string(),
   claimId: z.string(),
@@ -84,6 +93,9 @@ export const ExecutionTrace = z.object({
   evidenceIds: z.array(z.string()),
   resultStatus: TraceResult,
   stopReason: StopReason.nullable(),
+  checkId: z.string().nullable().default(null),
+  expectation: Expectation.nullable().default(null),
+  expectationHeld: z.boolean().nullable().default(null),
 });
 export type ExecutionTrace = z.infer<typeof ExecutionTrace>;
 
@@ -92,6 +104,29 @@ export const ReportStatement = z.object({
   evidenceIds: z.array(z.string()),
 });
 export type ReportStatement = z.infer<typeof ReportStatement>;
+
+export const ChangeCondition = z.object({
+  checkId: z.string(),
+  label: z.string(),
+  comparator: z.enum(['at_least', 'above', 'at_most', 'below']),
+  threshold: z.number(),
+  current: z.number(),
+  unit: z.enum(['percent', 'percentage_points', 'ratio']),
+  period: z.string().nullable(),
+  evidenceId: z.string(),
+  /** What happens to the check if the condition is met. */
+  effect: z.enum(['would_support', 'would_stop_weakening']),
+});
+export type ChangeCondition = z.infer<typeof ChangeCondition>;
+
+export const CounterpointHypothesis = z.object({
+  checkId: z.string(),
+  hypothesis: z.string(),
+  status: z.enum(['confirmed', 'refuted', 'untestable', 'not_tested']),
+  statement: ReportStatement.nullable(),
+  note: z.string().nullable(),
+});
+export type CounterpointHypothesis = z.infer<typeof CounterpointHypothesis>;
 
 export const ClaimReport = z.object({
   claimId: z.string(),
@@ -118,6 +153,11 @@ export const ClaimReport = z.object({
       minPeers: z.number().int(),
     })
     .nullable(),
+  counterpoint: z
+    .object({ hypotheses: z.array(CounterpointHypothesis), openQuestions: z.array(z.string()) })
+    .nullable()
+    .default(null),
+  changeConditions: z.array(ChangeCondition).default([]),
 });
 export type ClaimReport = z.infer<typeof ClaimReport>;
 

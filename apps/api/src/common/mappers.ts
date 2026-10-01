@@ -19,6 +19,8 @@ export function toClaim(r: ClaimRow): Claim {
     contractId: r.contractId,
     assessment: r.assessment as Claim['assessment'],
     scopeNote: r.scopeNote,
+    direction: 'bullish',
+    span: null,
   };
 }
 
@@ -55,6 +57,9 @@ export function toTrace(r: TraceRow): ExecutionTrace & { planner: string | null 
     evidenceIds: r.evidenceIds,
     resultStatus: r.resultStatus as ExecutionTrace['resultStatus'],
     stopReason: r.stopReason as ExecutionTrace['stopReason'],
+    checkId: null,
+    expectation: null,
+    expectationHeld: null,
     planner: r.planner,
   };
 }

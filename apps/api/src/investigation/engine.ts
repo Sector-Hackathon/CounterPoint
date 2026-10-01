@@ -90,7 +90,7 @@ export async function investigateClaim(claim: Claim, deps: InvestigationDeps): P
   };
   const instant = (action: ExecutionTrace['action'], reason: string, extra: Partial<ExecutionTrace> = {}) => {
     const ts = now().toISOString();
-    return record({ action, reason, startedAt: ts, finishedAt: ts, evidenceIds: [], resultStatus: 'OK', stopReason: null, ...extra });
+    return record({ action, reason, startedAt: ts, finishedAt: ts, evidenceIds: [], resultStatus: 'OK', stopReason: null, checkId: null, expectation: null, expectationHeld: null, ...extra });
   };
 
   const contract: EvidenceContract | null = claim.contractId ? getContract(claim.contractId) : null;
@@ -227,6 +227,9 @@ export async function investigateClaim(claim: Claim, deps: InvestigationDeps): P
       evidenceIds: items.map((i) => i.id),
       resultStatus,
       stopReason: null,
+      checkId: check.id,
+      expectation: null,
+      expectationHeld: null,
     });
 
     const resolved = states.filter((s) => before.get(s.checkId) === 'pending' && s.status !== 'pending');
