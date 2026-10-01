@@ -1,4 +1,4 @@
-import type { StepEvent } from './api';
+import type { ChangeCondition, StepEvent } from './api';
 
 /** Formats a value for display. Minus signs use U+2212 so negative numbers read cleanly in tabular figures. */
 export function formatValue(v: number | null, unit: string): string {
@@ -63,3 +63,11 @@ export const metricLabel = (m: string) => METRICS[m] ?? m.replace(/_/g, ' ');
 
 /** Derived metrics only: raw inputs (revenue, net income) stay in the evidence drawer. */
 export const isHeadlineMetric = (m: string) => m in METRICS;
+
+const CMP: Record<ChangeCondition['comparator'], string> = { at_least: 'at least', above: 'above', at_most: 'at most', below: 'below' };
+
+export function conditionText(c: ChangeCondition): string {
+  const effect = c.effect === 'would_support' ? 'to count as support' : 'to stop counting against the claim';
+  const when = c.period ? ` (${c.period})` : '';
+  return `${c.label} would need to be ${CMP[c.comparator]} ${formatValue(c.threshold, c.unit)} ${effect}. It is ${formatValue(c.current, c.unit)}${when}.`;
+}

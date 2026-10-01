@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatValue, stepHeadline } from '../lib/format';
+import { conditionText, formatValue, stepHeadline } from '../lib/format';
 
 describe('format', () => {
   it('formats units', () => {
@@ -12,5 +12,14 @@ describe('format', () => {
   it('names tool steps in plain words', () => {
     expect(stepHeadline({ action: 'get_quarterly_financials' } as never)).toBe('Read quarterly financials');
     expect(stepHeadline({ action: 'REPLAN' } as never)).toBe('Changed course');
+  });
+});
+
+describe('conditionText', () => {
+  it('writes a change condition in plain words', () => {
+    expect(conditionText({ checkId: 'revenue_growth', label: 'Latest-quarter revenue growth YoY', comparator: 'at_least', threshold: 10, current: 8.4, unit: 'percent', period: '2026Q2', evidenceId: 'e', effect: 'would_support' }))
+      .toBe('Latest-quarter revenue growth YoY would need to be at least 10.0% to count as support. It is 8.4% (2026Q2).');
+    expect(conditionText({ checkId: 'margin_deterioration', label: 'Net margin change YoY', comparator: 'above', threshold: -2, current: -3.1, unit: 'percentage_points', period: '2026Q2', evidenceId: 'e', effect: 'would_stop_weakening' }))
+      .toBe('Net margin change YoY would need to be above −2.0 pp to stop counting against the claim. It is −3.1 pp (2026Q2).');
   });
 });
