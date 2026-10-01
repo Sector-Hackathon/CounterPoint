@@ -9,6 +9,8 @@ import { toClaim } from '../common/mappers';
 import { DeterministicPlanner, investigateClaim, type Planner } from './engine';
 import { LlmPlanner } from './llm-planner';
 
+const SESSION_DEADLINE_MS = Number(process.env.SESSION_DEADLINE_MS ?? 90_000);
+
 @Injectable()
 export class InvestigationService {
   private readonly logger = new Logger(InvestigationService.name);
@@ -40,6 +42,7 @@ export class InvestigationService {
 
   private async run(sessionId: string) {
     const started = Date.now();
+    const deadline = started + SESSION_DEADLINE_MS;
     try {
       const claims = await this.prisma.claim.findMany({ where: { sessionId }, orderBy: { ordinal: 'asc' } });
       const planner = this.planner();
@@ -51,6 +54,7 @@ export class InvestigationService {
           source: this.source,
           planner,
           newId: randomUUID,
+          deadline,
           onTrace: async (t) => {
             await this.prisma.executionTrace.create({
               data: {
@@ -82,7 +86,7 @@ export class InvestigationService {
             peerSet: (result.peerSet as object | null) ?? undefined,
           },
         });
-        if (result.stopReason === 'BUDGET_EXHAUSTED' || result.stopReason === 'ERROR') partial = true;
+        if (['BUDGET_EXHAUSTED', 'ERROR', 'TIMEOUT'].includes(result.stopReason)) partial = true;
         this.logger.log(
           JSON.stringify({ event: 'claim_investigated', sessionId, claimId: claim.id, stopReason: result.stopReason, assessment: result.assessment, toolCalls: result.trace.filter((t) => t.action.startsWith('get_')).length }),
         );

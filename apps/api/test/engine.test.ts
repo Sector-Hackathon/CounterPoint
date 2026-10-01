@@ -124,6 +124,29 @@ describe('investigation engine', () => {
     const toolCalls = r.trace.filter((t) => t.action.startsWith('get_')).length;
     expect(toolCalls).toBeLessThanOrEqual(BUDGET.maxToolCalls);
   });
+
+  it('stops with TIMEOUT when the session deadline has passed', async () => {
+    let t = Date.parse('2026-10-02T00:00:00Z');
+    const r = await investigateClaim(claim({ ticker: 'BBCA' }), {
+      source,
+      planner: new DeterministicPlanner(),
+      newId: randomUUID,
+      now: () => new Date((t += 30_000)),
+      deadline: Date.parse('2026-10-02T00:01:00Z'),
+    });
+    expect(r.stopReason).toBe('TIMEOUT');
+    expect(r.trace.at(-1)?.action).toBe('STOP');
+    expect(r.trace.filter((x) => x.action.startsWith('get_')).length).toBeLessThan(3);
+  });
+
+  it('returns UNVERIFIABLE with TIMEOUT when the deadline passed before the claim started', async () => {
+    const r = await investigateClaim(claim({ ticker: 'BBCA' }), {
+      source, planner: new DeterministicPlanner(), newId: randomUUID, deadline: Date.now() - 1,
+    });
+    expect(r.stopReason).toBe('TIMEOUT');
+    expect(r.assessment).toBe('UNVERIFIABLE');
+    expect(r.evidence).toHaveLength(0);
+  });
 });
 
 describe('report composer', () => {

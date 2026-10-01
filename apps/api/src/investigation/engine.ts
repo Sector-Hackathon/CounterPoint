@@ -143,6 +143,11 @@ export async function investigateClaim(claim: Claim, deps: InvestigationDeps): P
 
   let states = evaluateChecks(contract, evidence, claim.direction);
   while (!stopReason) {
+    if (deps.deadline !== undefined && now().getTime() >= deps.deadline) {
+      stopReason = 'TIMEOUT';
+      stopNote = 'Session time limit reached; reporting what was found so far.';
+      break;
+    }
     let eligible = openChecks(contract, states, counterpointsRun).filter((c) => !blockedTriggers.has(c.id));
     const newlyTriggered = eligible.filter((c) => c.triggeredBy && !acceptedTriggers.has(c.id));
     if (newlyTriggered.length) {
