@@ -154,6 +154,15 @@ describe('investigation engine', () => {
     expect(r.assessment).toBe('UNVERIFIABLE');
     expect(r.evidence).toHaveLength(0);
   });
+
+  it('inverts check outcomes for a bearish claim', async () => {
+    const bull = await run(claim({ ticker: 'BBCA' }));
+    const bear = await run(claim({ ticker: 'BBCA', direction: 'bearish', normalizedText: 'BBCA growth is weak' }));
+    const rev = (r: typeof bull) => r.states.find((s) => s.checkId === 'revenue_growth')!.outcome;
+    expect(rev(bull)).toBe('supports');
+    expect(rev(bear)).toBe('weakens');
+    expect(bear.assessment).toBe('NOT_SUPPORTED');
+  });
 });
 
 describe('report composer', () => {

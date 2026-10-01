@@ -72,6 +72,7 @@ export class ThesisService {
             claimType: c.claim_type,
             comparisonType: c.comparison_type,
             timeScope: c.time_scope,
+            direction: c.direction,
             extractor,
             spanStart: span?.start ?? null,
             spanEnd: span?.end ?? null,

@@ -73,6 +73,7 @@ export function heuristicExtract(thesis: string): Extraction {
       time_scope: null,
       verifiability: verifiable ? 'YES' : 'NO',
       scope_note: verifiable ? null : SCOPE_NOTES.FORWARD_LOOKING!,
+      direction: 'bullish',
     });
   }
   if (claims.length === 0) {
@@ -85,6 +86,7 @@ export function heuristicExtract(thesis: string): Extraction {
       time_scope: null,
       verifiability: 'NO',
       scope_note: SCOPE_NOTES.UNSUPPORTED!,
+      direction: 'bullish',
     });
   }
   return { entities: [], claims };
