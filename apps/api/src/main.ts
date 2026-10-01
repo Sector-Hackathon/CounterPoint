@@ -15,6 +15,8 @@ async function bootstrap() {
   const app = await NestFactory.create<import('@nestjs/platform-express').NestExpressApplication>(AppModule);
   // Behind Railway's proxy: take the client IP from X-Forwarded-For for rate limiting.
   app.set('trust proxy', 1);
+  // Screenshot uploads (POST /theses/extract-text) carry up to ~4 MB of base64.
+  app.useBodyParser('json', { limit: '6mb' });
   const origins = (process.env.WEB_ORIGIN ?? 'http://localhost:3000').split(',').map((o) => o.trim()).filter(Boolean);
   app.enableCors({ origin: origins });
   const port = Number(process.env.PORT ?? process.env.API_PORT ?? 4000);

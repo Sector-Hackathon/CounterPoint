@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { api } from '@/lib/api';
+import { ScreenshotDrop } from '@/components/ScreenshotDrop';
 
 const EXAMPLE = 'BBRI masih menarik karena growth kuat dan valuasinya murah dibanding bank besar lain, harga akan naik ke 6000.';
 
@@ -43,6 +44,7 @@ export default function Home() {
           placeholder="BBRI masih menarik karena…"
           style={{ font: 'inherit', fontSize: '1.1rem', padding: 18, borderRadius: 'var(--r-sheet)', border: 0, background: 'var(--paper-raised)', color: 'var(--ink)', boxShadow: 'inset 0 0 0 1px var(--rule)', resize: 'vertical' }}
         />
+        <ScreenshotDrop onText={setThesis} />
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <button type="submit" disabled={busy || thesis.trim().length < 10}>{busy ? 'Reading the thesis…' : 'Check this thesis'}</button>
           <button type="button" className="quiet" disabled={busy} onClick={() => { setThesis(EXAMPLE); void submit(EXAMPLE); }}>
