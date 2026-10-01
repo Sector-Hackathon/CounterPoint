@@ -15,7 +15,9 @@ import {
   evidenceCoverage,
   getContract,
   openChecks,
+  phaseOf,
   type Assessment,
+  type Expectation,
   type Coverage,
 } from '@counterpoint/domain';
 import type { SectorsDataSource } from '@counterpoint/sectors';
@@ -24,7 +26,9 @@ import { METRIC_BUILDERS, type BuildContext } from './evidence-builders';
 export interface EligibleCheck {
   checkId: string;
   kind: CheckDefinition['kind'];
+  phase: 'required' | 'counter' | 'counterpoint';
   description: string;
+  hypothesis: string | null;
   tools: ToolName[];
   triggeredBy: string[] | null;
 }
@@ -40,7 +44,7 @@ export interface PlannerInput {
 }
 
 export type PlannerDecision =
-  | { action: 'investigate'; checkId: string; tool: string; reason: string }
+  | { action: 'investigate'; checkId: string; tool: string; reason: string; expectation: Expectation | null }
   | { action: 'stop'; reason: string };
 
 export interface Planner {
@@ -55,10 +59,12 @@ export class DeterministicPlanner implements Planner {
     const next = input.eligible[0];
     if (!next) return { action: 'stop', reason: 'No eligible checks remain.' };
     const trigger = next.triggeredBy?.filter((t) => input.contradictions.includes(t)) ?? [];
-    const reason = trigger.length
-      ? `Follow-up: ${trigger.join(', ')} weakened the claim, so checking ${next.description.toLowerCase()}.`
-      : `Next open ${next.kind} check: ${next.description.toLowerCase()}.`;
-    return { action: 'investigate', checkId: next.checkId, tool: next.tools[0]!, reason };
+    const reason = next.phase === 'counterpoint'
+      ? `Testing the counter-case: ${next.hypothesis}`
+      : trigger.length
+        ? `Follow-up: ${trigger.join(', ')} weakened the claim, so checking ${next.description.toLowerCase()}.`
+        : `Next open ${next.kind} check: ${next.description.toLowerCase()}.`;
+    return { action: 'investigate', checkId: next.checkId, tool: next.tools[0]!, reason, expectation: null };
   }
 }
 
@@ -77,16 +83,18 @@ export interface InvestigationDeps {
   planner: Planner;
   newId: () => string;
   now?: () => Date;
-  onTrace?: (t: ExecutionTrace) => void | Promise<void>;
+  onTrace?: (t: ExecutionTrace, evidence: EvidenceItem[]) => void | Promise<void>;
+  /** Epoch ms after which the claim stops with TIMEOUT (NFR-005). */
+  deadline?: number;
 }
 
 export async function investigateClaim(claim: Claim, deps: InvestigationDeps): Promise<InvestigationResult> {
   const now = deps.now ?? (() => new Date());
   const trace: ExecutionTrace[] = [];
-  const record = async (t: Omit<ExecutionTrace, 'id' | 'claimId' | 'sequence'>) => {
+  const record = async (t: Omit<ExecutionTrace, 'id' | 'claimId' | 'sequence'>, items: EvidenceItem[] = []) => {
     const entry: ExecutionTrace = { id: deps.newId(), claimId: claim.id, sequence: trace.length, ...t };
     trace.push(entry);
-    await deps.onTrace?.(entry);
+    await deps.onTrace?.(entry, items);
   };
   const instant = (action: ExecutionTrace['action'], reason: string, extra: Partial<ExecutionTrace> = {}) => {
     const ts = now().toISOString();
@@ -121,6 +129,7 @@ export async function investigateClaim(claim: Claim, deps: InvestigationDeps): P
   const history: PlannerInput['history'] = [];
   let toolCalls = 0;
   let replans = 0;
+  let counterpointsRun = 0;
   let rejections = 0;
   let stopReason: StopReason | null = null;
   let stopNote = '';
@@ -128,12 +137,13 @@ export async function investigateClaim(claim: Claim, deps: InvestigationDeps): P
   await instant(
     'PLAN',
     `Contract ${contract.id}: required checks ${contract.checks.filter((c) => c.kind === 'required').map((c) => c.id).join(', ')}; ` +
-      `counterchecks ${contract.checks.filter((c) => c.kind === 'counter' && !c.triggeredBy).map((c) => c.id).join(', ') || 'none'}.`,
+      `counterchecks ${contract.checks.filter((c) => phaseOf(c) === 'counter' && !c.triggeredBy).map((c) => c.id).join(', ') || 'none'}; ` +
+      `counter-hypotheses ${contract.checks.filter((c) => phaseOf(c) === 'counterpoint').map((c) => c.id).join(', ') || 'none'}.`,
   );
 
-  let states = evaluateChecks(contract, evidence);
+  let states = evaluateChecks(contract, evidence, claim.direction);
   while (!stopReason) {
-    let eligible = openChecks(contract, states).filter((c) => !blockedTriggers.has(c.id));
+    let eligible = openChecks(contract, states, counterpointsRun).filter((c) => !blockedTriggers.has(c.id));
     const newlyTriggered = eligible.filter((c) => c.triggeredBy && !acceptedTriggers.has(c.id));
     if (newlyTriggered.length) {
       const cause = contradictions(states).join(', ');
@@ -171,7 +181,10 @@ export async function investigateClaim(claim: Claim, deps: InvestigationDeps): P
     const input: PlannerInput = {
       claim,
       contractId: contract.id,
-      eligible: eligible.map((c) => ({ checkId: c.id, kind: c.kind, description: c.description, tools: c.tools, triggeredBy: c.triggeredBy ?? null })),
+      eligible: eligible.map((c) => ({
+        checkId: c.id, kind: c.kind, phase: phaseOf(c), description: c.description, hypothesis: c.hypothesis ?? null,
+        tools: c.tools, triggeredBy: c.triggeredBy ?? null,
+      })),
       states,
       contradictions: contradictions(states),
       budget: { toolCallsUsed: toolCalls, toolCallsLeft: BUDGET.maxToolCalls - toolCalls, replansLeft: BUDGET.maxReplans - replans },
@@ -211,26 +224,33 @@ export async function investigateClaim(claim: Claim, deps: InvestigationDeps): P
     const tool = decision.tool as ToolName;
     executed.add(`${check.id}:${tool}`);
     toolCalls++;
+    if (phaseOf(check) === 'counterpoint') counterpointsRun++;
     const startedAt = now().toISOString();
     const { items, failure } = await runCheck(ctx, check, evidence);
     evidence.push(...items);
     const before = new Map(states.map((s) => [s.checkId, s.status]));
-    states = evaluateChecks(contract, evidence);
+    states = evaluateChecks(contract, evidence, claim.direction);
     const allUnavailable = items.length > 0 && items.every((i) => i.status !== 'VALID');
     const resultStatus = failure ? 'ERROR' : allUnavailable ? 'NO_DATA' : 'OK';
     history.push({ checkId: check.id, tool, result: resultStatus });
-    await record({
-      action: tool,
-      reason: decision.reason,
-      startedAt,
-      finishedAt: now().toISOString(),
-      evidenceIds: items.map((i) => i.id),
-      resultStatus,
-      stopReason: null,
-      checkId: check.id,
-      expectation: null,
-      expectationHeld: null,
-    });
+    const state = states.find((s) => s.checkId === check.id);
+    const expectationHeld =
+      decision.expectation && state?.status === 'completed' ? state.outcome === decision.expectation : null;
+    await record(
+      {
+        action: tool,
+        reason: decision.reason,
+        startedAt,
+        finishedAt: now().toISOString(),
+        evidenceIds: items.map((i) => i.id),
+        resultStatus,
+        stopReason: null,
+        checkId: check.id,
+        expectation: decision.expectation,
+        expectationHeld,
+      },
+      items,
+    );
 
     const resolved = states.filter((s) => before.get(s.checkId) === 'pending' && s.status !== 'pending');
     if (resolved.length) {
@@ -272,7 +292,16 @@ async function runCheck(
   for (const metric of check.metrics) {
     if (have.has(metric)) continue;
     const build = METRIC_BUILDERS[metric];
-    if (!build) throw new Error(`no builder for metric ${metric}`);
+    if (!build) {
+      items.push({
+        id: ctx.newId(), claimId: ctx.claimId, checkId: check.id, metric, ticker: ctx.ticker, value: null, unit: 'percent',
+        economicPeriod: null, comparisonPeriod: null, observationDate: null, retrievalTime: new Date().toISOString(),
+        sourceLocator: 'not-implemented', derivedFrom: [], calculationVersion: null, status: 'UNAVAILABLE',
+        note: `no data source for ${metric} in this version`,
+      });
+      have.add(metric);
+      continue;
+    }
     let built: EvidenceItem[] | null = null;
     let lastError = '';
     for (let attempt = 0; attempt <= BUDGET.transientRetries && !built; attempt++) {

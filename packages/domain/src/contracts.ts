@@ -1,16 +1,34 @@
 import type { Calc } from './calc';
+import { band, ok, type CheckOutcome } from './check-helpers';
 import type { EvidenceItem } from './models';
-import type { Assessment, ClaimType, ToolName, Verifiability } from './ontology';
+import { BUDGET, type Assessment, type CheckPhase, type ClaimDirection, type ClaimType, type ToolName, type Verifiability } from './ontology';
+import { absoluteGrowthV2, dividendLevelV2, relativeValuationV2 } from './contracts-v2';
 
+export type { CheckOutcome } from './check-helpers';
 export type CheckKind = 'required' | 'counter';
-export type CheckOutcome = 'supports' | 'weakens' | 'neutral';
 export type CheckStatus = 'pending' | 'completed' | 'unavailable' | 'invalid';
 
 export type MetricValues = Record<string, number>;
 
+export interface FlipRule {
+  /** Evidence metric whose value is compared to the threshold. */
+  metric: string;
+  comparator: 'at_least' | 'above' | 'at_most' | 'below';
+  threshold: (t: Thresholds) => number;
+  /** Plain-language name of the measured quantity, e.g. "Latest-quarter revenue growth YoY". */
+  label: string;
+  unit: 'percent' | 'percentage_points' | 'ratio';
+}
+
 export interface CheckDefinition {
   id: string;
   kind: CheckKind;
+  /** Counter-hypotheses run after required checks resolve (final-week spec F1). */
+  phase?: 'counterpoint';
+  /** User-facing question this counter-hypothesis asks. Required when phase is 'counterpoint'. */
+  hypothesis?: string;
+  /** Condition that would flip this check, used by whatWouldChange(). */
+  flip?: FlipRule;
   description: string;
   /** Evidence metric names this check consumes. */
   metrics: string[];
@@ -39,13 +57,17 @@ export interface EvidenceContract {
   provisional: boolean;
   /** Minimum completed required checks before any non-UNVERIFIABLE assessment. */
   minRequiredCompleted: number;
+  /** Questions a reader would ask that Sectors data cannot answer; shown in the report. */
+  openQuestions?: string[];
   checks: CheckDefinition[];
 }
 
-const ok = (value: CheckOutcome): Calc<CheckOutcome> => ({ ok: true, value });
+export function phaseOf(check: CheckDefinition): CheckPhase {
+  if (check.phase === 'counterpoint') return 'counterpoint';
+  return check.kind === 'required' ? 'required' : 'counter';
+}
 
-const band = (value: number, supportsAtLeast: number, weakensBelow: number): Calc<CheckOutcome> =>
-  ok(value >= supportsAtLeast ? 'supports' : value < weakensBelow ? 'weakens' : 'neutral');
+const INVERT: Record<CheckOutcome, CheckOutcome> = { supports: 'weakens', weakens: 'supports', neutral: 'neutral' };
 
 export const absoluteGrowthV1: EvidenceContract = {
   id: 'absolute-growth-v1',
@@ -235,10 +257,20 @@ export const CONTRACTS: Record<string, EvidenceContract> = {
   [absoluteGrowthV1.id]: absoluteGrowthV1,
   [dividendLevelV1.id]: dividendLevelV1,
   [relativeValuationV1.id]: relativeValuationV1,
+  [absoluteGrowthV2.id]: absoluteGrowthV2,
+  [dividendLevelV2.id]: dividendLevelV2,
+  [relativeValuationV2.id]: relativeValuationV2,
+};
+
+/** Current contract per claim type. Older versions stay in CONTRACTS so stored reports resolve. */
+const CURRENT: Partial<Record<ClaimType, EvidenceContract>> = {
+  ABSOLUTE_GROWTH: absoluteGrowthV2,
+  DIVIDEND_LEVEL: dividendLevelV2,
+  RELATIVE_VALUATION: relativeValuationV2,
 };
 
 export function contractForClaimType(type: ClaimType): EvidenceContract | null {
-  return Object.values(CONTRACTS).find((c) => c.claimType === type) ?? null;
+  return CURRENT[type] ?? null;
 }
 
 export function getContract(id: string): EvidenceContract {
@@ -257,7 +289,11 @@ export interface CheckState {
 }
 
 /** Derives every check's state from the claim's evidence. Latest item per metric wins. */
-export function evaluateChecks(contract: EvidenceContract, evidence: EvidenceItem[]): CheckState[] {
+export function evaluateChecks(
+  contract: EvidenceContract,
+  evidence: EvidenceItem[],
+  direction: ClaimDirection = 'bullish',
+): CheckState[] {
   const byMetric = new Map<string, EvidenceItem>();
   for (const e of evidence) byMetric.set(e.metric, e);
 
@@ -278,7 +314,8 @@ export function evaluateChecks(contract: EvidenceContract, evidence: EvidenceIte
     const values: MetricValues = Object.fromEntries(present.map((i) => [i.metric, i.value!]));
     const result = check.evaluate(values, contract.thresholds);
     if (!result.ok) return { ...base, status: 'invalid', evidenceIds: ids, note: result.reason };
-    return { ...base, status: 'completed', outcome: result.value, evidenceIds: ids };
+    const outcome = direction === 'bearish' && phaseOf(check) !== 'counterpoint' ? INVERT[result.value] : result.value;
+    return { ...base, status: 'completed', outcome, evidenceIds: ids };
   });
 }
 
@@ -321,19 +358,24 @@ export function assess(
   return 'SUPPORTED';
 }
 
+const PHASE_ORDER: Record<CheckPhase, number> = { required: 0, counter: 1, counterpoint: 2 };
+
 /**
- * Checks still worth investigating: required first, then counterchecks. Triggered counterchecks
- * appear only after one of their trigger checks has weakened the claim.
+ * Checks still worth investigating: required, then counterchecks, then counter-hypotheses.
+ * Triggered counterchecks appear only after a trigger weakened the claim. Counter-hypotheses
+ * appear only once no required check is pending, and stop after BUDGET.maxCounterpoints ran.
  */
-export function openChecks(contract: EvidenceContract, states: CheckState[]): CheckDefinition[] {
+export function openChecks(contract: EvidenceContract, states: CheckState[], counterpointsRun = 0): CheckDefinition[] {
   const pending = new Set(states.filter((s) => s.status === 'pending').map((s) => s.checkId));
   const weakened = new Set(
     states.filter((s) => s.status === 'completed' && s.outcome === 'weakens').map((s) => s.checkId),
   );
+  const requiredPending = states.some((s) => s.kind === 'required' && s.status === 'pending');
   return contract.checks
     .filter((c) => pending.has(c.id))
     .filter((c) => !c.triggeredBy || c.triggeredBy.some((t) => weakened.has(t)))
-    .sort((a, b) => (a.kind === b.kind ? 0 : a.kind === 'required' ? -1 : 1));
+    .filter((c) => phaseOf(c) !== 'counterpoint' || (!requiredPending && counterpointsRun < BUDGET.maxCounterpoints))
+    .sort((a, b) => PHASE_ORDER[phaseOf(a)] - PHASE_ORDER[phaseOf(b)]);
 }
 
 /** Checks that weakened the claim — the contradictions the replanner reacts to. */

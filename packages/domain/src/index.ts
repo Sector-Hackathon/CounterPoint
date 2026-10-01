@@ -3,6 +3,8 @@ export * from './ontology';
 export * from './period';
 export * from './models';
 export * from './analytics';
+export * from './check-helpers';
 export * from './contracts';
+export * from './contracts-v2';
 export * from './peers';
 export * from './validation';

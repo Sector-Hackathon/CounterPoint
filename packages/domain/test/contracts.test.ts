@@ -34,7 +34,7 @@ function ev(metric: string, value: number | null, status: EvidenceItem['status']
 
 describe('evidence contracts', () => {
   it('maps claim types to contracts and abstains for unsupported types', () => {
-    expect(contractForClaimType('ABSOLUTE_GROWTH')?.id).toBe('absolute-growth-v1');
+    expect(contractForClaimType('ABSOLUTE_GROWTH')?.id).toBe('absolute-growth-v2');
     expect(contractForClaimType('FORWARD_LOOKING')).toBeNull();
     expect(assess(null, [], 'NO')).toBe('UNVERIFIABLE');
   });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { randomUUID } from 'node:crypto';
-import type { Claim } from '@counterpoint/domain';
+import { BUDGET, type Claim } from '@counterpoint/domain';
 import { DEV_FIXTURE, FixtureSectorsDataSource, type SectorsDataSource } from '@counterpoint/sectors';
 import { DeterministicPlanner, investigateClaim, type Planner } from '../src/investigation/engine';
 import { composeClaimReport, validateClaimReport } from '../src/reports/composer';
@@ -18,7 +18,7 @@ function claim(overrides: Partial<Claim>): Claim {
     comparisonType: 'HISTORICAL',
     timeScope: null,
     verifiability: 'YES',
-    contractId: 'absolute-growth-v1',
+    contractId: 'absolute-growth-v2',
     assessment: null,
     scopeNote: null,
     direction: 'bullish',
@@ -63,14 +63,14 @@ describe('investigation engine', () => {
   });
 
   it('uses a frozen deterministic peer set for relative valuation', async () => {
-    const r = await run(claim({ claimType: 'RELATIVE_VALUATION', comparisonType: 'PEER', contractId: 'relative-valuation-v1' }));
+    const r = await run(claim({ claimType: 'RELATIVE_VALUATION', comparisonType: 'PEER', contractId: 'relative-valuation-v2' }));
     expect(r.peerSet?.included.map((p) => p.ticker)).toEqual(['BBCA', 'BBNI', 'BMRI', 'BRIS']);
     expect(r.peerSet?.excluded.map((p) => p.ticker)).toContain('BBRI');
     expect(r.assessment).toBe('SUPPORTED');
   });
 
   it('assesses the dividend contract end to end', async () => {
-    const r = await run(claim({ claimType: 'DIVIDEND_LEVEL', contractId: 'dividend-level-v1' }));
+    const r = await run(claim({ claimType: 'DIVIDEND_LEVEL', contractId: 'dividend-level-v2' }));
     expect(r.assessment).toBe('SUPPORTED');
     expect(r.coverage?.label).toBe('3 of 3 required checks available');
   });
@@ -88,8 +88,8 @@ describe('investigation engine', () => {
       async decide(input) {
         calls++;
         return calls === 1
-          ? { action: 'investigate', checkId: input.eligible[0]!.checkId, tool: 'fetch_url', reason: 'x' }
-          : { action: 'investigate', checkId: 'nope', tool: 'get_quarterly_financials', reason: 'x' };
+          ? { action: 'investigate', checkId: input.eligible[0]!.checkId, tool: 'fetch_url', reason: 'x', expectation: null }
+          : { action: 'investigate', checkId: 'nope', tool: 'get_quarterly_financials', reason: 'x', expectation: null };
       },
     };
     const r = await run(claim({}), rogue);
@@ -122,7 +122,7 @@ describe('investigation engine', () => {
   it('never exceeds the tool budget', async () => {
     const r = await run(claim({}));
     const toolCalls = r.trace.filter((t) => t.action.startsWith('get_')).length;
-    expect(toolCalls).toBeLessThanOrEqual(6);
+    expect(toolCalls).toBeLessThanOrEqual(BUDGET.maxToolCalls);
   });
 });
 
@@ -138,7 +138,7 @@ describe('report composer', () => {
   });
 
   it('validates relative-valuation statements that carry observation dates', async () => {
-    const c = claim({ claimType: 'RELATIVE_VALUATION', comparisonType: 'PEER', contractId: 'relative-valuation-v1' });
+    const c = claim({ claimType: 'RELATIVE_VALUATION', comparisonType: 'PEER', contractId: 'relative-valuation-v2' });
     const r = await run(c);
     const { issues, report } = validateClaimReport(composeClaimReport({ claim: c, ...r }), r.evidence);
     expect(issues).toEqual([]);
@@ -153,5 +153,31 @@ describe('report composer', () => {
     const { report: cleaned, issues } = validateClaimReport(report, r.evidence);
     expect(cleaned.interpretation).toBeNull();
     expect(issues.map((i) => i.kind)).toEqual(expect.arrayContaining(['uncited_number', 'advice']));
+  });
+
+  it('runs counter-hypotheses after required checks and records them in the trace', async () => {
+    const r = await run(claim({ ticker: 'BBCA' }));
+    const cpIds = ['base_effect', 'earnings_outpacing_revenue', 'roe_trend'];
+    const counterpointSteps = r.trace.filter((t) => t.checkId && cpIds.includes(t.checkId));
+    expect(counterpointSteps.length).toBeGreaterThan(0);
+    const firstCounterpoint = r.trace.indexOf(counterpointSteps[0]!);
+    const lastRequired = Math.max(...['revenue_growth', 'earnings_growth', 'historical_context'].map((id) => r.trace.findIndex((t) => t.checkId === id)));
+    expect(firstCounterpoint).toBeGreaterThan(lastRequired);
+    expect(r.trace.filter((t) => t.action.startsWith('get_')).length).toBeLessThanOrEqual(8);
+  });
+
+  it('records whether the planner expectation held', async () => {
+    const planner: Planner = {
+      name: 'expects-support',
+      decide: async (input) => {
+        const next = input.eligible[0];
+        if (!next) return { action: 'stop', reason: 'done' };
+        return { action: 'investigate', checkId: next.checkId, tool: next.tools[0]!, reason: 'r', expectation: 'supports' };
+      },
+    };
+    const r = await run(claim({ ticker: 'BBCA' }), planner);
+    const revenue = r.trace.find((t) => t.checkId === 'revenue_growth')!;
+    expect(revenue.expectation).toBe('supports');
+    expect(typeof revenue.expectationHeld).toBe('boolean');
   });
 });

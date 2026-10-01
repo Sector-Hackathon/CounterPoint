@@ -141,6 +141,11 @@ export const METRIC_BUILDERS: Record<string, Builder> = {
     return yoyMetric(ctx, checkId, s, anchor(s), 'revenue', 'annual_revenue_yoy_pct');
   },
 
+  async annual_earnings_yoy_pct(ctx, checkId) {
+    const s = await annual(ctx);
+    return yoyMetric(ctx, checkId, s, anchor(s), 'netIncome', 'annual_earnings_yoy_pct');
+  },
+
   async net_margin_change_pp(ctx, checkId) {
     const s = await quarterly(ctx);
     const base = {
