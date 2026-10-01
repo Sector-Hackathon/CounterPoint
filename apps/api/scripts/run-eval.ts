@@ -12,7 +12,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
-import type { Claim } from '@counterpoint/domain';
+import { getContract, phaseOf, type Claim, type CheckState } from '@counterpoint/domain';
 import { DEV_FIXTURE, FixtureSectorsDataSource } from '@counterpoint/sectors';
 import { ClaimCase, ThesisCase, scoreClaimCase, scoreThesisCase, summarize, type CaseScore } from '@counterpoint/eval';
 import { DeterministicPlanner, investigateClaim, type Planner } from '../src/investigation/engine';
@@ -48,6 +48,8 @@ async function runClaimCases(): Promise<CaseScore[]> {
       comparisonType: 'ABSOLUTE',
       timeScope: null,
       assessment: null,
+      direction: 'bullish',
+      span: null,
       ...scope,
     };
     const r = await investigateClaim(claim, { source, planner, newId: randomUUID });
@@ -61,10 +63,28 @@ async function runClaimCases(): Promise<CaseScore[]> {
         toolCalls: toolPath.length,
         toolPath,
         uncitedNumbers: issues.filter((i) => i.kind === 'uncited_number').length,
+        counterpoint: scope.contractId ? counterpointOutcomes(scope.contractId, r.states) : {},
       }),
     );
   }
   return scores;
+}
+
+/** Observed counter-hypothesis outcome per check: confirmed | refuted | untestable | not_tested. */
+function counterpointOutcomes(contractId: string, states: CheckState[]): Record<string, string> {
+  return Object.fromEntries(
+    getContract(contractId)
+      .checks.filter((c) => phaseOf(c) === 'counterpoint')
+      .map((c) => {
+        const s = states.find((x) => x.checkId === c.id);
+        const status = !s || s.status === 'pending'
+          ? 'not_tested'
+          : s.status === 'completed'
+            ? s.outcome === 'weakens' ? 'confirmed' : 'refuted'
+            : 'untestable';
+        return [c.id, status];
+      }),
+  );
 }
 
 async function runThesisCases(): Promise<CaseScore[]> {

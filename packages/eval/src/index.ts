@@ -17,6 +17,8 @@ export const ClaimCase = z.object({
     /** Whether the case must (true) or must not (false) take a contradiction-driven replan. */
     replan: z.boolean().optional(),
     maxToolCalls: z.number().int().optional(),
+    /** Expected counter-hypothesis outcomes by check id (final-week spec F1). */
+    counterpoint: z.record(z.string(), z.enum(['confirmed', 'refuted', 'untestable'])).optional(),
   }),
 });
 export type ClaimCase = z.infer<typeof ClaimCase>;
@@ -42,6 +44,8 @@ export interface ClaimRunResult {
   toolCalls: number;
   toolPath: string[];
   uncitedNumbers: number;
+  /** Observed counter-hypothesis outcomes by check id: confirmed | refuted | untestable | not_tested. */
+  counterpoint?: Record<string, string>;
 }
 
 export interface CaseScore {
@@ -60,6 +64,10 @@ export function scoreClaimCase(c: ClaimCase, r: ClaimRunResult): CaseScore {
   }
   if (c.expected.maxToolCalls !== undefined && r.toolCalls > c.expected.maxToolCalls) {
     failures.push(`toolCalls ${r.toolCalls} > ${c.expected.maxToolCalls}`);
+  }
+  for (const [id, want] of Object.entries(c.expected.counterpoint ?? {})) {
+    const got = r.counterpoint?.[id] ?? 'not_tested';
+    if (got !== want) failures.push(`counterpoint ${id}: expected ${want}, got ${got}`);
   }
   if (r.uncitedNumbers > 0) failures.push(`${r.uncitedNumbers} report numbers without evidence`);
   return { id: c.id, split: c.split, pass: failures.length === 0, failures };
