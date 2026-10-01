@@ -36,3 +36,25 @@ About 5 seconds per claim, and 17 uncached Sectors calls for all four claims.
 - Bank "revenue" in Sectors includes non-interest and premium income. BBRI FY2025 annual revenue −9.2% versus quarterly +8.4% YoY needs a sanity check against the annual report before the demo.
 - Thresholds are still provisional. The absolute-growth contract calls BBRI's 8.4% quarterly revenue growth "neutral" because it is below the 10% threshold.
 - The fixture data in `packages/sectors/src/fixtures.ts` stays synthetic; tests don't depend on live data.
+
+## Counterpoint data check (2026-10-01)
+
+Probed with `pnpm sectors:probe BBRI BBCA TLKM ASII` (20/20 HTTP 200). Fields the v2 counter-hypotheses use:
+
+| Field | BBRI | BBCA | TLKM | ASII |
+| --- | --- | --- | --- | --- |
+| `financials.historical_financial_ratio[].profitability.roe` (fraction), years | 2018–2025 | 2018–2025 | 2021–2025 | 2021–2025 |
+| `overview.all_time_price["52_w_high"]` + `last_close_price` | 4050 / 3140 | 8750 / 6075 | 3990 / 2290 | 7475 / 4600 |
+| `valuation.historical_valuation[].pe`, years | 2022–2026 | 2022–2026 | 2022–2026 | 2022–2026 |
+| `dividend.historical_dividends` with `total_yield` + `breakdown` | 2023–2026 | 2023–2026 | 2023–2026 | 2023–2026 |
+
+All present for all four, so no counter-hypothesis is dropped. The latest `historical_valuation` year is the current year (it equals the current P/E). **The current calendar year in `historical_dividends` is partial** (e.g. BBRI 2026: DPS 209 so far vs 345 in 2025), so year-over-year dividend comparisons use completed fiscal years only.
+
+### BBRI revenue reconciliation
+
+| Source | FY2025 revenue (IDR) | FY2025 net income (IDR) |
+| --- | --- | --- |
+| `report?sections=financials` annual | 181.30T | 56.65T |
+| Sum of `financials/quarterly` Q1–Q4 2025 | 204.34T | 57.61T |
+
+Annual and quarterly **revenue disagree by 11%** for the same fiscal year, while net income agrees within 1.7%. Sectors' bank "revenue" is therefore not reliable across endpoints, which explains the earlier −9.2% annual vs +8.4% quarterly contradiction. Decision: the v2 growth contract's historical-context check uses **annual net income growth**; quarterly revenue YoY (same endpoint for both quarters: Q2 2026 53.35T vs Q2 2025 49.20T, +8.4%) is kept as a same-source comparison.
