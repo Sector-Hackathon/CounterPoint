@@ -21,6 +21,7 @@ export interface SessionView {
   status: string;
   dataMode: 'live' | 'fixture';
   error: string | null;
+  finalReportId: string | null;
   entities: EntityView[];
 }
 

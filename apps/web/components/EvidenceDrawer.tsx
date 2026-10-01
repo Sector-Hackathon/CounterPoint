@@ -1,25 +1,46 @@
 'use client';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useEffect, useRef } from 'react';
+import { wrapFocus } from '@/lib/session-logic';
 import type { EvidenceItem } from '@/lib/api';
 import { formatValue, metricLabel } from '@/lib/format';
 
 export function EvidenceDrawer({ item, all, onClose }: { item: EvidenceItem | null; all: EvidenceItem[]; onClose: () => void }) {
   const reduce = useReducedMotion();
   const closeRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
+  const open = item !== null;
+
+  // Focus moves into the dialog on open and back to the control that opened it on close.
   useEffect(() => {
-    if (!item) return;
+    if (!open) return;
+    const opener = document.activeElement as HTMLElement | null;
     closeRef.current?.focus();
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    return () => opener?.focus();
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') return onClose();
+      if (e.key !== 'Tab' || !panelRef.current) return;
+      const focusable = [...panelRef.current.querySelectorAll<HTMLElement>('button, a[href], [tabindex]:not([tabindex="-1"])')];
+      const next = wrapFocus(focusable.indexOf(document.activeElement as HTMLElement), focusable.length, e.shiftKey);
+      if (next >= 0) {
+        e.preventDefault();
+        focusable[next]!.focus();
+      }
+    };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [item, onClose]);
+  }, [open, onClose]);
   const inputs = item ? item.derivedFrom.map((id) => all.find((e) => e.id === id)).filter((e): e is EvidenceItem => !!e) : [];
 
   return (
     <AnimatePresence>
       {item && (
         <motion.aside
+          ref={panelRef}
           role="dialog" aria-modal="true" aria-labelledby="ev-title" className="drawer"
           initial={reduce ? false : { x: 40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={reduce ? undefined : { x: 40, opacity: 0 }}
           transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}

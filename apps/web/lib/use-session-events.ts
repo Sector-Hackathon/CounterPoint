@@ -2,13 +2,14 @@
 import { useEffect, useReducer, useState } from 'react';
 import { api, eventsUrl, type SessionEvent } from './api';
 import { initialState, reduce } from './session-state';
+import { pollToEvents, shouldFallBack } from './session-logic';
 
 const TERMINAL = new Set(['COMPLETED', 'PARTIAL', 'FAILED']);
 
 /**
  * Subscribes to the session's SSE stream. The server replays stored events first, so a
  * reload or reconnect rebuilds the same state. Falls back to polling the session endpoint
- * (status only) if EventSource errors three times in a row.
+ * (status and report id) when the browser closes the stream or after repeated errors.
  */
 export function useSessionEvents(id: string) {
   const [state, dispatch] = useReducer(reduce, initialState);
@@ -28,13 +29,14 @@ export function useSessionEvents(id: string) {
       }
     };
     es.onerror = () => {
-      if (++errors < 3) return; // EventSource reconnects on its own
+      // EventSource retries transient errors itself, but gives up for good on a non-200 reply.
+      if (!shouldFallBack(es.readyState, ++errors)) return;
       es.close();
       setConnection('polling');
       poll = setInterval(async () => {
         const s = await api.getSession(id).catch(() => null);
         if (!s) return;
-        dispatch({ id: `status:${s.status}`, type: 'session.status', status: s.status, error: s.error });
+        pollToEvents(s).forEach(dispatch);
         if (TERMINAL.has(s.status) && poll) clearInterval(poll);
       }, 1500);
     };

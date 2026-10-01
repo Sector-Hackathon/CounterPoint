@@ -25,6 +25,7 @@ export default function Report() {
   }, [report]);
 
   const onOpen = useCallback((evidenceId: string) => setOpen(evidence.find((e) => e.id === evidenceId) ?? null), [evidence]);
+  const closeDrawer = useCallback(() => setOpen(null), []);
   const quoteOf = (claimId: string) => state.claims.find((c) => c.id === claimId)?.originalText ?? '';
 
   return (
@@ -32,10 +33,17 @@ export default function Report() {
       <p><a href={`/t/${id}`}>Back to the investigation</a></p>
       {state.rawThesis && <blockquote style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: '1.3rem', maxWidth: '50ch' }}>{state.rawThesis}</blockquote>}
       {error && <p role="alert">{error}</p>}
-      {!report && !error && <p className="muted" aria-live="polite">The report appears when the investigation finishes.</p>}
+      {!report && !error && !state.reportId && ['FAILED', 'PARTIAL', 'COMPLETED'].includes(state.status) && (
+        <p role="alert">
+          The investigation ended without a report{state.error ? `: ${state.error}` : '.'} <a href="/">Check a thesis again</a>
+        </p>
+      )}
+      {!report && !error && !['FAILED', 'PARTIAL', 'COMPLETED'].includes(state.status) && (
+        <p className="muted" aria-live="polite">The report appears when the investigation finishes.</p>
+      )}
       {report?.claims.map((c) => <VerdictCard key={c.claimId} quote={quoteOf(c.claimId)} report={c} onOpen={onOpen} />)}
       {report && <p className="small muted">{report.disclaimer}</p>}
-      <EvidenceDrawer item={open} all={evidence} onClose={() => setOpen(null)} />
+      <EvidenceDrawer item={open} all={evidence} onClose={closeDrawer} />
     </main>
   );
 }
