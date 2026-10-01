@@ -56,6 +56,9 @@ model Claim {
   checkStates    Json?
   peerSet        Json?
   extractor      String
+  direction      String  @default("bullish")
+  spanStart      Int?
+  spanEnd        Int?
 
   session  ThesisSession    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   evidence EvidenceItem[]
@@ -100,6 +103,9 @@ model ExecutionTrace {
   resultStatus String
   stopReason   String?
   planner      String?
+  checkId         String?
+  expectation     String?
+  expectationHeld Boolean?
 
   claim Claim @relation(fields: [claimId], references: [id], onDelete: Cascade)
 
