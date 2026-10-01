@@ -210,4 +210,27 @@ describe('report composer', () => {
     expect(revenue.expectation).toBe('supports');
     expect(typeof revenue.expectationHeld).toBe('boolean');
   });
+
+  it('reports counter-hypotheses separately from weakens, with open questions', async () => {
+    const c = claim({ claimType: 'RELATIVE_VALUATION', comparisonType: 'PEER', contractId: 'relative-valuation-v2' });
+    const r = await run(c);
+    const report = composeClaimReport({ claim: c, ...r });
+    const byId = Object.fromEntries(report.counterpoint!.hypotheses.map((h) => [h.checkId, h.status]));
+    expect(byId).toEqual({ roe_vs_peers: 'confirmed', own_history: 'refuted', price_drawdown: 'confirmed' });
+    const counterIds = new Set(report.counterpoint!.hypotheses.flatMap((h) => h.statement?.evidenceIds ?? []));
+    expect(report.weakens.some((w) => w.evidenceIds.some((id) => counterIds.has(id)))).toBe(false);
+    expect(report.counterpoint!.openQuestions.length).toBeGreaterThan(0);
+    const { issues } = validateClaimReport(report, r.evidence);
+    expect(issues).toEqual([]);
+  });
+
+  it('lists what would change a growth verdict', async () => {
+    const c = claim({});
+    const r = await run(c);
+    const report = composeClaimReport({ claim: c, ...r });
+    expect(report.changeConditions.length).toBeGreaterThan(0);
+    for (const cond of report.changeConditions) {
+      expect(r.evidence.some((e) => e.id === cond.evidenceId && e.value === cond.current)).toBe(true);
+    }
+  });
 });

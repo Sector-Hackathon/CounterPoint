@@ -9,8 +9,11 @@ import {
   type ValidationIssue,
   type Coverage,
   type Assessment,
+  type CounterpointHypothesis,
   getContract,
+  phaseOf,
   validateStatement,
+  whatWouldChange,
 } from '@counterpoint/domain';
 
 const METRIC_LABELS: Record<string, string> = {
@@ -98,7 +101,26 @@ export function composeClaimReport(input: ComposeInput): ClaimReport {
   const context: ReportStatement[] = [];
   const missing: string[] = [];
 
+  const hypotheses: CounterpointHypothesis[] = [];
   for (const s of states) {
+    const check = contract?.checks.find((c) => c.id === s.checkId);
+    if (check && phaseOf(check) === 'counterpoint') {
+      hypotheses.push({
+        checkId: s.checkId,
+        hypothesis: check.hypothesis ?? check.description,
+        status:
+          s.status === 'completed'
+            ? s.outcome === 'weakens'
+              ? 'confirmed'
+              : 'refuted'
+            : s.status === 'pending'
+              ? 'not_tested'
+              : 'untestable',
+        statement: s.status === 'completed' ? statementFor(s, describe(s.checkId), byId) : null,
+        note: s.note,
+      });
+      continue;
+    }
     if (s.status === 'completed') {
       const st = statementFor(s, describe(s.checkId), byId);
       (s.outcome === 'supports' ? supports : s.outcome === 'weakens' ? weakens : context).push(st);
@@ -129,8 +151,8 @@ export function composeClaimReport(input: ComposeInput): ClaimReport {
           minPeers: input.peerSet.minPeers,
         }
       : null,
-    counterpoint: null,
-    changeConditions: [],
+    counterpoint: contract && claim.direction === 'bullish' ? { hypotheses, openQuestions: contract.openQuestions ?? [] } : null,
+    changeConditions: contract ? whatWouldChange(contract, states, evidence) : [],
   };
 }
 
@@ -153,6 +175,12 @@ export function validateClaimReport(
       supports: report.supports.filter(keep),
       weakens: report.weakens.filter(keep),
       context: report.context.filter(keep),
+      counterpoint: report.counterpoint
+        ? {
+            ...report.counterpoint,
+            hypotheses: report.counterpoint.hypotheses.map((h) => (h.statement && !keep(h.statement) ? { ...h, statement: null } : h)),
+          }
+        : null,
       interpretation,
     },
     issues,
