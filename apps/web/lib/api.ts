@@ -1,17 +1,8 @@
+import { normalizeReport } from './session-state';
+
 export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
 
 export type Assessment = 'SUPPORTED' | 'PARTIALLY_SUPPORTED' | 'NOT_SUPPORTED' | 'UNVERIFIABLE';
-
-export interface TraceEvent {
-  id: string;
-  sequence: number;
-  action: string;
-  reason: string;
-  resultStatus: string;
-  stopReason: string | null;
-  evidenceIds: string[];
-  planner: string | null;
-}
 
 export interface EntityView {
   id: string;
@@ -23,22 +14,7 @@ export interface EntityView {
   isPrimary: boolean;
 }
 
-export interface ClaimView {
-  id: string;
-  ordinal: number;
-  originalText: string;
-  normalizedText: string;
-  ticker: string | null;
-  claimType: string;
-  verifiability: 'YES' | 'PARTIAL' | 'NO';
-  contractId: string | null;
-  assessment: Assessment | null;
-  scopeNote: string | null;
-  stopReason: string | null;
-  extractor: string;
-  trace: TraceEvent[];
-}
-
+/** Session snapshot; used for ambiguous-company confirmation and as the polling fallback. */
 export interface SessionView {
   id: string;
   rawThesis: string;
@@ -46,7 +22,6 @@ export interface SessionView {
   dataMode: 'live' | 'fixture';
   error: string | null;
   entities: EntityView[];
-  claims: ClaimView[];
 }
 
 export interface Statement {
@@ -54,17 +29,101 @@ export interface Statement {
   evidenceIds: string[];
 }
 
+export interface Coverage {
+  required: number;
+  completed: number;
+  unavailable: number;
+  invalid: number;
+  label: string;
+}
+
+export interface EvidenceSummary {
+  id: string;
+  metric: string;
+  value: number | null;
+  unit: string;
+  economicPeriod: string | null;
+  comparisonPeriod: string | null;
+  status: string;
+  note: string | null;
+}
+
+export interface StepEvent {
+  id: string;
+  type: 'trace.step';
+  claimId: string;
+  sequence: number;
+  action: string;
+  reason: string;
+  resultStatus: string;
+  stopReason: string | null;
+  checkId: string | null;
+  phase: 'required' | 'counter' | 'counterpoint' | null;
+  hypothesis: string | null;
+  expectation: 'supports' | 'weakens' | 'neutral' | null;
+  expectationHeld: boolean | null;
+  evidence: EvidenceSummary[];
+}
+
+export interface ClaimSeed {
+  id: string;
+  ordinal: number;
+  originalText: string;
+  normalizedText: string;
+  ticker: string | null;
+  claimType: string;
+  verifiability: string;
+  scopeNote: string | null;
+  direction: string;
+  span: { start: number; end: number } | null;
+}
+
+export type SessionEvent =
+  | { id: string; type: 'session.status'; status: string; error: string | null }
+  | { id: string; type: 'claims.extracted'; rawThesis: string; claims: ClaimSeed[] }
+  | StepEvent
+  | { id: string; type: 'claim.assessed'; claimId: string; assessment: Assessment; stopReason: string; coverage: Coverage | null }
+  | { id: string; type: 'report.ready'; reportId: string };
+
+export interface ChangeCondition {
+  checkId: string;
+  label: string;
+  comparator: 'at_least' | 'above' | 'at_most' | 'below';
+  threshold: number;
+  current: number;
+  unit: 'percent' | 'percentage_points' | 'ratio';
+  period: string | null;
+  evidenceId: string;
+  effect: 'would_support' | 'would_stop_weakening';
+}
+
+export interface CounterpointHypothesis {
+  checkId: string;
+  hypothesis: string;
+  status: 'confirmed' | 'refuted' | 'untestable' | 'not_tested';
+  statement: Statement | null;
+  note: string | null;
+}
+
 export interface ClaimReport {
   claimId: string;
   assessment: Assessment;
-  coverage: { required: number; completed: number; unavailable: number; invalid: number; label: string };
+  coverage: Coverage;
   supports: Statement[];
   weakens: Statement[];
   context: Statement[];
   missing: string[];
   interpretation: Statement | null;
   stopReason: string | null;
-  peerSet: { policyVersion: string; period: string; included: string[]; excluded: { ticker: string; reason: string }[]; minPeers: number } | null;
+  peerSet: {
+    policyVersion: string;
+    period: string;
+    included: string[];
+    excluded: { ticker: string; reason: string }[];
+    minPeers: number;
+  } | null;
+  counterpoint: { hypotheses: CounterpointHypothesis[]; openQuestions: string[] } | null;
+  changeConditions: ChangeCondition[];
 }
 
 export interface ReportView {
@@ -91,6 +150,8 @@ export interface EvidenceItem {
   status: string;
   note: string | null;
 }
+
+export const eventsUrl = (id: string) => `${API_URL}/theses/${id}/events`;
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
@@ -119,6 +180,8 @@ export const api = {
   confirmEntity: (id: string, entityId: string, ticker: string) =>
     request<SessionView>(`/theses/${id}/entities/${entityId}/confirm`, { method: 'POST', body: JSON.stringify({ ticker }) }),
   investigate: (id: string) => request<{ status: string }>(`/theses/${id}/investigate`, { method: 'POST' }),
-  getReport: (id: string) => request<ReportView>(`/theses/${id}/report`),
+  getReport: async (id: string) => normalizeReport(await request<unknown>(`/theses/${id}/report`)),
   getEvidence: (claimId: string) => request<{ items: EvidenceItem[] }>(`/claims/${claimId}/evidence`),
+  extractText: (imageBase64: string, mimeType: string) =>
+    request<{ text: string }>('/theses/extract-text', { method: 'POST', body: JSON.stringify({ imageBase64, mimeType }) }),
 };
