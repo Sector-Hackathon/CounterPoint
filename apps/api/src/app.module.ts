@@ -11,6 +11,7 @@ import { ThesisService } from './thesis/thesis.service';
 import { ThesisController } from './thesis/thesis.controller';
 import { UsageLimiter } from './thesis/usage-limiter';
 import { EvidenceController } from './evidence/evidence.controller';
+import { EventsModule } from './events/events.module';
 
 @Controller()
 class HealthController {
@@ -31,7 +32,7 @@ class HealthController {
 }
 
 @Module({
-  imports: [PrismaModule, SectorsModule],
+  imports: [PrismaModule, SectorsModule, EventsModule],
   controllers: [HealthController, ThesisController, EvidenceController],
   providers: [LlmService, ClaimsService, EntityService, ReportsService, InvestigationService, ThesisService, UsageLimiter],
 })

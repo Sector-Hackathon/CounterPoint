@@ -4,7 +4,9 @@ import { PrismaService } from '../prisma/prisma.service';
 import { ClaimsService } from '../claims/claims.service';
 import { EntityService, type ResolvedEntity } from '../entity/entity.service';
 import { SECTORS_MODE } from '../sectors/sectors.module';
-import { toTrace } from '../common/mappers';
+import { toClaim, toTrace } from '../common/mappers';
+import { EventsService } from '../events/events.service';
+import { claimSeed, claimsEvent, statusEvent } from '../events/events.mappers';
 
 @Injectable()
 export class ThesisService {
@@ -15,7 +17,13 @@ export class ThesisService {
     private readonly claims: ClaimsService,
     private readonly entities: EntityService,
     @Inject(SECTORS_MODE) private readonly dataMode: 'live' | 'fixture',
+    private readonly events: EventsService,
   ) {}
+
+  private async setStatus(sessionId: string, status: string, error: string | null = null) {
+    await this.prisma.thesisSession.update({ where: { id: sessionId }, data: { status, ...(error ? { error } : {}) } });
+    this.events.publish(sessionId, statusEvent(status, error));
+  }
 
   async create(rawThesis: string) {
     const session = await this.prisma.thesisSession.create({
@@ -72,14 +80,14 @@ export class ThesisService {
         }),
       });
 
+      const rows = await this.prisma.claim.findMany({ where: { sessionId }, orderBy: { ordinal: 'asc' } });
+      this.events.publish(sessionId, claimsEvent(thesis, rows.map((row) => claimSeed(toClaim(row), row.ordinal))));
+
       const needsConfirmation = resolved.some((r) => r.resolutionStatus === 'AMBIGUOUS') || !primary;
-      await this.prisma.thesisSession.update({
-        where: { id: sessionId },
-        data: { status: needsConfirmation ? 'AWAITING_CONFIRMATION' : 'CLAIMS_EXTRACTED' },
-      });
+      await this.setStatus(sessionId, needsConfirmation ? 'AWAITING_CONFIRMATION' : 'CLAIMS_EXTRACTED');
     } catch (err) {
       this.logger.error(`analysis failed for ${sessionId}: ${(err as Error).message}`);
-      await this.prisma.thesisSession.update({ where: { id: sessionId }, data: { status: 'FAILED', error: (err as Error).message } });
+      await this.setStatus(sessionId, 'FAILED', (err as Error).message);
     }
   }
 
@@ -102,7 +110,7 @@ export class ThesisService {
     });
     const stillAmbiguous = await this.prisma.entity.count({ where: { sessionId, resolutionStatus: 'AMBIGUOUS' } });
     if (stillAmbiguous === 0) {
-      await this.prisma.thesisSession.update({ where: { id: sessionId }, data: { status: 'CLAIMS_EXTRACTED' } });
+      await this.setStatus(sessionId, 'CLAIMS_EXTRACTED');
     }
     return this.get(sessionId);
   }

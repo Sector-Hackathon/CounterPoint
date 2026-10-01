@@ -1,4 +1,6 @@
-import { BadRequestException, Body, Controller, Get, HttpCode, Ip, NotFoundException, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpCode, Ip, type MessageEvent, NotFoundException, Param, ParseUUIDPipe, Post, Sse } from '@nestjs/common';
+import type { Observable } from 'rxjs';
+import { EventsService } from '../events/events.service';
 import { UsageLimiter } from './usage-limiter';
 import { z } from 'zod';
 import { ThesisService } from './thesis.service';
@@ -21,6 +23,7 @@ export class ThesisController {
     private readonly investigation: InvestigationService,
     private readonly reports: ReportsService,
     private readonly limiter: UsageLimiter,
+    private readonly events: EventsService,
   ) {}
 
   @Post()
@@ -54,6 +57,11 @@ export class ThesisController {
     const report = await this.reports.latest(id);
     if (!report) throw new NotFoundException('report not ready');
     return report;
+  }
+
+  @Sse(':id/events')
+  stream(@Param('id', ParseUUIDPipe) id: string): Observable<MessageEvent> {
+    return this.events.stream(id) as Observable<MessageEvent>;
   }
 
   @Get(':id/trace')
