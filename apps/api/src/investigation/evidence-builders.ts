@@ -357,7 +357,12 @@ export const METRIC_BUILDERS: Record<string, Builder> = {
   async dividend_yield_hist_avg_pct(ctx, checkId) {
     const d = await dividends(ctx);
     const base = { metric: 'dividend_yield_hist_avg_pct', unit: 'percent' as const, sourceLocator: d.sourceLocator, retrievalTime: d.retrievedAt };
-    const years = [...d.annualYieldsPct].sort((a, b) => b.year - a.year).slice(0, 5);
+    // Completed fiscal years only: Sectors reports the retrieval year as a partial year.
+    const currentYear = Number(d.retrievedAt.slice(0, 4));
+    const years = d.annualYieldsPct
+      .filter((y) => y.year < currentYear)
+      .sort((a, b) => b.year - a.year)
+      .slice(0, 5);
     if (years.length < 3) return unavailable(ctx, checkId, base, `only ${years.length} years of yield history; need 3`);
     const avg = years.reduce((s, y) => s + y.yieldPct, 0) / years.length;
     return [

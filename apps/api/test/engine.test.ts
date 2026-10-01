@@ -163,6 +163,15 @@ describe('investigation engine', () => {
     expect(rev(bear)).toBe('weakens');
     expect(bear.assessment).toBe('NOT_SUPPORTED');
   });
+
+  it('records the check outcome on each tool step', async () => {
+    const r = await run(claim({ ticker: 'BBCA' }));
+    for (const t of r.trace.filter((x) => x.action.startsWith('get_') && x.checkId)) {
+      const state = r.states.find((s) => s.checkId === t.checkId)!;
+      expect(t.outcome).toBe(state.status === 'completed' ? state.outcome : null);
+    }
+    expect(r.trace.find((t) => t.checkId === 'revenue_growth')!.outcome).toBe('supports');
+  });
 });
 
 describe('report composer', () => {

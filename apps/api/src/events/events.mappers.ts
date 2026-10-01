@@ -30,6 +30,7 @@ export function stepEvent(t: ExecutionTrace, evidence: EvidenceItem[], contractI
     hypothesis: check?.hypothesis ?? null,
     expectation: t.expectation,
     expectationHeld: t.expectationHeld,
+    outcome: t.outcome,
     evidence: evidence.map(summarize),
   };
 }

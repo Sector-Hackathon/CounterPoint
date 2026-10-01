@@ -106,6 +106,7 @@ model ExecutionTrace {
   checkId         String?
   expectation     String?
   expectationHeld Boolean?
+  outcome         String?
 
   claim Claim @relation(fields: [claimId], references: [id], onDelete: Cascade)
 

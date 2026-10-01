@@ -62,6 +62,7 @@ export interface StepEvent {
   hypothesis: string | null;
   expectation: 'supports' | 'weakens' | 'neutral' | null;
   expectationHeld: boolean | null;
+  outcome: 'supports' | 'weakens' | 'neutral' | null;
   evidence: EvidenceSummary[];
 }
 

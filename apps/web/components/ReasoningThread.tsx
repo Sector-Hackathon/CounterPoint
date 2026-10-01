@@ -25,7 +25,7 @@ export function ReasoningThread({ steps }: { steps: StepEvent[] }) {
               {s.phase === 'counterpoint' ? <span className="voice-counter">Testing the counter-case</span> : stepHeadline(s)}
               {s.resultStatus !== 'OK' && <span className="muted small"> · {s.resultStatus === 'NO_DATA' ? 'no data' : s.resultStatus.toLowerCase()}</span>}
             </div>
-            <p style={{ margin: '2px 0 6px' }}>{s.phase === 'counterpoint' && s.hypothesis ? s.hypothesis : s.reason}</p>
+            <p style={{ margin: '2px 0 6px' }}>{bodyText(s)}</p>
             {s.expectation && (
               <p className="prediction" style={{ margin: '0 0 6px' }}>
                 Expected this to {PREDICT[s.expectation]}.{' '}
@@ -69,4 +69,11 @@ function ForkMark() {
       />
     </svg>
   );
+}
+
+/** The plan step's stored reason lists internal check ids; show what it means instead. */
+function bodyText(s: StepEvent): string {
+  if (s.phase === 'counterpoint' && s.hypothesis) return s.hypothesis;
+  if (s.action === 'PLAN') return 'Lined up the checks this claim needs, the follow-ups to run if something contradicts it, and the counter-case to test.';
+  return s.reason;
 }

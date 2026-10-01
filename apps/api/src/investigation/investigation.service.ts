@@ -78,6 +78,7 @@ export class InvestigationService {
                 checkId: t.checkId,
                 expectation: t.expectation,
                 expectationHeld: t.expectationHeld,
+                outcome: t.outcome,
               },
             });
             this.events.publish(sessionId, stepEvent(t, items, claim.contractId));

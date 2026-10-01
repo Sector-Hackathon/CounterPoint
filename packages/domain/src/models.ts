@@ -96,6 +96,8 @@ export const ExecutionTrace = z.object({
   checkId: z.string().nullable().default(null),
   expectation: Expectation.nullable().default(null),
   expectationHeld: z.boolean().nullable().default(null),
+  /** Outcome of the check this step resolved (tool steps only). */
+  outcome: Expectation.nullable().default(null),
 });
 export type ExecutionTrace = z.infer<typeof ExecutionTrace>;
 

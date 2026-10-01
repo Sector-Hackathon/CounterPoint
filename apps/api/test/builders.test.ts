@@ -105,4 +105,15 @@ describe('counterpoint metric builders', () => {
     expect(gap.derivedFrom).toEqual([earn.id, rev.id]);
     expect(gap.economicPeriod).toBe('2025Q2');
   });
+
+  it('historical average yield leaves out the partial current year', async () => {
+    const bbri = DEV_FIXTURE.dividends.BBRI!;
+    const fx: FixtureSet = {
+      ...DEV_FIXTURE,
+      dividends: { BBRI: { ...bbri, annualYieldsPct: [...bbri.annualYieldsPct, { year: 2026, yieldPct: 1.0 }] } },
+    };
+    const e = await valueOf('dividend_yield_hist_avg_pct', 'BBRI', fx);
+    expect(e.economicPeriod).toBe('FY2022-FY2025');
+    expect(e.value).toBeCloseTo((5.2 + 5.6 + 7.4 + 9.6) / 4, 2);
+  });
 });

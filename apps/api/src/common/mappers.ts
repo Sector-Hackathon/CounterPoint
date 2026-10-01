@@ -60,6 +60,7 @@ export function toTrace(r: TraceRow): ExecutionTrace & { planner: string | null 
     checkId: r.checkId,
     expectation: r.expectation as ExecutionTrace['expectation'],
     expectationHeld: r.expectationHeld,
+    outcome: r.outcome as ExecutionTrace['outcome'],
     planner: r.planner,
   };
 }

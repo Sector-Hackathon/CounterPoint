@@ -42,6 +42,7 @@ export type SessionEvent =
       hypothesis: string | null;
       expectation: CheckOutcome | null;
       expectationHeld: boolean | null;
+      outcome: CheckOutcome | null;
       evidence: EvidenceSummary[];
     }
   | { id: string; type: 'claim.assessed'; claimId: string; assessment: Assessment; stopReason: string; coverage: Coverage | null }

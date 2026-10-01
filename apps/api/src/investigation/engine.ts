@@ -98,7 +98,7 @@ export async function investigateClaim(claim: Claim, deps: InvestigationDeps): P
   };
   const instant = (action: ExecutionTrace['action'], reason: string, extra: Partial<ExecutionTrace> = {}) => {
     const ts = now().toISOString();
-    return record({ action, reason, startedAt: ts, finishedAt: ts, evidenceIds: [], resultStatus: 'OK', stopReason: null, checkId: null, expectation: null, expectationHeld: null, ...extra });
+    return record({ action, reason, startedAt: ts, finishedAt: ts, evidenceIds: [], resultStatus: 'OK', stopReason: null, checkId: null, expectation: null, expectationHeld: null, outcome: null, ...extra });
   };
 
   const contract: EvidenceContract | null = claim.contractId ? getContract(claim.contractId) : null;
@@ -253,6 +253,7 @@ export async function investigateClaim(claim: Claim, deps: InvestigationDeps): P
         checkId: check.id,
         expectation: decision.expectation,
         expectationHeld,
+        outcome: state?.status === 'completed' ? state.outcome : null,
       },
       items,
     );
