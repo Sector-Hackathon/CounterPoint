@@ -14,6 +14,11 @@ export default function Investigation() {
   const { id } = useParams<{ id: string }>();
   const { state } = useSessionEvents(id);
   const [settled, setSettled] = useState(false);
+  const [dataMode, setDataMode] = useState<'live' | 'fixture' | null>(null);
+
+  useEffect(() => {
+    api.getSession(id).then((s) => setDataMode(s.dataMode)).catch(() => setDataMode(null));
+  }, [id]);
 
   // Hold the highlighted quotes for a beat, then let them lift into rows. Driven by the real claims event.
   useEffect(() => {
@@ -29,6 +34,11 @@ export default function Investigation() {
 
   return (
     <main className="page">
+      {dataMode === 'fixture' && (
+        <p className="small" role="note" style={{ background: 'var(--hatch), var(--paper-raised)', padding: '8px 12px', borderRadius: 'var(--r-chip)', marginTop: 0 }}>
+          Synthetic sample data, not live Sectors data. Numbers are illustrative only.
+        </p>
+      )}
       {state.rawThesis ? (
         <ThesisSplit rawThesis={state.rawThesis} claims={state.claims} settled={settled} />
       ) : (

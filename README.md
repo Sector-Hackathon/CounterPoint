@@ -1,6 +1,10 @@
 # Counterpoint
 
-AI evidence investigation agent for Indonesian stock narratives. Paste a stock thesis; Counterpoint decomposes it into testable claims, investigates each against Sectors data, actively looks for counterevidence, and reports which parts are supported, weakened, or unverifiable. It never gives buy/sell/hold advice.
+AI evidence investigation agent for Indonesian stock narratives. Paste a stock thesis (or drop a screenshot of the post); Counterpoint decomposes it into testable claims, investigates each against Sectors data, and then **argues back**: it builds the strongest opposing case and tests that too. You watch the agent reason live, predicting each result before the data arrives, and the report shows which parts are supported, weakened or unverifiable, plus **what would change each verdict**. It never gives buy/sell/hold advice.
+
+| Paste | Watch it investigate | Read the evidence |
+| --- | --- | --- |
+| ![Input](docs/img/input.png) | ![Investigation](docs/img/investigation.png) | ![Report](docs/img/report.png) |
 
 > Language models interpret and plan. Deterministic code calculates, validates, compares, tracks periods, selects peers, and enforces evidence provenance.
 
@@ -40,18 +44,22 @@ pnpm dev:web                    # http://localhost:3000
 | `SECTORS_API_KEY` | Synthetic fixture data (`fixture:` locators, labelled in the UI) | Live Sectors API |
 | `LLM_PROVIDER` + that provider's key | Heuristic claim extractor + deterministic planner (labelled `heuristic-v1` / `deterministic-v1`) | LLM structured extraction, planner, and bounded interpretation. `openai` uses `OPENAI_API_KEY` / `OPENAI_MODEL`; `anthropic` uses `ANTHROPIC_API_KEY` / `ANTHROPIC_MODEL` |
 
+`SESSION_DEADLINE_MS` (default `90000`) is the hard limit for one investigation; when it is reached the report is built from what was found and marked partial.
+
 Assessments are always produced by deterministic contract rules, never by the LLM.
 
 ## Tests and evaluation
 
 ```bash
-pnpm test                               # unit tests (domain, sectors, eval, api engine/composer)
-pnpm eval                               # 22 labelled claim cases through the real engine
-pnpm --filter @counterpoint/api eval --theses       # thesis decomposition cases
-pnpm --filter @counterpoint/api eval --llm-planner  # same claim cases with the Claude planner
+pnpm test                                           # unit tests: domain, sectors, eval, api, web
+pnpm eval                                           # 24 labelled claim cases through the real engine (fixture data)
+pnpm --filter @counterpoint/api eval --theses       # thesis decomposition cases (uses the LLM)
+pnpm --filter @counterpoint/api eval --llm-planner  # claim cases with the LLM planner
+pnpm --filter @counterpoint/api baseline "<thesis>" <TICKER> <name>  # generic-LLM baseline -> evals/baseline/
+pnpm --filter @counterpoint/api export-trace <sessionId> <name>     # commit a run -> evals/traces/
 ```
 
-Results are written to `evals/results/` (git-ignored). Only measured results should be reported.
+Eval results are written to `evals/results/` (git-ignored). Representative live traces are in `evals/traces/`, and the measured baseline comparison is in `evals/baseline/README.md`. Only measured results should be reported.
 
 ## API
 
@@ -63,11 +71,13 @@ Results are written to `evals/results/` (git-ignored). Only measured results sho
 | `POST /theses/:id/investigate` | Start the bounded investigation (idempotent) |
 | `GET /theses/:id/report` | Validated evidence report |
 | `GET /theses/:id/trace` | Persisted execution events and stop reasons |
+| `GET /theses/:id/events` | Server-Sent Events: replay of the session, then live agent steps |
+| `POST /theses/extract-text` | Transcribe a screenshot `{ "imageBase64", "mimeType" }` (not stored) |
 | `GET /claims/:id/evidence` | EvidenceItems with periods and source locators |
 | `GET /health` | Data mode, LLM model, contract registry |
 
 ## Status
 
-P0 vertical slice verified end to end on live Sectors v2 data (see [docs/data-spike.md](docs/data-spike.md); run `pnpm --filter @counterpoint/api live-check`). Contract thresholds are still provisional; see [docs/architecture.md](docs/architecture.md).
+Verified end to end on live Sectors v2 data (see [docs/data-spike.md](docs/data-spike.md); run `pnpm --filter @counterpoint/api live-check`). Thresholds are fixed per contract version and explained in [docs/thresholds.md](docs/thresholds.md); the design is in [docs/architecture.md](docs/architecture.md), and product changes since PRD v1.0 in [docs/prd/CHANGELOG.md](docs/prd/CHANGELOG.md). Deployment: [docs/deploy.md](docs/deploy.md).
 
 Information and analysis only; not investment advice.
