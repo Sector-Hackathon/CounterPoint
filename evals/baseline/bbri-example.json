@@ -1,0 +1,15 @@
+{
+  "thesis": "BBRI masih menarik karena growth kuat dan valuasinya murah dibanding bank besar lain, harga akan naik ke 6000.",
+  "ticker": "BBRI",
+  "model": "openai/gpt-4.1-mini",
+  "dataMode": "live",
+  "measuredAt": "2026-10-01T10:45:39.007Z",
+  "answer": "BBRI menunjukkan pertumbuhan pendapatan dan laba bersih yang cukup stabil dalam beberapa tahun terakhir, dengan pendapatan dan laba bersih yang meningkat dari 2020 hingga 2024, meskipun ada sedikit penurunan pada tahun 2025. Valuasi saat ini tampak relatif murah dengan rasio P/E sebesar 7.56, lebih rendah dibandingkan tahun-tahun sebelumnya. Dividen juga memberikan yield yang cukup tinggi sekitar 11%, yang menarik bagi investor yang mencari pendapatan. Oleh karena itu, thesis bahwa BBRI masih menarik karena pertumbuhan yang kuat dan valuasi yang murah dibandingkan dengan bank besar lain adalah tepat. Namun, prediksi harga naik ke 6000 memerlukan analisis tambahan seperti kondisi pasar dan sentimen investor saat ini.",
+  "numbers": 3,
+  "untraceable": [
+    "6000"
+  ],
+  "languageIssues": [
+    "causality: karena"
+  ]
+}

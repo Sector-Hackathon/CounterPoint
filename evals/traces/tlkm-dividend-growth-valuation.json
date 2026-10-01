@@ -1,0 +1,2951 @@
+{
+  "id": "2791504e-6397-4ffe-8f1a-9cff368fd7a5",
+  "rawThesis": "TLKM dividennya tinggi dan growth kuat, valuasinya juga murah dibanding emiten telco lain.",
+  "status": "COMPLETED",
+  "dataMode": "live",
+  "error": null,
+  "createdAt": "2026-10-01T10:42:03.972Z",
+  "updatedAt": "2026-10-01T10:42:42.345Z",
+  "finalReportId": "922a949c-427b-46bb-a516-6c5735dbb367",
+  "entities": [
+    {
+      "id": "792e28a5-c207-4a07-bc21-c271a509cab9",
+      "sessionId": "2791504e-6397-4ffe-8f1a-9cff368fd7a5",
+      "mention": "TLKM",
+      "ticker": "TLKM",
+      "canonicalName": "PT Telkom Indonesia (Persero) Tbk",
+      "resolutionStatus": "RESOLVED",
+      "candidates": [
+        {
+          "name": "PT Telkom Indonesia (Persero) Tbk",
+          "ticker": "TLKM"
+        }
+      ],
+      "isPrimary": true
+    },
+    {
+      "id": "d120cd2a-5630-476e-94e8-b4f64723add9",
+      "sessionId": "2791504e-6397-4ffe-8f1a-9cff368fd7a5",
+      "mention": "emiten telco lain",
+      "ticker": null,
+      "canonicalName": null,
+      "resolutionStatus": "UNKNOWN",
+      "candidates": [],
+      "isPrimary": false
+    }
+  ],
+  "reports": [
+    {
+      "id": "922a949c-427b-46bb-a516-6c5735dbb367",
+      "sessionId": "2791504e-6397-4ffe-8f1a-9cff368fd7a5",
+      "content": {
+        "claims": [
+          {
+            "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+            "context": [
+              {
+                "text": "Latest dividend versus prior payments (one-off check): latest dividend vs prior median 133.0% (as of 2026-06-18).",
+                "evidenceIds": [
+                  "04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75"
+                ]
+              }
+            ],
+            "missing": [],
+            "peerSet": null,
+            "weakens": [],
+            "coverage": {
+              "label": "3 of 3 required checks available",
+              "invalid": 0,
+              "required": 3,
+              "completed": 3,
+              "unavailable": 0
+            },
+            "supports": [
+              {
+                "text": "Trailing dividend yield: trailing dividend yield 9.7% (TTM).",
+                "evidenceIds": [
+                  "adf0d10c-2442-467d-8e68-049550760d90"
+                ]
+              },
+              {
+                "text": "Yield versus own historical average yield: trailing dividend yield 9.7% (TTM); historical average yield 6.1% (FY2022-FY2026).",
+                "evidenceIds": [
+                  "adf0d10c-2442-467d-8e68-049550760d90",
+                  "dbcb9b66-76f9-4a55-89dc-40744642b7a1"
+                ]
+              },
+              {
+                "text": "Time since the latest dividend payment (recency check): days since last dividend 105 (as of 2026-06-18).",
+                "evidenceIds": [
+                  "42848f68-8a66-4267-bdfd-7beb74aec494"
+                ]
+              }
+            ],
+            "assessment": "PARTIALLY_SUPPORTED",
+            "stopReason": "SUFFICIENT",
+            "counterpoint": {
+              "hypotheses": [
+                {
+                  "note": null,
+                  "status": "refuted",
+                  "checkId": "yield_from_price",
+                  "statement": {
+                    "text": "Change in annual yield versus change in dividend per share, latest completed fiscal year: yield change 30.5% (FY2025 vs FY2024); dividend per share change 19.0% (FY2025 vs FY2024).",
+                    "evidenceIds": [
+                      "d4487f83-ba4d-4614-bf9d-e4427b6ddba8",
+                      "42c83cb9-2def-477f-a0af-75c50a466cdb"
+                    ]
+                  },
+                  "hypothesis": "Did the yield rise mostly because the share price fell, not because the dividend grew?"
+                },
+                {
+                  "note": null,
+                  "status": "confirmed",
+                  "checkId": "payout_stretch",
+                  "statement": {
+                    "text": "Payout ratio: payout ratio 126.6%.",
+                    "evidenceIds": [
+                      "2eeb2c8e-06a2-4b78-ad57-84d44fd48238"
+                    ]
+                  },
+                  "hypothesis": "Is the company paying out almost all of its earnings, leaving little room to keep the dividend up?"
+                }
+              ],
+              "openQuestions": [
+                "Will the payout policy continue? Future dividends are not knowable from reported data."
+              ]
+            },
+            "interpretation": null,
+            "changeConditions": [
+              {
+                "unit": "percent",
+                "label": "Payout ratio",
+                "effect": "would_stop_weakening",
+                "period": null,
+                "checkId": "payout_stretch",
+                "current": 126.5697869291,
+                "threshold": 90,
+                "comparator": "below",
+                "evidenceId": "2eeb2c8e-06a2-4b78-ad57-84d44fd48238"
+              }
+            ]
+          },
+          {
+            "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+            "context": [
+              {
+                "text": "Latest-quarter revenue growth, same quarter year-on-year: revenue growth YoY 6.4% (2026Q2 vs 2025Q2).",
+                "evidenceIds": [
+                  "b1b178ea-2516-46f9-a10c-9092b9fba9b4",
+                  "74ea8812-0cab-4630-9eac-4134fef65ef8",
+                  "5727f68a-cb67-418a-800c-a12771cf1b62"
+                ]
+              },
+              {
+                "text": "Revenue growth trend versus the prior quarter (deceleration check): revenue growth YoY 6.4% (2026Q2 vs 2025Q2); prior-quarter revenue growth YoY 1.5% (2026Q1 vs 2025Q1).",
+                "evidenceIds": [
+                  "b1b178ea-2516-46f9-a10c-9092b9fba9b4",
+                  "74ea8812-0cab-4630-9eac-4134fef65ef8",
+                  "5727f68a-cb67-418a-800c-a12771cf1b62",
+                  "27362164-9154-457a-b121-cd9404704121",
+                  "ff150102-2244-4aba-8087-82fbea9ad06a",
+                  "50ebee64-9033-47e5-af71-0adf81711d2b"
+                ]
+              },
+              {
+                "text": "Earnings growth versus revenue growth (divergence check): revenue growth YoY 6.4% (2026Q2 vs 2025Q2); net income growth YoY 21.6% (2026Q2 vs 2025Q2).",
+                "evidenceIds": [
+                  "b1b178ea-2516-46f9-a10c-9092b9fba9b4",
+                  "74ea8812-0cab-4630-9eac-4134fef65ef8",
+                  "5727f68a-cb67-418a-800c-a12771cf1b62",
+                  "13a4fde5-2ae2-4f9b-aa69-e2ec13296398",
+                  "3d809ebb-e6bb-419a-9a8d-b852f952315d",
+                  "e743990c-d797-4e7e-bf0d-225a9b37b639"
+                ]
+              }
+            ],
+            "missing": [],
+            "peerSet": null,
+            "weakens": [
+              {
+                "text": "Last full fiscal year net income growth: annual net income growth -24.7% (FY2025 vs FY2024).",
+                "evidenceIds": [
+                  "7e9d9352-ddc5-4203-af1a-1b67315690dd",
+                  "793666ee-6ccd-492e-b72c-3d66aac0e54e",
+                  "83dc00eb-2956-478d-b2f8-5e9eb61ec377"
+                ]
+              }
+            ],
+            "coverage": {
+              "label": "3 of 3 required checks available",
+              "invalid": 0,
+              "required": 3,
+              "completed": 3,
+              "unavailable": 0
+            },
+            "supports": [
+              {
+                "text": "Latest-quarter net income growth, same quarter year-on-year: net income growth YoY 21.6% (2026Q2 vs 2025Q2).",
+                "evidenceIds": [
+                  "13a4fde5-2ae2-4f9b-aa69-e2ec13296398",
+                  "3d809ebb-e6bb-419a-9a8d-b852f952315d",
+                  "e743990c-d797-4e7e-bf0d-225a9b37b639"
+                ]
+              }
+            ],
+            "assessment": "PARTIALLY_SUPPORTED",
+            "stopReason": "SUFFICIENT",
+            "counterpoint": {
+              "hypotheses": [
+                {
+                  "note": null,
+                  "status": "confirmed",
+                  "checkId": "base_effect",
+                  "statement": {
+                    "text": "Prior fiscal year net income growth (base effect): prior-year net income growth -3.7% (FY2024 vs FY2023); net income growth YoY 21.6% (2026Q2 vs 2025Q2).",
+                    "evidenceIds": [
+                      "d39ac71c-b09a-4652-8330-7e86f2a81bc2",
+                      "f97a6d20-5fc9-4b38-8dee-a6cd6e75b335",
+                      "e742e662-e785-4cce-82bb-68ca06d4376a",
+                      "13a4fde5-2ae2-4f9b-aa69-e2ec13296398",
+                      "3d809ebb-e6bb-419a-9a8d-b852f952315d",
+                      "e743990c-d797-4e7e-bf0d-225a9b37b639"
+                    ]
+                  },
+                  "hypothesis": "Is this growth a rebound from a weak prior year rather than new strength?"
+                },
+                {
+                  "note": null,
+                  "status": "confirmed",
+                  "checkId": "earnings_outpacing_revenue",
+                  "statement": {
+                    "text": "Net income growth minus revenue growth, latest quarter: net income growth minus revenue growth 15.2 pp (2026Q2 vs 2025Q2).",
+                    "evidenceIds": [
+                      "38d0e564-d219-4516-8a71-37cf4d3f9dbc",
+                      "13a4fde5-2ae2-4f9b-aa69-e2ec13296398",
+                      "b1b178ea-2516-46f9-a10c-9092b9fba9b4"
+                    ]
+                  },
+                  "hypothesis": "Is profit growing much faster than revenue, so the business itself is not growing as fast as earnings suggest?"
+                },
+                {
+                  "note": null,
+                  "status": "confirmed",
+                  "checkId": "roe_trend",
+                  "statement": {
+                    "text": "Latest fiscal year ROE versus its average over the prior three years: ROE change -2.9 pp (FY2025 vs FY2022-FY2024).",
+                    "evidenceIds": [
+                      "82f7ffd1-57b5-4395-9a3b-da70f628bfd0",
+                      "b24d359b-d51c-49c8-997f-a1c97fec0ba3",
+                      "49d9163c-dfe6-411d-b1f2-20a81d10c78d"
+                    ]
+                  },
+                  "hypothesis": "Is return on equity falling even while profit grows?"
+                }
+              ],
+              "openQuestions": [
+                "Is growth concentrated in one business segment? Sectors does not expose segment data.",
+                "Did one-off items (asset sales, provisions released) lift net income? Not identifiable from summary financials."
+              ]
+            },
+            "interpretation": {
+              "text": "TLKM's latest quarter shows a net income growth of 21.6% year-on-year with revenue growth at 6.4%, reflecting a 15.2 percentage point difference. However, the last full fiscal year saw a net income decline of 24.7%, and the latest fiscal year ROE decreased by 2.9 percentage points compared to the prior three-year average, indicating mixed fundamental growth signals.",
+              "evidenceIds": [
+                "13a4fde5-2ae2-4f9b-aa69-e2ec13296398",
+                "3d809ebb-e6bb-419a-9a8d-b852f952315d",
+                "e743990c-d797-4e7e-bf0d-225a9b37b639",
+                "7e9d9352-ddc5-4203-af1a-1b67315690dd",
+                "793666ee-6ccd-492e-b72c-3d66aac0e54e",
+                "83dc00eb-2956-478d-b2f8-5e9eb61ec377",
+                "38d0e564-d219-4516-8a71-37cf4d3f9dbc",
+                "82f7ffd1-57b5-4395-9a3b-da70f628bfd0",
+                "b24d359b-d51c-49c8-997f-a1c97fec0ba3",
+                "49d9163c-dfe6-411d-b1f2-20a81d10c78d",
+                "b1b178ea-2516-46f9-a10c-9092b9fba9b4",
+                "74ea8812-0cab-4630-9eac-4134fef65ef8",
+                "5727f68a-cb67-418a-800c-a12771cf1b62"
+              ]
+            },
+            "changeConditions": [
+              {
+                "unit": "percent",
+                "label": "Latest-quarter revenue growth YoY",
+                "effect": "would_support",
+                "period": "2026Q2",
+                "checkId": "revenue_growth",
+                "current": 6.3908,
+                "threshold": 10,
+                "comparator": "at_least",
+                "evidenceId": "b1b178ea-2516-46f9-a10c-9092b9fba9b4"
+              },
+              {
+                "unit": "percent",
+                "label": "Last fiscal year net income growth",
+                "effect": "would_support",
+                "period": "FY2025",
+                "checkId": "historical_context",
+                "current": -24.6733,
+                "threshold": 10,
+                "comparator": "at_least",
+                "evidenceId": "7e9d9352-ddc5-4203-af1a-1b67315690dd"
+              },
+              {
+                "unit": "percentage_points",
+                "label": "ROE change vs prior 3-year average",
+                "effect": "would_stop_weakening",
+                "period": "FY2025",
+                "checkId": "roe_trend",
+                "current": -2.88,
+                "threshold": -2,
+                "comparator": "above",
+                "evidenceId": "82f7ffd1-57b5-4395-9a3b-da70f628bfd0"
+              }
+            ]
+          },
+          {
+            "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+            "context": [
+              {
+                "text": "Comparable valuation metric for the target (P/E): P/E 12.99x (as of 2026-09-30).",
+                "evidenceIds": [
+                  "c114f19a-a048-45af-aedb-0ba42b2d3d99"
+                ]
+              },
+              {
+                "text": "Size of the frozen valid peer set: valid peers 8 (as of 2026-09-30).",
+                "evidenceIds": [
+                  "6dc8eff4-2ba4-4990-bc42-8a977331af7d"
+                ]
+              },
+              {
+                "text": "Target P/BV versus frozen peer median (cross-check): P/BV vs peer median -15.8% (as of 2026-09-30).",
+                "evidenceIds": [
+                  "de8e6086-1725-4a72-a227-4bb1799ee18c",
+                  "da05c548-3f5e-4972-8e6e-302cf3a05932",
+                  "62fa26d5-523d-4982-bb89-5e41e7724202"
+                ]
+              }
+            ],
+            "missing": [],
+            "peerSet": {
+              "period": "2026-09-30",
+              "excluded": [
+                {
+                  "reason": "non-positive metric value is not comparable",
+                  "ticker": "EXCL"
+                },
+                {
+                  "reason": "target company",
+                  "ticker": "TLKM"
+                }
+              ],
+              "included": [
+                "IBST",
+                "INET",
+                "ISAT",
+                "MORA",
+                "MTEL",
+                "SUPR",
+                "TBIG",
+                "TOWR"
+              ],
+              "minPeers": 4,
+              "policyVersion": "peer-policy-v1"
+            },
+            "weakens": [],
+            "coverage": {
+              "label": "3 of 3 required checks available",
+              "invalid": 0,
+              "required": 3,
+              "completed": 3,
+              "unavailable": 0
+            },
+            "supports": [
+              {
+                "text": "Target P/E versus frozen peer median: P/E vs peer median -47.2% (as of 2026-09-30).",
+                "evidenceIds": [
+                  "d6088427-b300-49f0-b033-406bf166d688",
+                  "a39f8078-6cf4-4c9d-877f-0cb501da89f7",
+                  "95c440ff-86d0-40b8-bf12-de3f61b8a5cc"
+                ]
+              }
+            ],
+            "assessment": "PARTIALLY_SUPPORTED",
+            "stopReason": "SUFFICIENT",
+            "counterpoint": {
+              "hypotheses": [
+                {
+                  "note": null,
+                  "status": "refuted",
+                  "checkId": "roe_vs_peers",
+                  "statement": {
+                    "text": "Target ROE minus frozen peer median ROE, latest fiscal year: ROE vs peer median -1.1 pp (FY2025).",
+                    "evidenceIds": [
+                      "82077901-e568-4ad1-b548-a35ffc396b2f",
+                      "bb4e997e-804f-40a2-a040-6adf8f5cb73a",
+                      "8ed6f019-5322-4a7a-a946-214c20916c66"
+                    ]
+                  },
+                  "hypothesis": "Is it cheaper because it earns lower returns on equity than its peers?"
+                },
+                {
+                  "note": null,
+                  "status": "refuted",
+                  "checkId": "own_history",
+                  "statement": {
+                    "text": "Current P/E versus the median of its own prior fiscal years: P/E vs own history -23.2% (as of 2026-09-30).",
+                    "evidenceIds": [
+                      "9727b0be-1623-4492-917f-266540f76734",
+                      "2ef5fb2d-a7a8-4be5-bbaf-7a9d6bd6c314",
+                      "70538897-9a80-441b-9c05-29e499bce5bb"
+                    ]
+                  },
+                  "hypothesis": "Is this P/E normal for this company, so it is not cheap by its own standards?"
+                },
+                {
+                  "note": null,
+                  "status": "confirmed",
+                  "checkId": "price_drawdown",
+                  "statement": {
+                    "text": "Last close versus its high over the past year: distance from past-year high -42.6% (as of 2026-09-30).",
+                    "evidenceIds": [
+                      "df7f8b35-5537-4f6a-87bc-79ca0e7cefaa",
+                      "dedf1a42-4457-4314-8e81-74f0ad11d9a4",
+                      "c720585a-2e79-443e-b5d3-1ab8f5cdf3bd"
+                    ]
+                  },
+                  "hypothesis": "Does the low valuation coincide with a large fall in the share price?"
+                }
+              ],
+              "openQuestions": [
+                "Is the market pricing in risks not visible in reported numbers (asset quality, regulation)? Not testable with Sectors data."
+              ]
+            },
+            "interpretation": {
+              "text": "As of 2026-09-30, TLKM's P/E ratio stands at 12.99x, which is 47.2% below the peer median, indicating a lower valuation relative to its peers. Additionally, the P/BV ratio is 15.8% below the peer median, and the stock price is 42.6% below its past-year high, supporting a partial indication of lower valuation.",
+              "evidenceIds": [
+                "d6088427-b300-49f0-b033-406bf166d688",
+                "a39f8078-6cf4-4c9d-877f-0cb501da89f7",
+                "95c440ff-86d0-40b8-bf12-de3f61b8a5cc",
+                "df7f8b35-5537-4f6a-87bc-79ca0e7cefaa",
+                "dedf1a42-4457-4314-8e81-74f0ad11d9a4",
+                "c720585a-2e79-443e-b5d3-1ab8f5cdf3bd",
+                "c114f19a-a048-45af-aedb-0ba42b2d3d99",
+                "de8e6086-1725-4a72-a227-4bb1799ee18c",
+                "da05c548-3f5e-4972-8e6e-302cf3a05932",
+                "62fa26d5-523d-4982-bb89-5e41e7724202"
+              ]
+            },
+            "changeConditions": []
+          }
+        ],
+        "disclaimer": "Counterpoint checks the evidence behind claims you provide. It is information and analysis only, not investment advice, and does not recommend buying, selling, or holding any security."
+      },
+      "validationStatus": "REPAIRED",
+      "validationIssues": [
+        {
+          "kind": "uncited_number",
+          "detail": "0",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-2442",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-467",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-8",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "68",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-049550760",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "90",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "9",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "66",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-76",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "9",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-4",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "55",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-89",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-40744642",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "7",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "1",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "42848",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "68",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-8",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "66",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-4267",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-7",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "74",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "494",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "2",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "2",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "8",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "2",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-4",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "78",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "57",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-84",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "44",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "48238",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "04",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "5",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "3",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "013",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-4997",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "7",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "-8",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "8",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "3",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        },
+        {
+          "kind": "uncited_number",
+          "detail": "75",
+          "statement": "The trailing dividend yield of TLKM is 9.7%, which is higher than its historical average yield of 6.1% for FY2022-FY2026. The payout ratio is noted at 126.6%, and the latest dividend payment is 133.0% compared to the prior median, with 105 days since the last dividend payment (evidence ids: adf0d10c-2442-467d-8e68-049550760d90, dbcb9b66-76f9-4a55-89dc-40744642b7a1, 42848f68-8a66-4267-bdfd-7beb74aec494, 2eeb2c8e-06a2-4b78-ad57-84d44fd48238, 04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75)."
+        }
+      ],
+      "modelVersion": "openai/gpt-4.1-mini",
+      "promptVersion": "prompts-v2",
+      "createdAt": "2026-10-01T10:42:42.291Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "7335227c-8379-4a21-b0b9-0492438febed",
+      "sessionId": "2791504e-6397-4ffe-8f1a-9cff368fd7a5",
+      "ordinal": 0,
+      "originalText": "TLKM dividennya tinggi",
+      "normalizedText": "TLKM has a high dividend level compared to a baseline",
+      "ticker": "TLKM",
+      "entityMention": "TLKM",
+      "claimType": "DIVIDEND_LEVEL",
+      "comparisonType": "ABSOLUTE",
+      "timeScope": null,
+      "verifiability": "YES",
+      "contractId": "dividend-level-v2",
+      "assessment": "PARTIALLY_SUPPORTED",
+      "scopeNote": null,
+      "stopReason": "SUFFICIENT",
+      "checkStates": {
+        "states": [
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "dividend_yield",
+            "outcome": "supports",
+            "evidenceIds": [
+              "adf0d10c-2442-467d-8e68-049550760d90"
+            ]
+          },
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "yield_baseline",
+            "outcome": "supports",
+            "evidenceIds": [
+              "adf0d10c-2442-467d-8e68-049550760d90",
+              "dbcb9b66-76f9-4a55-89dc-40744642b7a1"
+            ]
+          },
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "dividend_recency",
+            "outcome": "supports",
+            "evidenceIds": [
+              "42848f68-8a66-4267-bdfd-7beb74aec494"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "one_off_dividend",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "yield_from_price",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "d4487f83-ba4d-4614-bf9d-e4427b6ddba8",
+              "42c83cb9-2def-477f-a0af-75c50a466cdb"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "payout_stretch",
+            "outcome": "weakens",
+            "evidenceIds": [
+              "2eeb2c8e-06a2-4b78-ad57-84d44fd48238"
+            ]
+          }
+        ],
+        "coverage": {
+          "label": "3 of 3 required checks available",
+          "invalid": 0,
+          "required": 3,
+          "completed": 3,
+          "unavailable": 0
+        }
+      },
+      "peerSet": null,
+      "extractor": "llm:openai/gpt-4.1-mini",
+      "direction": "bullish",
+      "spanStart": 0,
+      "spanEnd": 22,
+      "trace": [
+        {
+          "id": "a54c3f98-24da-42f4-b9d9-856573f5c681",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "sequence": 0,
+          "action": "PLAN",
+          "reason": "Contract dividend-level-v2: required checks dividend_yield, yield_baseline, dividend_recency; counterchecks one_off_dividend; counter-hypotheses yield_from_price, payout_stretch.",
+          "startedAt": "2026-10-01T10:42:07.397Z",
+          "finishedAt": "2026-10-01T10:42:07.397Z",
+          "evidenceIds": [],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "d19ce593-9832-47de-aab7-c89a77484205",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "sequence": 1,
+          "action": "get_dividend_history",
+          "reason": "Starting by checking the trailing dividend yield as a fundamental metric to assess if TLKM's dividend level is high.",
+          "startedAt": "2026-10-01T10:42:08.543Z",
+          "finishedAt": "2026-10-01T10:42:08.615Z",
+          "evidenceIds": [
+            "adf0d10c-2442-467d-8e68-049550760d90"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "dividend_yield",
+          "expectation": "supports",
+          "expectationHeld": true,
+          "outcome": "supports"
+        },
+        {
+          "id": "b53f10a3-0c03-4e06-bab6-ee1ef7bd2622",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "sequence": 2,
+          "action": "EVALUATE",
+          "reason": "dividend_yield: completed (supports)",
+          "startedAt": "2026-10-01T10:42:08.625Z",
+          "finishedAt": "2026-10-01T10:42:08.625Z",
+          "evidenceIds": [
+            "adf0d10c-2442-467d-8e68-049550760d90"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "edd48fca-1afb-482f-8fea-9f901d7ec9d0",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "sequence": 3,
+          "action": "get_dividend_history",
+          "reason": "To confirm the claim that TLKM's dividend is high, we need to check if its current yield is high compared to its own historical average yield.",
+          "startedAt": "2026-10-01T10:42:10.178Z",
+          "finishedAt": "2026-10-01T10:42:10.179Z",
+          "evidenceIds": [
+            "dbcb9b66-76f9-4a55-89dc-40744642b7a1"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "yield_baseline",
+          "expectation": "supports",
+          "expectationHeld": true,
+          "outcome": "supports"
+        },
+        {
+          "id": "306abe49-677e-4a29-a62c-1236ca143108",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "sequence": 4,
+          "action": "EVALUATE",
+          "reason": "yield_baseline: completed (supports)",
+          "startedAt": "2026-10-01T10:42:10.195Z",
+          "finishedAt": "2026-10-01T10:42:10.195Z",
+          "evidenceIds": [
+            "adf0d10c-2442-467d-8e68-049550760d90",
+            "dbcb9b66-76f9-4a55-89dc-40744642b7a1"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "c38f9bda-389d-4ddd-a5dd-67be4529c619",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "sequence": 5,
+          "action": "get_dividend_history",
+          "reason": "To validate the claim that TLKM's dividend is high, we first need to verify the recency of its latest dividend payment to ensure it's relevant and current.",
+          "startedAt": "2026-10-01T10:42:11.180Z",
+          "finishedAt": "2026-10-01T10:42:11.180Z",
+          "evidenceIds": [
+            "42848f68-8a66-4267-bdfd-7beb74aec494"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "dividend_recency",
+          "expectation": "supports",
+          "expectationHeld": true,
+          "outcome": "supports"
+        },
+        {
+          "id": "5b5a8eb8-d0f2-4eb3-b09f-d8ffeac03a3b",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "sequence": 6,
+          "action": "EVALUATE",
+          "reason": "dividend_recency: completed (supports)",
+          "startedAt": "2026-10-01T10:42:11.188Z",
+          "finishedAt": "2026-10-01T10:42:11.188Z",
+          "evidenceIds": [
+            "42848f68-8a66-4267-bdfd-7beb74aec494"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "4b6d8801-aee8-4d0d-b2ec-2ae3dfc33d88",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "sequence": 7,
+          "action": "get_dividend_history",
+          "reason": "Confirming the dividend is not just a one-off spike will solidify the claim that TLKM's dividend is truly high, not temporarily inflated.",
+          "startedAt": "2026-10-01T10:42:12.499Z",
+          "finishedAt": "2026-10-01T10:42:12.499Z",
+          "evidenceIds": [
+            "04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "one_off_dividend",
+          "expectation": "supports",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "2efbdfc0-d891-48f3-bfde-eaab7ea22676",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "sequence": 8,
+          "action": "EVALUATE",
+          "reason": "one_off_dividend: completed (neutral)",
+          "startedAt": "2026-10-01T10:42:12.511Z",
+          "finishedAt": "2026-10-01T10:42:12.511Z",
+          "evidenceIds": [
+            "04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "8a9422af-a01c-4970-bdb8-6315fa0bb445",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "sequence": 9,
+          "action": "get_dividend_history",
+          "reason": "Checking if the high dividend yield resulted mostly from a share price fall rather than dividend growth is key to understanding sustainability of the dividend level.",
+          "startedAt": "2026-10-01T10:42:13.478Z",
+          "finishedAt": "2026-10-01T10:42:13.478Z",
+          "evidenceIds": [
+            "d4487f83-ba4d-4614-bf9d-e4427b6ddba8",
+            "42c83cb9-2def-477f-a0af-75c50a466cdb"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "yield_from_price",
+          "expectation": "weakens",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "aa10abd2-bda3-44d6-b661-280c103369b2",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "sequence": 10,
+          "action": "EVALUATE",
+          "reason": "yield_from_price: completed (neutral)",
+          "startedAt": "2026-10-01T10:42:13.487Z",
+          "finishedAt": "2026-10-01T10:42:13.487Z",
+          "evidenceIds": [
+            "d4487f83-ba4d-4614-bf9d-e4427b6ddba8",
+            "42c83cb9-2def-477f-a0af-75c50a466cdb"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "9c85cd8e-17d8-414b-8013-524254a5b157",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "sequence": 11,
+          "action": "get_annual_financials",
+          "reason": "Checking the payout ratio will reveal if TLKM is paying out almost all its earnings, which could challenge the sustainability of its high dividend level.",
+          "startedAt": "2026-10-01T10:42:14.573Z",
+          "finishedAt": "2026-10-01T10:42:14.573Z",
+          "evidenceIds": [
+            "2eeb2c8e-06a2-4b78-ad57-84d44fd48238"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "payout_stretch",
+          "expectation": "weakens",
+          "expectationHeld": true,
+          "outcome": "weakens"
+        },
+        {
+          "id": "1bf521ab-2b5f-495e-8035-e4466daa0580",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "sequence": 12,
+          "action": "EVALUATE",
+          "reason": "payout_stretch: completed (weakens)",
+          "startedAt": "2026-10-01T10:42:14.581Z",
+          "finishedAt": "2026-10-01T10:42:14.581Z",
+          "evidenceIds": [
+            "2eeb2c8e-06a2-4b78-ad57-84d44fd48238"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "f2210cdd-c023-41e4-8a08-b3d9b7ec4a68",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "sequence": 13,
+          "action": "STOP",
+          "reason": "All eligible checks are resolved.",
+          "startedAt": "2026-10-01T10:42:14.584Z",
+          "finishedAt": "2026-10-01T10:42:14.584Z",
+          "evidenceIds": [],
+          "resultStatus": "OK",
+          "stopReason": "SUFFICIENT",
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        }
+      ],
+      "evidence": [
+        {
+          "id": "adf0d10c-2442-467d-8e68-049550760d90",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "checkId": "dividend_yield",
+          "metric": "dividend_yield_pct",
+          "ticker": "TLKM",
+          "value": 9.7452348600829,
+          "unit": "percent",
+          "economicPeriod": "TTM",
+          "comparisonPeriod": null,
+          "observationDate": "2026-10-01",
+          "retrievalTime": "2026-10-01T10:42:08.612Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=dividend",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:08.616Z"
+        },
+        {
+          "id": "dbcb9b66-76f9-4a55-89dc-40744642b7a1",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "checkId": "yield_baseline",
+          "metric": "dividend_yield_hist_avg_pct",
+          "ticker": "TLKM",
+          "value": 6.08,
+          "unit": "percent",
+          "economicPeriod": "FY2022-FY2026",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:08.612Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=dividend",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:10.180Z"
+        },
+        {
+          "id": "42848f68-8a66-4267-bdfd-7beb74aec494",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "checkId": "dividend_recency",
+          "metric": "last_dividend_age_days",
+          "ticker": "TLKM",
+          "value": 105,
+          "unit": "count",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-06-18",
+          "retrievalTime": "2026-10-01T10:42:08.612Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=dividend",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:11.181Z"
+        },
+        {
+          "id": "04c5ea3e-e013-4997-bb7c-8b8ad3e6ca75",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "checkId": "one_off_dividend",
+          "metric": "latest_dividend_vs_prior_median_pct",
+          "ticker": "TLKM",
+          "value": 132.99,
+          "unit": "percent",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-06-18",
+          "retrievalTime": "2026-10-01T10:42:08.612Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=dividend",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:12.500Z"
+        },
+        {
+          "id": "d4487f83-ba4d-4614-bf9d-e4427b6ddba8",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "checkId": "yield_from_price",
+          "metric": "yield_change_pct",
+          "ticker": "TLKM",
+          "value": 30.49,
+          "unit": "percent",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": "FY2024",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:08.612Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=dividend",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:13.480Z"
+        },
+        {
+          "id": "42c83cb9-2def-477f-a0af-75c50a466cdb",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "checkId": "yield_from_price",
+          "metric": "dps_change_pct",
+          "ticker": "TLKM",
+          "value": 19.03,
+          "unit": "percent",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": "FY2024",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:08.612Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=dividend",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:13.480Z"
+        },
+        {
+          "id": "2eeb2c8e-06a2-4b78-ad57-84d44fd48238",
+          "claimId": "7335227c-8379-4a21-b0b9-0492438febed",
+          "checkId": "payout_stretch",
+          "metric": "payout_ratio_pct",
+          "ticker": "TLKM",
+          "value": 126.5697869291,
+          "unit": "percent",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:08.612Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=dividend",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:14.574Z"
+        }
+      ]
+    },
+    {
+      "id": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+      "sessionId": "2791504e-6397-4ffe-8f1a-9cff368fd7a5",
+      "ordinal": 1,
+      "originalText": "growth kuat",
+      "normalizedText": "TLKM has strong recent fundamental growth",
+      "ticker": "TLKM",
+      "entityMention": "TLKM",
+      "claimType": "ABSOLUTE_GROWTH",
+      "comparisonType": "HISTORICAL",
+      "timeScope": null,
+      "verifiability": "YES",
+      "contractId": "absolute-growth-v2",
+      "assessment": "PARTIALLY_SUPPORTED",
+      "scopeNote": null,
+      "stopReason": "SUFFICIENT",
+      "checkStates": {
+        "states": [
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "revenue_growth",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "b1b178ea-2516-46f9-a10c-9092b9fba9b4"
+            ]
+          },
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "earnings_growth",
+            "outcome": "supports",
+            "evidenceIds": [
+              "13a4fde5-2ae2-4f9b-aa69-e2ec13296398"
+            ]
+          },
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "historical_context",
+            "outcome": "weakens",
+            "evidenceIds": [
+              "7e9d9352-ddc5-4203-af1a-1b67315690dd"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "growth_deceleration",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "b1b178ea-2516-46f9-a10c-9092b9fba9b4",
+              "27362164-9154-457a-b121-cd9404704121"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "revenue_earnings_divergence",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "b1b178ea-2516-46f9-a10c-9092b9fba9b4",
+              "13a4fde5-2ae2-4f9b-aa69-e2ec13296398"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "pending",
+            "checkId": "margin_deterioration",
+            "outcome": null,
+            "evidenceIds": []
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "base_effect",
+            "outcome": "weakens",
+            "evidenceIds": [
+              "d39ac71c-b09a-4652-8330-7e86f2a81bc2",
+              "13a4fde5-2ae2-4f9b-aa69-e2ec13296398"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "earnings_outpacing_revenue",
+            "outcome": "weakens",
+            "evidenceIds": [
+              "38d0e564-d219-4516-8a71-37cf4d3f9dbc"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "roe_trend",
+            "outcome": "weakens",
+            "evidenceIds": [
+              "82f7ffd1-57b5-4395-9a3b-da70f628bfd0"
+            ]
+          }
+        ],
+        "coverage": {
+          "label": "3 of 3 required checks available",
+          "invalid": 0,
+          "required": 3,
+          "completed": 3,
+          "unavailable": 0
+        }
+      },
+      "peerSet": null,
+      "extractor": "llm:openai/gpt-4.1-mini",
+      "direction": "bullish",
+      "spanStart": 27,
+      "spanEnd": 38,
+      "trace": [
+        {
+          "id": "28cfe0d3-a602-49b6-8882-761b3f0c73ab",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 0,
+          "action": "PLAN",
+          "reason": "Contract absolute-growth-v2: required checks revenue_growth, earnings_growth, historical_context; counterchecks growth_deceleration, revenue_earnings_divergence; counter-hypotheses base_effect, earnings_outpacing_revenue, roe_trend.",
+          "startedAt": "2026-10-01T10:42:14.593Z",
+          "finishedAt": "2026-10-01T10:42:14.593Z",
+          "evidenceIds": [],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "16c11e8b-c318-4a8a-a40b-f4824e90d1f8",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 1,
+          "action": "get_quarterly_financials",
+          "reason": "Revenue growth year-on-year this quarter is a primary indicator of recent fundamental growth for TLKM.",
+          "startedAt": "2026-10-01T10:42:15.537Z",
+          "finishedAt": "2026-10-01T10:42:15.696Z",
+          "evidenceIds": [
+            "54e5f5df-2183-4edd-a702-06efbb0802e7",
+            "4c489fc1-9cf3-4eb1-b75a-218e16618712",
+            "4fd9c9b8-e386-49c7-b25e-60044fc906bc"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "revenue_growth",
+          "expectation": "supports",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "69ab950f-ec12-401f-88a6-caffe55eeeb0",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 2,
+          "action": "EVALUATE",
+          "reason": "revenue_growth: completed (neutral)",
+          "startedAt": "2026-10-01T10:42:15.704Z",
+          "finishedAt": "2026-10-01T10:42:15.704Z",
+          "evidenceIds": [
+            "4fd9c9b8-e386-49c7-b25e-60044fc906bc"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "ef0e7528-e65b-407d-a3bf-05d83bf86f87",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 3,
+          "action": "get_quarterly_financials",
+          "reason": "Earnings growth is a key metric to establish recent fundamental growth, directly relevant and still pending.",
+          "startedAt": "2026-10-01T10:42:16.648Z",
+          "finishedAt": "2026-10-01T10:42:16.648Z",
+          "evidenceIds": [
+            "7d5f9613-2769-4901-aa6f-5150fe89f70d",
+            "e3821205-e72d-4e64-8252-9caee26df523",
+            "c1bdb127-0982-4df7-a481-2a825201a538"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "earnings_growth",
+          "expectation": "supports",
+          "expectationHeld": true,
+          "outcome": "supports"
+        },
+        {
+          "id": "b9359166-e020-4e80-ad3b-e47ed20f4929",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 4,
+          "action": "EVALUATE",
+          "reason": "earnings_growth: completed (supports); revenue_earnings_divergence: completed (neutral)",
+          "startedAt": "2026-10-01T10:42:16.656Z",
+          "finishedAt": "2026-10-01T10:42:16.656Z",
+          "evidenceIds": [
+            "c1bdb127-0982-4df7-a481-2a825201a538",
+            "4fd9c9b8-e386-49c7-b25e-60044fc906bc",
+            "c1bdb127-0982-4df7-a481-2a825201a538"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "e07b331e-77ef-41c5-ab57-a6ba969763ff",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 5,
+          "action": "get_annual_financials",
+          "reason": "The last full fiscal year net income growth is required to establish whether TLKM has strong fundamental growth historically, which is the primary claim.",
+          "startedAt": "2026-10-01T10:42:17.805Z",
+          "finishedAt": "2026-10-01T10:42:17.872Z",
+          "evidenceIds": [
+            "793666ee-6ccd-492e-b72c-3d66aac0e54e",
+            "83dc00eb-2956-478d-b2f8-5e9eb61ec377",
+            "7e9d9352-ddc5-4203-af1a-1b67315690dd"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "historical_context",
+          "expectation": "supports",
+          "expectationHeld": false,
+          "outcome": "weakens"
+        },
+        {
+          "id": "2314ce0d-c949-46b6-8616-730e8d907fcb",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 6,
+          "action": "EVALUATE",
+          "reason": "historical_context: completed (weakens)",
+          "startedAt": "2026-10-01T10:42:17.882Z",
+          "finishedAt": "2026-10-01T10:42:17.882Z",
+          "evidenceIds": [
+            "7e9d9352-ddc5-4203-af1a-1b67315690dd"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "f71e0942-4687-48a3-9b2a-cf2b1e12dfa8",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 7,
+          "action": "get_quarterly_financials",
+          "reason": "Checking if recent revenue growth is decelerating will clarify if the current growth is sustainably strong or slowing, critical given historical context weakens the claim.",
+          "startedAt": "2026-10-01T10:42:18.980Z",
+          "finishedAt": "2026-10-01T10:42:18.981Z",
+          "evidenceIds": [
+            "ff150102-2244-4aba-8087-82fbea9ad06a",
+            "50ebee64-9033-47e5-af71-0adf81711d2b",
+            "27362164-9154-457a-b121-cd9404704121"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "growth_deceleration",
+          "expectation": "weakens",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "62ef07bd-618f-429d-8571-59216a67d2f9",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 8,
+          "action": "EVALUATE",
+          "reason": "growth_deceleration: completed (neutral)",
+          "startedAt": "2026-10-01T10:42:18.989Z",
+          "finishedAt": "2026-10-01T10:42:18.989Z",
+          "evidenceIds": [
+            "4fd9c9b8-e386-49c7-b25e-60044fc906bc",
+            "27362164-9154-457a-b121-cd9404704121"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "241746dd-2dc9-44d6-9cc1-ff61f5331c3f",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 9,
+          "action": "get_annual_financials",
+          "reason": "To understand if the recent earnings growth is just a recovery from a weak prior year, which could explain the contradicting historical context outcome.",
+          "startedAt": "2026-10-01T10:42:20.125Z",
+          "finishedAt": "2026-10-01T10:42:20.126Z",
+          "evidenceIds": [
+            "f97a6d20-5fc9-4b38-8dee-a6cd6e75b335",
+            "e742e662-e785-4cce-82bb-68ca06d4376a",
+            "d39ac71c-b09a-4652-8330-7e86f2a81bc2"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "base_effect",
+          "expectation": "weakens",
+          "expectationHeld": true,
+          "outcome": "weakens"
+        },
+        {
+          "id": "7464b377-ca39-400a-b6d0-6a9cda05f88f",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 10,
+          "action": "EVALUATE",
+          "reason": "base_effect: completed (weakens)",
+          "startedAt": "2026-10-01T10:42:20.134Z",
+          "finishedAt": "2026-10-01T10:42:20.134Z",
+          "evidenceIds": [
+            "d39ac71c-b09a-4652-8330-7e86f2a81bc2",
+            "c1bdb127-0982-4df7-a481-2a825201a538"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "5f681c64-0434-4858-b9c0-c407f55cf69b",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 11,
+          "action": "get_quarterly_financials",
+          "reason": "Check if the profit growth outpacing revenue growth is due to earnings growth rather than business expansion, which could weaken the claim of strong fundamental growth.",
+          "startedAt": "2026-10-01T10:42:21.335Z",
+          "finishedAt": "2026-10-01T10:42:21.335Z",
+          "evidenceIds": [
+            "3d809ebb-e6bb-419a-9a8d-b852f952315d",
+            "e743990c-d797-4e7e-bf0d-225a9b37b639",
+            "13a4fde5-2ae2-4f9b-aa69-e2ec13296398",
+            "74ea8812-0cab-4630-9eac-4134fef65ef8",
+            "5727f68a-cb67-418a-800c-a12771cf1b62",
+            "b1b178ea-2516-46f9-a10c-9092b9fba9b4",
+            "38d0e564-d219-4516-8a71-37cf4d3f9dbc"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "earnings_outpacing_revenue",
+          "expectation": "weakens",
+          "expectationHeld": true,
+          "outcome": "weakens"
+        },
+        {
+          "id": "e9af173a-9d5a-4754-920f-72e5c4bf946f",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 12,
+          "action": "EVALUATE",
+          "reason": "earnings_outpacing_revenue: completed (weakens)",
+          "startedAt": "2026-10-01T10:42:21.346Z",
+          "finishedAt": "2026-10-01T10:42:21.346Z",
+          "evidenceIds": [
+            "38d0e564-d219-4516-8a71-37cf4d3f9dbc"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "24785363-de6d-474a-a034-51f3f04cf231",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 13,
+          "action": "get_annual_financials",
+          "reason": "ROE trend directly assesses the quality of growth, important given contradictions about earnings growth sustainability.",
+          "startedAt": "2026-10-01T10:42:22.336Z",
+          "finishedAt": "2026-10-01T10:42:22.337Z",
+          "evidenceIds": [
+            "b24d359b-d51c-49c8-997f-a1c97fec0ba3",
+            "49d9163c-dfe6-411d-b1f2-20a81d10c78d",
+            "82f7ffd1-57b5-4395-9a3b-da70f628bfd0"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "roe_trend",
+          "expectation": "weakens",
+          "expectationHeld": true,
+          "outcome": "weakens"
+        },
+        {
+          "id": "574a6eb9-b427-4d69-b424-42eb6d1e4d14",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 14,
+          "action": "EVALUATE",
+          "reason": "roe_trend: completed (weakens)",
+          "startedAt": "2026-10-01T10:42:22.345Z",
+          "finishedAt": "2026-10-01T10:42:22.345Z",
+          "evidenceIds": [
+            "82f7ffd1-57b5-4395-9a3b-da70f628bfd0"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "6c0e2d7b-a21a-4d2d-941e-69a7fd9f45cc",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "sequence": 15,
+          "action": "STOP",
+          "reason": "All eligible checks are resolved.",
+          "startedAt": "2026-10-01T10:42:22.348Z",
+          "finishedAt": "2026-10-01T10:42:22.348Z",
+          "evidenceIds": [],
+          "resultStatus": "OK",
+          "stopReason": "SUFFICIENT",
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        }
+      ],
+      "evidence": [
+        {
+          "id": "54e5f5df-2183-4edd-a702-06efbb0802e7",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "revenue_growth",
+          "metric": "revenue",
+          "ticker": "TLKM",
+          "value": 38689000000000,
+          "unit": "IDR",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:15.697Z"
+        },
+        {
+          "id": "4c489fc1-9cf3-4eb1-b75a-218e16618712",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "revenue_growth",
+          "metric": "revenue",
+          "ticker": "TLKM",
+          "value": 36365000000000,
+          "unit": "IDR",
+          "economicPeriod": "2025Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:15.697Z"
+        },
+        {
+          "id": "4fd9c9b8-e386-49c7-b25e-60044fc906bc",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "revenue_growth",
+          "metric": "revenue_yoy_pct",
+          "ticker": "TLKM",
+          "value": 6.3908,
+          "unit": "percent",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": "2025Q2",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [
+            "54e5f5df-2183-4edd-a702-06efbb0802e7",
+            "4c489fc1-9cf3-4eb1-b75a-218e16618712"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:15.697Z"
+        },
+        {
+          "id": "7d5f9613-2769-4901-aa6f-5150fe89f70d",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "earnings_growth",
+          "metric": "netIncome",
+          "ticker": "TLKM",
+          "value": 6279000000000,
+          "unit": "IDR",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:16.649Z"
+        },
+        {
+          "id": "e3821205-e72d-4e64-8252-9caee26df523",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "earnings_growth",
+          "metric": "netIncome",
+          "ticker": "TLKM",
+          "value": 5165000000000,
+          "unit": "IDR",
+          "economicPeriod": "2025Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:16.649Z"
+        },
+        {
+          "id": "c1bdb127-0982-4df7-a481-2a825201a538",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "earnings_growth",
+          "metric": "earnings_yoy_pct",
+          "ticker": "TLKM",
+          "value": 21.5682,
+          "unit": "percent",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": "2025Q2",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [
+            "7d5f9613-2769-4901-aa6f-5150fe89f70d",
+            "e3821205-e72d-4e64-8252-9caee26df523"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:16.649Z"
+        },
+        {
+          "id": "793666ee-6ccd-492e-b72c-3d66aac0e54e",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "historical_context",
+          "metric": "netIncome",
+          "ticker": "TLKM",
+          "value": 17814000000000,
+          "unit": "IDR",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:17.871Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=financials",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:17.873Z"
+        },
+        {
+          "id": "83dc00eb-2956-478d-b2f8-5e9eb61ec377",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "historical_context",
+          "metric": "netIncome",
+          "ticker": "TLKM",
+          "value": 23649000000000,
+          "unit": "IDR",
+          "economicPeriod": "FY2024",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:17.871Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=financials",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:17.873Z"
+        },
+        {
+          "id": "7e9d9352-ddc5-4203-af1a-1b67315690dd",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "historical_context",
+          "metric": "annual_earnings_yoy_pct",
+          "ticker": "TLKM",
+          "value": -24.6733,
+          "unit": "percent",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": "FY2024",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:17.871Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=financials",
+          "derivedFrom": [
+            "793666ee-6ccd-492e-b72c-3d66aac0e54e",
+            "83dc00eb-2956-478d-b2f8-5e9eb61ec377"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:17.873Z"
+        },
+        {
+          "id": "ff150102-2244-4aba-8087-82fbea9ad06a",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "growth_deceleration",
+          "metric": "revenue",
+          "ticker": "TLKM",
+          "value": 37189000000000,
+          "unit": "IDR",
+          "economicPeriod": "2026Q1",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:18.982Z"
+        },
+        {
+          "id": "50ebee64-9033-47e5-af71-0adf81711d2b",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "growth_deceleration",
+          "metric": "revenue",
+          "ticker": "TLKM",
+          "value": 36639000000000,
+          "unit": "IDR",
+          "economicPeriod": "2025Q1",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:18.982Z"
+        },
+        {
+          "id": "27362164-9154-457a-b121-cd9404704121",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "growth_deceleration",
+          "metric": "revenue_yoy_pct_prev_quarter",
+          "ticker": "TLKM",
+          "value": 1.5011,
+          "unit": "percent",
+          "economicPeriod": "2026Q1",
+          "comparisonPeriod": "2025Q1",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [
+            "ff150102-2244-4aba-8087-82fbea9ad06a",
+            "50ebee64-9033-47e5-af71-0adf81711d2b"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:18.982Z"
+        },
+        {
+          "id": "f97a6d20-5fc9-4b38-8dee-a6cd6e75b335",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "base_effect",
+          "metric": "netIncome",
+          "ticker": "TLKM",
+          "value": 23649000000000,
+          "unit": "IDR",
+          "economicPeriod": "FY2024",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:17.871Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=financials",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:20.127Z"
+        },
+        {
+          "id": "e742e662-e785-4cce-82bb-68ca06d4376a",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "base_effect",
+          "metric": "netIncome",
+          "ticker": "TLKM",
+          "value": 24560000000000,
+          "unit": "IDR",
+          "economicPeriod": "FY2023",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:17.871Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=financials",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:20.127Z"
+        },
+        {
+          "id": "d39ac71c-b09a-4652-8330-7e86f2a81bc2",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "base_effect",
+          "metric": "prior_fy_earnings_yoy_pct",
+          "ticker": "TLKM",
+          "value": -3.7093,
+          "unit": "percent",
+          "economicPeriod": "FY2024",
+          "comparisonPeriod": "FY2023",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:17.871Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=financials",
+          "derivedFrom": [
+            "f97a6d20-5fc9-4b38-8dee-a6cd6e75b335",
+            "e742e662-e785-4cce-82bb-68ca06d4376a"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:20.127Z"
+        },
+        {
+          "id": "3d809ebb-e6bb-419a-9a8d-b852f952315d",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "earnings_outpacing_revenue",
+          "metric": "netIncome",
+          "ticker": "TLKM",
+          "value": 6279000000000,
+          "unit": "IDR",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:21.337Z"
+        },
+        {
+          "id": "e743990c-d797-4e7e-bf0d-225a9b37b639",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "earnings_outpacing_revenue",
+          "metric": "netIncome",
+          "ticker": "TLKM",
+          "value": 5165000000000,
+          "unit": "IDR",
+          "economicPeriod": "2025Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:21.337Z"
+        },
+        {
+          "id": "13a4fde5-2ae2-4f9b-aa69-e2ec13296398",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "earnings_outpacing_revenue",
+          "metric": "earnings_yoy_pct",
+          "ticker": "TLKM",
+          "value": 21.5682,
+          "unit": "percent",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": "2025Q2",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [
+            "3d809ebb-e6bb-419a-9a8d-b852f952315d",
+            "e743990c-d797-4e7e-bf0d-225a9b37b639"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:21.337Z"
+        },
+        {
+          "id": "74ea8812-0cab-4630-9eac-4134fef65ef8",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "earnings_outpacing_revenue",
+          "metric": "revenue",
+          "ticker": "TLKM",
+          "value": 38689000000000,
+          "unit": "IDR",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:21.337Z"
+        },
+        {
+          "id": "5727f68a-cb67-418a-800c-a12771cf1b62",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "earnings_outpacing_revenue",
+          "metric": "revenue",
+          "ticker": "TLKM",
+          "value": 36365000000000,
+          "unit": "IDR",
+          "economicPeriod": "2025Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:21.337Z"
+        },
+        {
+          "id": "b1b178ea-2516-46f9-a10c-9092b9fba9b4",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "earnings_outpacing_revenue",
+          "metric": "revenue_yoy_pct",
+          "ticker": "TLKM",
+          "value": 6.3908,
+          "unit": "percent",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": "2025Q2",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [
+            "74ea8812-0cab-4630-9eac-4134fef65ef8",
+            "5727f68a-cb67-418a-800c-a12771cf1b62"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:21.337Z"
+        },
+        {
+          "id": "38d0e564-d219-4516-8a71-37cf4d3f9dbc",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "earnings_outpacing_revenue",
+          "metric": "earnings_minus_revenue_growth_pp",
+          "ticker": "TLKM",
+          "value": 15.18,
+          "unit": "percentage_points",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": "2025Q2",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:15.694Z",
+          "sourceLocator": "sectors:/financials/quarterly/TLKM/?n_quarters=8",
+          "derivedFrom": [
+            "13a4fde5-2ae2-4f9b-aa69-e2ec13296398",
+            "b1b178ea-2516-46f9-a10c-9092b9fba9b4"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:21.337Z"
+        },
+        {
+          "id": "b24d359b-d51c-49c8-997f-a1c97fec0ba3",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "roe_trend",
+          "metric": "roe_pct",
+          "ticker": "TLKM",
+          "value": 11.83363558460711,
+          "unit": "percent",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:17.871Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=financials",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:22.338Z"
+        },
+        {
+          "id": "49d9163c-dfe6-411d-b1f2-20a81d10c78d",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "roe_trend",
+          "metric": "roe_prior_3y_avg_pct",
+          "ticker": "TLKM",
+          "value": 14.71,
+          "unit": "percent",
+          "economicPeriod": "FY2022-FY2024",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:17.871Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=financials",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:22.338Z"
+        },
+        {
+          "id": "82f7ffd1-57b5-4395-9a3b-da70f628bfd0",
+          "claimId": "783722e4-c657-46bb-b64b-263b2e4cdfbe",
+          "checkId": "roe_trend",
+          "metric": "roe_trend_pp",
+          "ticker": "TLKM",
+          "value": -2.88,
+          "unit": "percentage_points",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": "FY2022-FY2024",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:17.871Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=financials",
+          "derivedFrom": [
+            "b24d359b-d51c-49c8-997f-a1c97fec0ba3",
+            "49d9163c-dfe6-411d-b1f2-20a81d10c78d"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:22.338Z"
+        }
+      ]
+    },
+    {
+      "id": "0130753a-2c47-4210-a384-87518de9719c",
+      "sessionId": "2791504e-6397-4ffe-8f1a-9cff368fd7a5",
+      "ordinal": 2,
+      "originalText": "valuasinya juga murah dibanding emiten telco lain",
+      "normalizedText": "TLKM is cheap in valuation compared to other telecommunications companies",
+      "ticker": "TLKM",
+      "entityMention": "TLKM",
+      "claimType": "RELATIVE_VALUATION",
+      "comparisonType": "PEER",
+      "timeScope": null,
+      "verifiability": "YES",
+      "contractId": "relative-valuation-v2",
+      "assessment": "PARTIALLY_SUPPORTED",
+      "scopeNote": null,
+      "stopReason": "SUFFICIENT",
+      "checkStates": {
+        "states": [
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "valuation_metric",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "c114f19a-a048-45af-aedb-0ba42b2d3d99"
+            ]
+          },
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "peer_set",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "6dc8eff4-2ba4-4990-bc42-8a977331af7d"
+            ]
+          },
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "peer_baseline",
+            "outcome": "supports",
+            "evidenceIds": [
+              "d6088427-b300-49f0-b033-406bf166d688"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "pbv_cross_check",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "de8e6086-1725-4a72-a227-4bb1799ee18c"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "roe_vs_peers",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "82077901-e568-4ad1-b548-a35ffc396b2f"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "own_history",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "9727b0be-1623-4492-917f-266540f76734"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "price_drawdown",
+            "outcome": "weakens",
+            "evidenceIds": [
+              "df7f8b35-5537-4f6a-87bc-79ca0e7cefaa"
+            ]
+          }
+        ],
+        "coverage": {
+          "label": "3 of 3 required checks available",
+          "invalid": 0,
+          "required": 3,
+          "completed": 3,
+          "unavailable": 0
+        }
+      },
+      "peerSet": {
+        "period": "2026-09-30",
+        "excluded": [
+          {
+            "reason": "non-positive metric value is not comparable",
+            "ticker": "EXCL"
+          },
+          {
+            "reason": "target company",
+            "ticker": "TLKM"
+          }
+        ],
+        "frozenAt": "2026-10-01T10:42:25.272Z",
+        "included": [
+          {
+            "ticker": "IBST",
+            "subsector": "Telecommunication",
+            "metricValue": 27.869677499927,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "INET",
+            "subsector": "Telecommunication",
+            "metricValue": 163.798057382178,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "ISAT",
+            "subsector": "Telecommunication",
+            "metricValue": 9.73986296822026,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "MORA",
+            "subsector": "Telecommunication",
+            "metricValue": 373.298700644424,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "MTEL",
+            "subsector": "Telecommunication",
+            "metricValue": 17.6033619123237,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "SUPR",
+            "subsector": "Telecommunication",
+            "metricValue": 42.6021969079314,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "TBIG",
+            "subsector": "Telecommunication",
+            "metricValue": 21.3720262875372,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "TOWR",
+            "subsector": "Telecommunication",
+            "metricValue": 6.08799220701692,
+            "metricPeriod": "2026-09-30"
+          }
+        ],
+        "minPeers": 4,
+        "subsector": "Telecommunication",
+        "sufficient": true,
+        "targetTicker": "TLKM",
+        "policyVersion": "peer-policy-v1"
+      },
+      "extractor": "llm:openai/gpt-4.1-mini",
+      "direction": "bullish",
+      "spanStart": 40,
+      "spanEnd": 89,
+      "trace": [
+        {
+          "id": "82cf7d84-3842-4a70-b1d0-22bb723d4112",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 0,
+          "action": "PLAN",
+          "reason": "Contract relative-valuation-v2: required checks valuation_metric, peer_set, peer_baseline; counterchecks pbv_cross_check; counter-hypotheses roe_vs_peers, own_history, price_drawdown.",
+          "startedAt": "2026-10-01T10:42:22.354Z",
+          "finishedAt": "2026-10-01T10:42:22.354Z",
+          "evidenceIds": [],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "b4c6583b-a400-43ee-92ea-0c37fc661110",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 1,
+          "action": "get_valuation_metrics",
+          "reason": "To verify the claim that TLKM has cheap valuation, we first need to know its current valuation metric such as P/E ratio.",
+          "startedAt": "2026-10-01T10:42:23.289Z",
+          "finishedAt": "2026-10-01T10:42:23.646Z",
+          "evidenceIds": [
+            "c114f19a-a048-45af-aedb-0ba42b2d3d99"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "valuation_metric",
+          "expectation": "supports",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "32762e5f-1249-44f1-a99d-647b7909df15",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 2,
+          "action": "EVALUATE",
+          "reason": "valuation_metric: completed (neutral)",
+          "startedAt": "2026-10-01T10:42:23.654Z",
+          "finishedAt": "2026-10-01T10:42:23.654Z",
+          "evidenceIds": [
+            "c114f19a-a048-45af-aedb-0ba42b2d3d99"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "7eb2268a-d61d-4def-b648-f78876e164c4",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 3,
+          "action": "get_peer_candidates",
+          "reason": "Establishing the peer set is essential before comparing TLKM's valuation to its peers.",
+          "startedAt": "2026-10-01T10:42:24.718Z",
+          "finishedAt": "2026-10-01T10:42:25.272Z",
+          "evidenceIds": [
+            "6dc8eff4-2ba4-4990-bc42-8a977331af7d"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "peer_set",
+          "expectation": "neutral",
+          "expectationHeld": true,
+          "outcome": "neutral"
+        },
+        {
+          "id": "acecb13d-f735-42bc-a4b7-eeba4bf26cc6",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 4,
+          "action": "EVALUATE",
+          "reason": "peer_set: completed (neutral)",
+          "startedAt": "2026-10-01T10:42:25.280Z",
+          "finishedAt": "2026-10-01T10:42:25.280Z",
+          "evidenceIds": [
+            "6dc8eff4-2ba4-4990-bc42-8a977331af7d"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "cf91d90e-22b8-4765-abd0-0ffcad469148",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 5,
+          "action": "get_valuation_metrics",
+          "reason": "The primary required check to establish if TLKM's P/E valuation is cheaper than its peers will confirm the claim's core assertion.",
+          "startedAt": "2026-10-01T10:42:26.390Z",
+          "finishedAt": "2026-10-01T10:42:26.391Z",
+          "evidenceIds": [
+            "95c440ff-86d0-40b8-bf12-de3f61b8a5cc",
+            "a39f8078-6cf4-4c9d-877f-0cb501da89f7",
+            "d6088427-b300-49f0-b033-406bf166d688"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "peer_baseline",
+          "expectation": "supports",
+          "expectationHeld": true,
+          "outcome": "supports"
+        },
+        {
+          "id": "e073077c-b62b-4853-824f-7a45c5ccc86a",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 6,
+          "action": "EVALUATE",
+          "reason": "peer_baseline: completed (supports)",
+          "startedAt": "2026-10-01T10:42:26.399Z",
+          "finishedAt": "2026-10-01T10:42:26.399Z",
+          "evidenceIds": [
+            "d6088427-b300-49f0-b033-406bf166d688"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "6be0cb8f-7eec-4c15-83b7-cd0c441db4e7",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 7,
+          "action": "get_valuation_metrics",
+          "reason": "Checking the P/BV ratio versus peers will provide a complementary valuation perspective to confirm if TLKM is indeed cheaper than its telecommunications peers.",
+          "startedAt": "2026-10-01T10:42:27.417Z",
+          "finishedAt": "2026-10-01T10:42:27.417Z",
+          "evidenceIds": [
+            "62fa26d5-523d-4982-bb89-5e41e7724202",
+            "da05c548-3f5e-4972-8e6e-302cf3a05932",
+            "de8e6086-1725-4a72-a227-4bb1799ee18c"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "pbv_cross_check",
+          "expectation": "supports",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "cfba42be-4dd8-40ab-82ff-99089bb026de",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 8,
+          "action": "EVALUATE",
+          "reason": "pbv_cross_check: completed (neutral)",
+          "startedAt": "2026-10-01T10:42:27.426Z",
+          "finishedAt": "2026-10-01T10:42:27.426Z",
+          "evidenceIds": [
+            "de8e6086-1725-4a72-a227-4bb1799ee18c"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "68e05f45-35e8-4aeb-b572-68f364417745",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 9,
+          "action": "get_annual_financials",
+          "reason": "Checking the return on equity compared to peers can explain if TLKM's lower valuation is justified due to lower profitability.",
+          "startedAt": "2026-10-01T10:42:28.633Z",
+          "finishedAt": "2026-10-01T10:42:29.209Z",
+          "evidenceIds": [
+            "bb4e997e-804f-40a2-a040-6adf8f5cb73a",
+            "8ed6f019-5322-4a7a-a946-214c20916c66",
+            "82077901-e568-4ad1-b548-a35ffc396b2f"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "roe_vs_peers",
+          "expectation": "weakens",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "8b38eace-d837-4cdd-bfee-9d220df28f7c",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 10,
+          "action": "EVALUATE",
+          "reason": "roe_vs_peers: completed (neutral)",
+          "startedAt": "2026-10-01T10:42:29.218Z",
+          "finishedAt": "2026-10-01T10:42:29.218Z",
+          "evidenceIds": [
+            "82077901-e568-4ad1-b548-a35ffc396b2f"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "08cb5871-b681-477f-beaa-f04bd6e74e61",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 11,
+          "action": "get_valuation_metrics",
+          "reason": "Checking TLKM's historical P/E will clarify whether its current valuation is unusually low for itself or just normal, testing if it's truly cheap compared to its own past.",
+          "startedAt": "2026-10-01T10:42:30.288Z",
+          "finishedAt": "2026-10-01T10:42:30.288Z",
+          "evidenceIds": [
+            "70538897-9a80-441b-9c05-29e499bce5bb",
+            "2ef5fb2d-a7a8-4be5-bbaf-7a9d6bd6c314",
+            "9727b0be-1623-4492-917f-266540f76734"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "own_history",
+          "expectation": "weakens",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "7aa3a4cf-e4ab-40b5-bbf7-ed6c78536791",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 12,
+          "action": "EVALUATE",
+          "reason": "own_history: completed (neutral)",
+          "startedAt": "2026-10-01T10:42:30.301Z",
+          "finishedAt": "2026-10-01T10:42:30.301Z",
+          "evidenceIds": [
+            "9727b0be-1623-4492-917f-266540f76734"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "9237b0aa-6f17-4ee5-b6e3-3622ea2482a6",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 13,
+          "action": "get_valuation_metrics",
+          "reason": "Checking if TLKM's low valuation is due to a recent large drop in share price will help clarify if the cheap valuation is a warning sign or an opportunity.",
+          "startedAt": "2026-10-01T10:42:31.281Z",
+          "finishedAt": "2026-10-01T10:42:31.281Z",
+          "evidenceIds": [
+            "dedf1a42-4457-4314-8e81-74f0ad11d9a4",
+            "c720585a-2e79-443e-b5d3-1ab8f5cdf3bd",
+            "df7f8b35-5537-4f6a-87bc-79ca0e7cefaa"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "price_drawdown",
+          "expectation": "neutral",
+          "expectationHeld": false,
+          "outcome": "weakens"
+        },
+        {
+          "id": "98ed80e9-cb62-4d76-a0cb-ff3b0d5bee78",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 14,
+          "action": "EVALUATE",
+          "reason": "price_drawdown: completed (weakens)",
+          "startedAt": "2026-10-01T10:42:31.289Z",
+          "finishedAt": "2026-10-01T10:42:31.289Z",
+          "evidenceIds": [
+            "df7f8b35-5537-4f6a-87bc-79ca0e7cefaa"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "8e5ba570-a6fc-4ad3-9d89-83fd63ca3df2",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "sequence": 15,
+          "action": "STOP",
+          "reason": "All eligible checks are resolved.",
+          "startedAt": "2026-10-01T10:42:31.292Z",
+          "finishedAt": "2026-10-01T10:42:31.292Z",
+          "evidenceIds": [],
+          "resultStatus": "OK",
+          "stopReason": "SUFFICIENT",
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        }
+      ],
+      "evidence": [
+        {
+          "id": "c114f19a-a048-45af-aedb-0ba42b2d3d99",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "valuation_metric",
+          "metric": "target_pe",
+          "ticker": "TLKM",
+          "value": 12.9912081098385,
+          "unit": "ratio",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:42:23.646Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=valuation%2Cdividend",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:23.648Z"
+        },
+        {
+          "id": "6dc8eff4-2ba4-4990-bc42-8a977331af7d",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "peer_set",
+          "metric": "peer_count",
+          "ticker": "TLKM",
+          "value": 8,
+          "unit": "count",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:42:25.272Z",
+          "sourceLocator": "sectors:/companies/?where=sub_sector+%3D+%27Telecommunication%27&order_by=-market_cap&limit=10",
+          "derivedFrom": [],
+          "calculationVersion": "peer-policy-v1",
+          "status": "VALID",
+          "note": "included: IBST, INET, ISAT, MORA, MTEL, SUPR, TBIG, TOWR; excluded: 2",
+          "createdAt": "2026-10-01T10:42:25.273Z"
+        },
+        {
+          "id": "95c440ff-86d0-40b8-bf12-de3f61b8a5cc",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "peer_baseline",
+          "metric": "peer_median_pe",
+          "ticker": "TLKM",
+          "value": 24.6209,
+          "unit": "ratio",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:42:25.272Z",
+          "sourceLocator": "sectors:/companies/?where=sub_sector+%3D+%27Telecommunication%27&order_by=-market_cap&limit=10",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": "n=8",
+          "createdAt": "2026-10-01T10:42:26.393Z"
+        },
+        {
+          "id": "a39f8078-6cf4-4c9d-877f-0cb501da89f7",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "peer_baseline",
+          "metric": "target_pe_for_peer_comparison",
+          "ticker": "TLKM",
+          "value": 12.9912081098385,
+          "unit": "ratio",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:42:23.646Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=valuation%2Cdividend",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:26.393Z"
+        },
+        {
+          "id": "d6088427-b300-49f0-b033-406bf166d688",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "peer_baseline",
+          "metric": "pe_vs_peer_median_pct",
+          "ticker": "TLKM",
+          "value": -47.23,
+          "unit": "percent",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:42:25.272Z",
+          "sourceLocator": "sectors:/companies/?where=sub_sector+%3D+%27Telecommunication%27&order_by=-market_cap&limit=10",
+          "derivedFrom": [
+            "a39f8078-6cf4-4c9d-877f-0cb501da89f7",
+            "95c440ff-86d0-40b8-bf12-de3f61b8a5cc"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": "peers: IBST, INET, ISAT, MORA, MTEL, SUPR, TBIG, TOWR",
+          "createdAt": "2026-10-01T10:42:26.393Z"
+        },
+        {
+          "id": "62fa26d5-523d-4982-bb89-5e41e7724202",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "pbv_cross_check",
+          "metric": "peer_median_pbv",
+          "ticker": "TLKM",
+          "value": 2.278,
+          "unit": "ratio",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:42:25.272Z",
+          "sourceLocator": "sectors:/companies/?where=sub_sector+%3D+%27Telecommunication%27&order_by=-market_cap&limit=10",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": "n=8",
+          "createdAt": "2026-10-01T10:42:27.418Z"
+        },
+        {
+          "id": "da05c548-3f5e-4972-8e6e-302cf3a05932",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "pbv_cross_check",
+          "metric": "target_pbv_for_peer_comparison",
+          "ticker": "TLKM",
+          "value": 1.91706857777628,
+          "unit": "ratio",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:42:23.646Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=valuation%2Cdividend",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:27.418Z"
+        },
+        {
+          "id": "de8e6086-1725-4a72-a227-4bb1799ee18c",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "pbv_cross_check",
+          "metric": "pbv_vs_peer_median_pct",
+          "ticker": "TLKM",
+          "value": -15.85,
+          "unit": "percent",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:42:25.272Z",
+          "sourceLocator": "sectors:/companies/?where=sub_sector+%3D+%27Telecommunication%27&order_by=-market_cap&limit=10",
+          "derivedFrom": [
+            "da05c548-3f5e-4972-8e6e-302cf3a05932",
+            "62fa26d5-523d-4982-bb89-5e41e7724202"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": "peers: IBST, INET, ISAT, MORA, MTEL, SUPR, TBIG, TOWR",
+          "createdAt": "2026-10-01T10:42:27.418Z"
+        },
+        {
+          "id": "bb4e997e-804f-40a2-a040-6adf8f5cb73a",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "roe_vs_peers",
+          "metric": "roe_pct",
+          "ticker": "TLKM",
+          "value": 11.83363558460711,
+          "unit": "percent",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:17.871Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=financials",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:29.210Z"
+        },
+        {
+          "id": "8ed6f019-5322-4a7a-a946-214c20916c66",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "roe_vs_peers",
+          "metric": "peer_median_roe_pct",
+          "ticker": "TLKM",
+          "value": 12.88,
+          "unit": "percent",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:17.871Z",
+          "sourceLocator": "sectors:/companies/?where=sub_sector+%3D+%27Telecommunication%27&order_by=-market_cap&limit=10",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": "n=8; peers: IBST, INET, ISAT, MORA, MTEL, SUPR, TBIG, TOWR",
+          "createdAt": "2026-10-01T10:42:29.210Z"
+        },
+        {
+          "id": "82077901-e568-4ad1-b548-a35ffc396b2f",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "roe_vs_peers",
+          "metric": "roe_vs_peer_median_pp",
+          "ticker": "TLKM",
+          "value": -1.05,
+          "unit": "percentage_points",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:42:17.871Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=financials",
+          "derivedFrom": [
+            "bb4e997e-804f-40a2-a040-6adf8f5cb73a",
+            "8ed6f019-5322-4a7a-a946-214c20916c66"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:29.210Z"
+        },
+        {
+          "id": "70538897-9a80-441b-9c05-29e499bce5bb",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "own_history",
+          "metric": "pe_own_history_median",
+          "ticker": "TLKM",
+          "value": 16.92,
+          "unit": "ratio",
+          "economicPeriod": "FY2022-FY2025",
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:42:23.646Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=valuation%2Cdividend",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:30.289Z"
+        },
+        {
+          "id": "2ef5fb2d-a7a8-4be5-bbaf-7a9d6bd6c314",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "own_history",
+          "metric": "target_pe_for_history",
+          "ticker": "TLKM",
+          "value": 12.9912081098385,
+          "unit": "ratio",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:42:23.646Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=valuation%2Cdividend",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:30.289Z"
+        },
+        {
+          "id": "9727b0be-1623-4492-917f-266540f76734",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "own_history",
+          "metric": "pe_vs_own_history_pct",
+          "ticker": "TLKM",
+          "value": -23.2,
+          "unit": "percent",
+          "economicPeriod": null,
+          "comparisonPeriod": "FY2022-FY2025",
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:42:23.646Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=valuation%2Cdividend",
+          "derivedFrom": [
+            "2ef5fb2d-a7a8-4be5-bbaf-7a9d6bd6c314",
+            "70538897-9a80-441b-9c05-29e499bce5bb"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:30.289Z"
+        },
+        {
+          "id": "dedf1a42-4457-4314-8e81-74f0ad11d9a4",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "price_drawdown",
+          "metric": "last_close",
+          "ticker": "TLKM",
+          "value": 2290,
+          "unit": "IDR",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:42:24.777Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=overview",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:31.282Z"
+        },
+        {
+          "id": "c720585a-2e79-443e-b5d3-1ab8f5cdf3bd",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "price_drawdown",
+          "metric": "high_52w",
+          "ticker": "TLKM",
+          "value": 3990,
+          "unit": "IDR",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-01-27",
+          "retrievalTime": "2026-10-01T10:42:24.777Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=overview",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:31.282Z"
+        },
+        {
+          "id": "df7f8b35-5537-4f6a-87bc-79ca0e7cefaa",
+          "claimId": "0130753a-2c47-4210-a384-87518de9719c",
+          "checkId": "price_drawdown",
+          "metric": "drawdown_from_52w_high_pct",
+          "ticker": "TLKM",
+          "value": -42.61,
+          "unit": "percent",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:42:24.777Z",
+          "sourceLocator": "sectors:/company/report/TLKM/?sections=overview",
+          "derivedFrom": [
+            "dedf1a42-4457-4314-8e81-74f0ad11d9a4",
+            "c720585a-2e79-443e-b5d3-1ab8f5cdf3bd"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:42:31.282Z"
+        }
+      ]
+    }
+  ]
+}

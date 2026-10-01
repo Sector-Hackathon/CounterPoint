@@ -11,7 +11,9 @@
     "eval": "tsx scripts/run-eval.ts",
     "live-check": "tsx scripts/live-check.ts",
     "db:push": "node --env-file-if-exists=../../.env node_modules/prisma/build/index.js db push",
-    "db:generate": "prisma generate"
+    "db:generate": "prisma generate",
+    "export-trace": "node --env-file-if-exists=../../.env node_modules/tsx/dist/cli.mjs scripts/export-trace.ts",
+    "baseline": "node --env-file-if-exists=../../.env node_modules/tsx/dist/cli.mjs scripts/baseline.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",

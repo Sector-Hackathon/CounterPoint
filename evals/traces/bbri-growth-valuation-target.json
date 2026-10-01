@@ -1,0 +1,2197 @@
+{
+  "id": "5b6205a2-b584-4098-8ef8-aef684f1d17c",
+  "rawThesis": "BBRI masih menarik karena growth kuat dan valuasinya murah dibanding bank besar lain, harga akan naik ke 6000.",
+  "status": "COMPLETED",
+  "dataMode": "live",
+  "error": null,
+  "createdAt": "2026-10-01T10:45:06.574Z",
+  "updatedAt": "2026-10-01T10:45:33.231Z",
+  "finalReportId": "b41cc311-2b7f-47f6-997c-44a93395c2e5",
+  "entities": [
+    {
+      "id": "b4921754-f5c2-40fa-8c2d-bcab41137804",
+      "sessionId": "5b6205a2-b584-4098-8ef8-aef684f1d17c",
+      "mention": "BBRI",
+      "ticker": "BBRI",
+      "canonicalName": "PT Bank Rakyat Indonesia (Persero) Tbk",
+      "resolutionStatus": "RESOLVED",
+      "candidates": [
+        {
+          "name": "PT Bank Rakyat Indonesia (Persero) Tbk",
+          "ticker": "BBRI"
+        }
+      ],
+      "isPrimary": true
+    },
+    {
+      "id": "f5be3477-3796-425f-bf72-78334f4958e5",
+      "sessionId": "5b6205a2-b584-4098-8ef8-aef684f1d17c",
+      "mention": "bank besar lain",
+      "ticker": null,
+      "canonicalName": null,
+      "resolutionStatus": "UNKNOWN",
+      "candidates": [],
+      "isPrimary": false
+    }
+  ],
+  "reports": [
+    {
+      "id": "b41cc311-2b7f-47f6-997c-44a93395c2e5",
+      "sessionId": "5b6205a2-b584-4098-8ef8-aef684f1d17c",
+      "content": {
+        "claims": [
+          {
+            "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+            "context": [
+              {
+                "text": "Latest-quarter revenue growth, same quarter year-on-year: revenue growth YoY 8.4% (2026Q2 vs 2025Q2).",
+                "evidenceIds": [
+                  "6030db1e-613b-42af-b6ff-ecc5a841b9b8",
+                  "bfa36fc4-9bab-4500-a9d9-2188cb9af123",
+                  "13f35119-706c-41df-b5a0-43ac159029ee"
+                ]
+              },
+              {
+                "text": "Revenue growth trend versus the prior quarter (deceleration check): revenue growth YoY 8.4% (2026Q2 vs 2025Q2); prior-quarter revenue growth YoY 8.0% (2026Q1 vs 2025Q1).",
+                "evidenceIds": [
+                  "6030db1e-613b-42af-b6ff-ecc5a841b9b8",
+                  "bfa36fc4-9bab-4500-a9d9-2188cb9af123",
+                  "13f35119-706c-41df-b5a0-43ac159029ee",
+                  "8e284606-3490-4dc2-95ec-af77f9bd07b9",
+                  "28cd03fc-737a-4306-bae2-6d0460ef7feb",
+                  "f6969e00-29a8-4d02-8de3-f24027ba48a1"
+                ]
+              },
+              {
+                "text": "Earnings growth versus revenue growth (divergence check): revenue growth YoY 8.4% (2026Q2 vs 2025Q2); net income growth YoY 22.3% (2026Q2 vs 2025Q2).",
+                "evidenceIds": [
+                  "6030db1e-613b-42af-b6ff-ecc5a841b9b8",
+                  "bfa36fc4-9bab-4500-a9d9-2188cb9af123",
+                  "13f35119-706c-41df-b5a0-43ac159029ee",
+                  "b541f736-f797-4ae9-9f60-03df5b04dead",
+                  "072a7ee8-01af-47e0-aa3c-c91f38921d5f",
+                  "55c60730-7548-4460-a3e6-887ac5d161ab"
+                ]
+              }
+            ],
+            "missing": [],
+            "peerSet": null,
+            "weakens": [
+              {
+                "text": "Last full fiscal year net income growth: annual net income growth -5.8% (FY2025 vs FY2024).",
+                "evidenceIds": [
+                  "7e3e278a-455d-406b-ad78-3f86eb117f34",
+                  "d0344d39-3c75-4e11-8644-1560226acdc7",
+                  "d63a96ef-3da2-40c0-bd6d-47b34f4e6b5f"
+                ]
+              }
+            ],
+            "coverage": {
+              "label": "3 of 3 required checks available",
+              "invalid": 0,
+              "required": 3,
+              "completed": 3,
+              "unavailable": 0
+            },
+            "supports": [
+              {
+                "text": "Latest-quarter net income growth, same quarter year-on-year: net income growth YoY 22.3% (2026Q2 vs 2025Q2).",
+                "evidenceIds": [
+                  "b541f736-f797-4ae9-9f60-03df5b04dead",
+                  "072a7ee8-01af-47e0-aa3c-c91f38921d5f",
+                  "55c60730-7548-4460-a3e6-887ac5d161ab"
+                ]
+              }
+            ],
+            "assessment": "PARTIALLY_SUPPORTED",
+            "stopReason": "SUFFICIENT",
+            "counterpoint": {
+              "hypotheses": [
+                {
+                  "note": null,
+                  "status": "refuted",
+                  "checkId": "base_effect",
+                  "statement": {
+                    "text": "Prior fiscal year net income growth (base effect): prior-year net income growth 0.1% (FY2024 vs FY2023); net income growth YoY 22.3% (2026Q2 vs 2025Q2).",
+                    "evidenceIds": [
+                      "c32646c2-76fa-4c34-ae0f-b35dca28c0ab",
+                      "7a4e7d52-660c-4a0c-b0cc-18cf25e48727",
+                      "e9f8c703-e952-42b2-8a9a-ba6928a83a26",
+                      "b541f736-f797-4ae9-9f60-03df5b04dead",
+                      "072a7ee8-01af-47e0-aa3c-c91f38921d5f",
+                      "55c60730-7548-4460-a3e6-887ac5d161ab"
+                    ]
+                  },
+                  "hypothesis": "Is this growth a rebound from a weak prior year rather than new strength?"
+                },
+                {
+                  "note": null,
+                  "status": "refuted",
+                  "checkId": "earnings_outpacing_revenue",
+                  "statement": {
+                    "text": "Net income growth minus revenue growth, latest quarter: net income growth minus revenue growth 13.9 pp (2026Q2 vs 2025Q2).",
+                    "evidenceIds": [
+                      "24e2c45c-d0dc-4792-a79b-2f723715baf1",
+                      "b541f736-f797-4ae9-9f60-03df5b04dead",
+                      "6030db1e-613b-42af-b6ff-ecc5a841b9b8"
+                    ]
+                  },
+                  "hypothesis": "Is profit growing much faster than revenue, so the business itself is not growing as fast as earnings suggest?"
+                },
+                {
+                  "note": null,
+                  "status": "refuted",
+                  "checkId": "roe_trend",
+                  "statement": {
+                    "text": "Latest fiscal year ROE versus its average over the prior three years: ROE change -1.2 pp (FY2025 vs FY2022-FY2024).",
+                    "evidenceIds": [
+                      "d3a06470-a138-455d-9ac2-1f718a60c302",
+                      "75f4ec86-2ca5-458f-9ecf-243006937c4e",
+                      "cbc3b5da-9325-4a75-af7c-cdcb51402cfa"
+                    ]
+                  },
+                  "hypothesis": "Is return on equity falling even while profit grows?"
+                }
+              ],
+              "openQuestions": [
+                "Is growth concentrated in one business segment? Sectors does not expose segment data.",
+                "Did one-off items (asset sales, provisions released) lift net income? Not identifiable from summary financials."
+              ]
+            },
+            "interpretation": {
+              "text": "BBRI's latest-quarter net income growth was 22.3% year-on-year, while its revenue growth for the same period was 8.4%, which is a slight increase compared to the prior quarter's 8.0%. However, the last full fiscal year saw a decline in net income growth by 5.8%.",
+              "evidenceIds": [
+                "b541f736-f797-4ae9-9f60-03df5b04dead",
+                "072a7ee8-01af-47e0-aa3c-c91f38921d5f",
+                "55c60730-7548-4460-a3e6-887ac5d161ab",
+                "7e3e278a-455d-406b-ad78-3f86eb117f34",
+                "d0344d39-3c75-4e11-8644-1560226acdc7",
+                "d63a96ef-3da2-40c0-bd6d-47b34f4e6b5f",
+                "6030db1e-613b-42af-b6ff-ecc5a841b9b8",
+                "bfa36fc4-9bab-4500-a9d9-2188cb9af123",
+                "13f35119-706c-41df-b5a0-43ac159029ee",
+                "8e284606-3490-4dc2-95ec-af77f9bd07b9",
+                "28cd03fc-737a-4306-bae2-6d0460ef7feb",
+                "f6969e00-29a8-4d02-8de3-f24027ba48a1"
+              ]
+            },
+            "changeConditions": [
+              {
+                "unit": "percent",
+                "label": "Latest-quarter revenue growth YoY",
+                "effect": "would_support",
+                "period": "2026Q2",
+                "checkId": "revenue_growth",
+                "current": 8.4416,
+                "threshold": 10,
+                "comparator": "at_least",
+                "evidenceId": "6030db1e-613b-42af-b6ff-ecc5a841b9b8"
+              },
+              {
+                "unit": "percent",
+                "label": "Last fiscal year net income growth",
+                "effect": "would_support",
+                "period": "FY2025",
+                "checkId": "historical_context",
+                "current": -5.8225,
+                "threshold": 10,
+                "comparator": "at_least",
+                "evidenceId": "7e3e278a-455d-406b-ad78-3f86eb117f34"
+              }
+            ]
+          },
+          {
+            "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+            "context": [
+              {
+                "text": "Comparable valuation metric for the target (P/E): P/E 7.56x (as of 2026-09-30).",
+                "evidenceIds": [
+                  "45fce9fd-0e2c-4d50-91fe-aafb1ae04c71"
+                ]
+              },
+              {
+                "text": "Size of the frozen valid peer set: valid peers 9 (as of 2026-09-30).",
+                "evidenceIds": [
+                  "a1dd6663-06fd-4095-93dc-9ec24dc47961"
+                ]
+              },
+              {
+                "text": "Target P/E versus frozen peer median: P/E vs peer median -0.9% (as of 2026-09-30).",
+                "evidenceIds": [
+                  "b7852c42-65d0-4367-89ca-157425c95020",
+                  "321831a3-6d1c-4acf-af03-504667ea6867",
+                  "3db1bd8d-cd1f-445b-b4de-7daa9c31493f"
+                ]
+              }
+            ],
+            "missing": [],
+            "peerSet": {
+              "period": "2026-09-30",
+              "excluded": [
+                {
+                  "reason": "target company",
+                  "ticker": "BBRI"
+                }
+              ],
+              "included": [
+                "BBCA",
+                "BBNI",
+                "BDMN",
+                "BMRI",
+                "BNGA",
+                "BNLI",
+                "BRIS",
+                "MEGA",
+                "NISP"
+              ],
+              "minPeers": 4,
+              "policyVersion": "peer-policy-v1"
+            },
+            "weakens": [
+              {
+                "text": "Target P/BV versus frozen peer median (cross-check): P/BV vs peer median 15.2% (as of 2026-09-30).",
+                "evidenceIds": [
+                  "3fb3dd92-6849-48b5-b38a-e92746a06545",
+                  "03631391-cd43-4220-a36e-6267af563cfa",
+                  "f8248e0e-142b-4bc1-a7d5-f13c1ea39652"
+                ]
+              }
+            ],
+            "coverage": {
+              "label": "3 of 3 required checks available",
+              "invalid": 0,
+              "required": 3,
+              "completed": 3,
+              "unavailable": 0
+            },
+            "supports": [],
+            "assessment": "NOT_SUPPORTED",
+            "stopReason": "SUFFICIENT",
+            "counterpoint": {
+              "hypotheses": [
+                {
+                  "note": null,
+                  "status": "refuted",
+                  "checkId": "roe_vs_peers",
+                  "statement": {
+                    "text": "Target ROE minus frozen peer median ROE, latest fiscal year: ROE vs peer median 5.3 pp (FY2025).",
+                    "evidenceIds": [
+                      "bc4302fe-36cd-40d6-aabd-3fea652cf59e",
+                      "881b0dbb-5dbf-48ac-a549-217fce1fb8f4",
+                      "887c6577-ae08-495f-b836-d507a0befe6a"
+                    ]
+                  },
+                  "hypothesis": "Is it cheaper because it earns lower returns on equity than its peers?"
+                },
+                {
+                  "note": null,
+                  "status": "refuted",
+                  "checkId": "own_history",
+                  "statement": {
+                    "text": "Current P/E versus the median of its own prior fiscal years: P/E vs own history -38.2% (as of 2026-09-30).",
+                    "evidenceIds": [
+                      "2ffa356d-28b7-4b10-afe5-feb764fb22f1",
+                      "c00a24a1-33c2-4bf9-9af7-66dea71b36ff",
+                      "2b05c68f-fbcf-4aed-ae2d-4aaff365e9b6"
+                    ]
+                  },
+                  "hypothesis": "Is this P/E normal for this company, so it is not cheap by its own standards?"
+                },
+                {
+                  "note": null,
+                  "status": "refuted",
+                  "checkId": "price_drawdown",
+                  "statement": {
+                    "text": "Last close versus its high over the past year: distance from past-year high -22.5% (as of 2026-09-30).",
+                    "evidenceIds": [
+                      "797a7abb-e9a0-479d-91c5-7bd9dc38ac3d",
+                      "cbf86cf3-6480-43b3-acd2-a762c83d83b6",
+                      "5d4a767f-8ecf-4e7e-ae08-e220492a0fe1"
+                    ]
+                  },
+                  "hypothesis": "Does the low valuation coincide with a large fall in the share price?"
+                }
+              ],
+              "openQuestions": [
+                "Is the market pricing in risks not visible in reported numbers (asset quality, regulation)? Not testable with Sectors data."
+              ]
+            },
+            "interpretation": null,
+            "changeConditions": [
+              {
+                "unit": "percent",
+                "label": "P/E versus peer median",
+                "effect": "would_support",
+                "period": "2026-09-30",
+                "checkId": "peer_baseline",
+                "current": -0.93,
+                "threshold": -10,
+                "comparator": "at_most",
+                "evidenceId": "b7852c42-65d0-4367-89ca-157425c95020"
+              }
+            ]
+          },
+          {
+            "claimId": "34bfdb02-b2be-441b-889a-a159b3d2cdf1",
+            "context": [],
+            "missing": [
+              "Future price prediction is not verifiable"
+            ],
+            "peerSet": null,
+            "weakens": [],
+            "coverage": {
+              "label": "No evidence contract applies",
+              "invalid": 0,
+              "required": 0,
+              "completed": 0,
+              "unavailable": 0
+            },
+            "supports": [],
+            "assessment": "UNVERIFIABLE",
+            "stopReason": "OUT_OF_SCOPE",
+            "counterpoint": null,
+            "interpretation": null,
+            "changeConditions": []
+          }
+        ],
+        "disclaimer": "Counterpoint checks the evidence behind claims you provide. It is information and analysis only, not investment advice, and does not recommend buying, selling, or holding any security."
+      },
+      "validationStatus": "REPAIRED",
+      "validationIssues": [
+        {
+          "kind": "unknown_evidence",
+          "detail": "3db1bd8c-dcd1f-445b-b4de-7daa9c31493f",
+          "statement": "BBRI's price-to-book value (P/BV) is 15.2% above the peer median, and its price-to-earnings (P/E) ratio is 7.56x, which is 0.9% below the peer median based on a valid peer set of 9 banks as of 2026-09-30."
+        }
+      ],
+      "modelVersion": "openai/gpt-4.1-mini",
+      "promptVersion": "prompts-v2",
+      "createdAt": "2026-10-01T10:45:33.222Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+      "sessionId": "5b6205a2-b584-4098-8ef8-aef684f1d17c",
+      "ordinal": 0,
+      "originalText": "BBRI masih menarik karena growth kuat",
+      "normalizedText": "BBRI has strong fundamental growth compared to its own history",
+      "ticker": "BBRI",
+      "entityMention": "BBRI",
+      "claimType": "ABSOLUTE_GROWTH",
+      "comparisonType": "HISTORICAL",
+      "timeScope": null,
+      "verifiability": "YES",
+      "contractId": "absolute-growth-v2",
+      "assessment": "PARTIALLY_SUPPORTED",
+      "scopeNote": null,
+      "stopReason": "SUFFICIENT",
+      "checkStates": {
+        "states": [
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "revenue_growth",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "6030db1e-613b-42af-b6ff-ecc5a841b9b8"
+            ]
+          },
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "earnings_growth",
+            "outcome": "supports",
+            "evidenceIds": [
+              "b541f736-f797-4ae9-9f60-03df5b04dead"
+            ]
+          },
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "historical_context",
+            "outcome": "weakens",
+            "evidenceIds": [
+              "7e3e278a-455d-406b-ad78-3f86eb117f34"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "growth_deceleration",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "6030db1e-613b-42af-b6ff-ecc5a841b9b8",
+              "8e284606-3490-4dc2-95ec-af77f9bd07b9"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "revenue_earnings_divergence",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "6030db1e-613b-42af-b6ff-ecc5a841b9b8",
+              "b541f736-f797-4ae9-9f60-03df5b04dead"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "pending",
+            "checkId": "margin_deterioration",
+            "outcome": null,
+            "evidenceIds": []
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "base_effect",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "c32646c2-76fa-4c34-ae0f-b35dca28c0ab",
+              "b541f736-f797-4ae9-9f60-03df5b04dead"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "earnings_outpacing_revenue",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "24e2c45c-d0dc-4792-a79b-2f723715baf1"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "roe_trend",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "d3a06470-a138-455d-9ac2-1f718a60c302"
+            ]
+          }
+        ],
+        "coverage": {
+          "label": "3 of 3 required checks available",
+          "invalid": 0,
+          "required": 3,
+          "completed": 3,
+          "unavailable": 0
+        }
+      },
+      "peerSet": null,
+      "extractor": "llm:openai/gpt-4.1-mini",
+      "direction": "bullish",
+      "spanStart": 0,
+      "spanEnd": 37,
+      "trace": [
+        {
+          "id": "7f1d5dde-da29-4ce5-ab47-f4d770d560ad",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 0,
+          "action": "PLAN",
+          "reason": "Contract absolute-growth-v2: required checks revenue_growth, earnings_growth, historical_context; counterchecks growth_deceleration, revenue_earnings_divergence; counter-hypotheses base_effect, earnings_outpacing_revenue, roe_trend.",
+          "startedAt": "2026-10-01T10:45:10.083Z",
+          "finishedAt": "2026-10-01T10:45:10.083Z",
+          "evidenceIds": [],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "69849002-a9ef-4a22-bbed-3c85d67aeed6",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 1,
+          "action": "get_quarterly_financials",
+          "reason": "Checking BBRI's latest quarter revenue growth establishes if there is fundamental growth compared to its own history, which is crucial for verifying the claim.",
+          "startedAt": "2026-10-01T10:45:11.097Z",
+          "finishedAt": "2026-10-01T10:45:11.157Z",
+          "evidenceIds": [
+            "af86ce39-559d-4714-a49e-00c0ed534a21",
+            "50b01bda-1f0f-4b21-bf1f-47a462e6c027",
+            "02574331-f571-4c13-a08c-139af129bf44"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "revenue_growth",
+          "expectation": "supports",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "53cf7856-9f89-4706-949f-123e5153bd6c",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 2,
+          "action": "EVALUATE",
+          "reason": "revenue_growth: completed (neutral)",
+          "startedAt": "2026-10-01T10:45:11.167Z",
+          "finishedAt": "2026-10-01T10:45:11.167Z",
+          "evidenceIds": [
+            "02574331-f571-4c13-a08c-139af129bf44"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "c717cc4f-fc19-4073-a0f9-e9193efb59d5",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 3,
+          "action": "get_quarterly_financials",
+          "reason": "Checking the latest quarter's net income growth is essential to establish if BBRI's earnings are showing strong growth compared to its own history, directly supporting the claim.",
+          "startedAt": "2026-10-01T10:45:12.901Z",
+          "finishedAt": "2026-10-01T10:45:12.901Z",
+          "evidenceIds": [
+            "3bdc88d5-9ccb-40c6-8406-0cd97759d951",
+            "adfb6308-7dc7-425f-8ecd-ee758b311858",
+            "44b8e525-32b7-4bee-b2b1-778241b21e01"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "earnings_growth",
+          "expectation": "supports",
+          "expectationHeld": true,
+          "outcome": "supports"
+        },
+        {
+          "id": "156fac4e-d174-4f8e-be26-ba09237d109d",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 4,
+          "action": "EVALUATE",
+          "reason": "earnings_growth: completed (supports); revenue_earnings_divergence: completed (neutral)",
+          "startedAt": "2026-10-01T10:45:12.911Z",
+          "finishedAt": "2026-10-01T10:45:12.911Z",
+          "evidenceIds": [
+            "44b8e525-32b7-4bee-b2b1-778241b21e01",
+            "02574331-f571-4c13-a08c-139af129bf44",
+            "44b8e525-32b7-4bee-b2b1-778241b21e01"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "39c84867-88ac-4407-970f-c54d7f9e3bd9",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 5,
+          "action": "get_annual_financials",
+          "reason": "To confirm the claim that BBRI has strong fundamental growth compared to its own history, we need to establish the growth context from the last full fiscal year.",
+          "startedAt": "2026-10-01T10:45:14.177Z",
+          "finishedAt": "2026-10-01T10:45:14.277Z",
+          "evidenceIds": [
+            "d0344d39-3c75-4e11-8644-1560226acdc7",
+            "d63a96ef-3da2-40c0-bd6d-47b34f4e6b5f",
+            "7e3e278a-455d-406b-ad78-3f86eb117f34"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "historical_context",
+          "expectation": "supports",
+          "expectationHeld": false,
+          "outcome": "weakens"
+        },
+        {
+          "id": "a1ffd7c1-b510-42d1-ac12-88ba03e42ac1",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 6,
+          "action": "EVALUATE",
+          "reason": "historical_context: completed (weakens)",
+          "startedAt": "2026-10-01T10:45:14.285Z",
+          "finishedAt": "2026-10-01T10:45:14.285Z",
+          "evidenceIds": [
+            "7e3e278a-455d-406b-ad78-3f86eb117f34"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "f43e5195-3bd1-43ca-9537-5868f0e27a55",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 7,
+          "action": "get_quarterly_financials",
+          "reason": "The historical context weakens the claim, so checking recent revenue growth trend for deceleration will clarify if growth momentum is slowing.",
+          "startedAt": "2026-10-01T10:45:15.283Z",
+          "finishedAt": "2026-10-01T10:45:15.283Z",
+          "evidenceIds": [
+            "28cd03fc-737a-4306-bae2-6d0460ef7feb",
+            "f6969e00-29a8-4d02-8de3-f24027ba48a1",
+            "8e284606-3490-4dc2-95ec-af77f9bd07b9"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "growth_deceleration",
+          "expectation": "weakens",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "ef6d56cd-81f1-4ac0-be3c-a6394af3da94",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 8,
+          "action": "EVALUATE",
+          "reason": "growth_deceleration: completed (neutral)",
+          "startedAt": "2026-10-01T10:45:15.291Z",
+          "finishedAt": "2026-10-01T10:45:15.291Z",
+          "evidenceIds": [
+            "02574331-f571-4c13-a08c-139af129bf44",
+            "8e284606-3490-4dc2-95ec-af77f9bd07b9"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "2718562e-47c3-4539-9362-0060c1250806",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 9,
+          "action": "get_annual_financials",
+          "reason": "Checking if the strong growth is merely a rebound from a weak prior year can clarify if the growth is truly strong or just mean reversion.",
+          "startedAt": "2026-10-01T10:45:16.393Z",
+          "finishedAt": "2026-10-01T10:45:16.394Z",
+          "evidenceIds": [
+            "7a4e7d52-660c-4a0c-b0cc-18cf25e48727",
+            "e9f8c703-e952-42b2-8a9a-ba6928a83a26",
+            "c32646c2-76fa-4c34-ae0f-b35dca28c0ab"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "base_effect",
+          "expectation": "weakens",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "15b293f5-9a19-4167-9d76-2dd691af2001",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 10,
+          "action": "EVALUATE",
+          "reason": "base_effect: completed (neutral)",
+          "startedAt": "2026-10-01T10:45:16.413Z",
+          "finishedAt": "2026-10-01T10:45:16.413Z",
+          "evidenceIds": [
+            "c32646c2-76fa-4c34-ae0f-b35dca28c0ab",
+            "44b8e525-32b7-4bee-b2b1-778241b21e01"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "0af824b7-90c1-4928-97f1-36c5b2631156",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 11,
+          "action": "get_quarterly_financials",
+          "reason": "To probe if profit growth surpassing revenue growth means the business growth is not as strong as earnings suggest, clarifying the quality of growth.",
+          "startedAt": "2026-10-01T10:45:17.435Z",
+          "finishedAt": "2026-10-01T10:45:17.435Z",
+          "evidenceIds": [
+            "072a7ee8-01af-47e0-aa3c-c91f38921d5f",
+            "55c60730-7548-4460-a3e6-887ac5d161ab",
+            "b541f736-f797-4ae9-9f60-03df5b04dead",
+            "bfa36fc4-9bab-4500-a9d9-2188cb9af123",
+            "13f35119-706c-41df-b5a0-43ac159029ee",
+            "6030db1e-613b-42af-b6ff-ecc5a841b9b8",
+            "24e2c45c-d0dc-4792-a79b-2f723715baf1"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "earnings_outpacing_revenue",
+          "expectation": "weakens",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "23d2318f-37fe-4e27-8dc6-05c6773a610c",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 12,
+          "action": "EVALUATE",
+          "reason": "earnings_outpacing_revenue: completed (neutral)",
+          "startedAt": "2026-10-01T10:45:17.448Z",
+          "finishedAt": "2026-10-01T10:45:17.448Z",
+          "evidenceIds": [
+            "24e2c45c-d0dc-4792-a79b-2f723715baf1"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "cab22e05-6d4b-456f-9cb8-634282e4866a",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 13,
+          "action": "get_annual_financials",
+          "reason": "ROE trend can reveal if the company's profitability efficiency is actually improving, potentially overturning current mixed evidence on growth quality.",
+          "startedAt": "2026-10-01T10:45:18.415Z",
+          "finishedAt": "2026-10-01T10:45:18.416Z",
+          "evidenceIds": [
+            "75f4ec86-2ca5-458f-9ecf-243006937c4e",
+            "cbc3b5da-9325-4a75-af7c-cdcb51402cfa",
+            "d3a06470-a138-455d-9ac2-1f718a60c302"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "roe_trend",
+          "expectation": "weakens",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "8b5e49cc-b4fd-4bbd-a1b3-2451d1e53582",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 14,
+          "action": "EVALUATE",
+          "reason": "roe_trend: completed (neutral)",
+          "startedAt": "2026-10-01T10:45:18.425Z",
+          "finishedAt": "2026-10-01T10:45:18.425Z",
+          "evidenceIds": [
+            "d3a06470-a138-455d-9ac2-1f718a60c302"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "83a5fc82-4d21-40ea-9525-c06daf39d5a6",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "sequence": 15,
+          "action": "STOP",
+          "reason": "All eligible checks are resolved.",
+          "startedAt": "2026-10-01T10:45:18.428Z",
+          "finishedAt": "2026-10-01T10:45:18.428Z",
+          "evidenceIds": [],
+          "resultStatus": "OK",
+          "stopReason": "SUFFICIENT",
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        }
+      ],
+      "evidence": [
+        {
+          "id": "af86ce39-559d-4714-a49e-00c0ed534a21",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "revenue_growth",
+          "metric": "revenue",
+          "ticker": "BBRI",
+          "value": 53348647000000,
+          "unit": "IDR",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:11.159Z"
+        },
+        {
+          "id": "50b01bda-1f0f-4b21-bf1f-47a462e6c027",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "revenue_growth",
+          "metric": "revenue",
+          "ticker": "BBRI",
+          "value": 49195755000000,
+          "unit": "IDR",
+          "economicPeriod": "2025Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:11.159Z"
+        },
+        {
+          "id": "02574331-f571-4c13-a08c-139af129bf44",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "revenue_growth",
+          "metric": "revenue_yoy_pct",
+          "ticker": "BBRI",
+          "value": 8.4416,
+          "unit": "percent",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": "2025Q2",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [
+            "af86ce39-559d-4714-a49e-00c0ed534a21",
+            "50b01bda-1f0f-4b21-bf1f-47a462e6c027"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:11.159Z"
+        },
+        {
+          "id": "3bdc88d5-9ccb-40c6-8406-0cd97759d951",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "earnings_growth",
+          "metric": "netIncome",
+          "ticker": "BBRI",
+          "value": 15724782000000,
+          "unit": "IDR",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:12.903Z"
+        },
+        {
+          "id": "adfb6308-7dc7-425f-8ecd-ee758b311858",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "earnings_growth",
+          "metric": "netIncome",
+          "ticker": "BBRI",
+          "value": 12854780000000,
+          "unit": "IDR",
+          "economicPeriod": "2025Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:12.903Z"
+        },
+        {
+          "id": "44b8e525-32b7-4bee-b2b1-778241b21e01",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "earnings_growth",
+          "metric": "earnings_yoy_pct",
+          "ticker": "BBRI",
+          "value": 22.3263,
+          "unit": "percent",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": "2025Q2",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [
+            "3bdc88d5-9ccb-40c6-8406-0cd97759d951",
+            "adfb6308-7dc7-425f-8ecd-ee758b311858"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:12.903Z"
+        },
+        {
+          "id": "d0344d39-3c75-4e11-8644-1560226acdc7",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "historical_context",
+          "metric": "netIncome",
+          "ticker": "BBRI",
+          "value": 56652384000000,
+          "unit": "IDR",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:14.277Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=financials",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:14.279Z"
+        },
+        {
+          "id": "d63a96ef-3da2-40c0-bd6d-47b34f4e6b5f",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "historical_context",
+          "metric": "netIncome",
+          "ticker": "BBRI",
+          "value": 60154887000000,
+          "unit": "IDR",
+          "economicPeriod": "FY2024",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:14.277Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=financials",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:14.279Z"
+        },
+        {
+          "id": "7e3e278a-455d-406b-ad78-3f86eb117f34",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "historical_context",
+          "metric": "annual_earnings_yoy_pct",
+          "ticker": "BBRI",
+          "value": -5.8225,
+          "unit": "percent",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": "FY2024",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:14.277Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=financials",
+          "derivedFrom": [
+            "d0344d39-3c75-4e11-8644-1560226acdc7",
+            "d63a96ef-3da2-40c0-bd6d-47b34f4e6b5f"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:14.279Z"
+        },
+        {
+          "id": "28cd03fc-737a-4306-bae2-6d0460ef7feb",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "growth_deceleration",
+          "metric": "revenue",
+          "ticker": "BBRI",
+          "value": 53505109000000,
+          "unit": "IDR",
+          "economicPeriod": "2026Q1",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:15.285Z"
+        },
+        {
+          "id": "f6969e00-29a8-4d02-8de3-f24027ba48a1",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "growth_deceleration",
+          "metric": "revenue",
+          "ticker": "BBRI",
+          "value": 49527596000000,
+          "unit": "IDR",
+          "economicPeriod": "2025Q1",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:15.285Z"
+        },
+        {
+          "id": "8e284606-3490-4dc2-95ec-af77f9bd07b9",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "growth_deceleration",
+          "metric": "revenue_yoy_pct_prev_quarter",
+          "ticker": "BBRI",
+          "value": 8.0309,
+          "unit": "percent",
+          "economicPeriod": "2026Q1",
+          "comparisonPeriod": "2025Q1",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [
+            "28cd03fc-737a-4306-bae2-6d0460ef7feb",
+            "f6969e00-29a8-4d02-8de3-f24027ba48a1"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:15.285Z"
+        },
+        {
+          "id": "7a4e7d52-660c-4a0c-b0cc-18cf25e48727",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "base_effect",
+          "metric": "netIncome",
+          "ticker": "BBRI",
+          "value": 60154887000000,
+          "unit": "IDR",
+          "economicPeriod": "FY2024",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:14.277Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=financials",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:16.395Z"
+        },
+        {
+          "id": "e9f8c703-e952-42b2-8a9a-ba6928a83a26",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "base_effect",
+          "metric": "netIncome",
+          "ticker": "BBRI",
+          "value": 60099863000000,
+          "unit": "IDR",
+          "economicPeriod": "FY2023",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:14.277Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=financials",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:16.395Z"
+        },
+        {
+          "id": "c32646c2-76fa-4c34-ae0f-b35dca28c0ab",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "base_effect",
+          "metric": "prior_fy_earnings_yoy_pct",
+          "ticker": "BBRI",
+          "value": 0.0916,
+          "unit": "percent",
+          "economicPeriod": "FY2024",
+          "comparisonPeriod": "FY2023",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:14.277Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=financials",
+          "derivedFrom": [
+            "7a4e7d52-660c-4a0c-b0cc-18cf25e48727",
+            "e9f8c703-e952-42b2-8a9a-ba6928a83a26"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:16.395Z"
+        },
+        {
+          "id": "072a7ee8-01af-47e0-aa3c-c91f38921d5f",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "earnings_outpacing_revenue",
+          "metric": "netIncome",
+          "ticker": "BBRI",
+          "value": 15724782000000,
+          "unit": "IDR",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:17.437Z"
+        },
+        {
+          "id": "55c60730-7548-4460-a3e6-887ac5d161ab",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "earnings_outpacing_revenue",
+          "metric": "netIncome",
+          "ticker": "BBRI",
+          "value": 12854780000000,
+          "unit": "IDR",
+          "economicPeriod": "2025Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:17.437Z"
+        },
+        {
+          "id": "b541f736-f797-4ae9-9f60-03df5b04dead",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "earnings_outpacing_revenue",
+          "metric": "earnings_yoy_pct",
+          "ticker": "BBRI",
+          "value": 22.3263,
+          "unit": "percent",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": "2025Q2",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [
+            "072a7ee8-01af-47e0-aa3c-c91f38921d5f",
+            "55c60730-7548-4460-a3e6-887ac5d161ab"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:17.437Z"
+        },
+        {
+          "id": "bfa36fc4-9bab-4500-a9d9-2188cb9af123",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "earnings_outpacing_revenue",
+          "metric": "revenue",
+          "ticker": "BBRI",
+          "value": 53348647000000,
+          "unit": "IDR",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:17.437Z"
+        },
+        {
+          "id": "13f35119-706c-41df-b5a0-43ac159029ee",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "earnings_outpacing_revenue",
+          "metric": "revenue",
+          "ticker": "BBRI",
+          "value": 49195755000000,
+          "unit": "IDR",
+          "economicPeriod": "2025Q2",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:17.437Z"
+        },
+        {
+          "id": "6030db1e-613b-42af-b6ff-ecc5a841b9b8",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "earnings_outpacing_revenue",
+          "metric": "revenue_yoy_pct",
+          "ticker": "BBRI",
+          "value": 8.4416,
+          "unit": "percent",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": "2025Q2",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [
+            "bfa36fc4-9bab-4500-a9d9-2188cb9af123",
+            "13f35119-706c-41df-b5a0-43ac159029ee"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:17.437Z"
+        },
+        {
+          "id": "24e2c45c-d0dc-4792-a79b-2f723715baf1",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "earnings_outpacing_revenue",
+          "metric": "earnings_minus_revenue_growth_pp",
+          "ticker": "BBRI",
+          "value": 13.88,
+          "unit": "percentage_points",
+          "economicPeriod": "2026Q2",
+          "comparisonPeriod": "2025Q2",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:11.157Z",
+          "sourceLocator": "sectors:/financials/quarterly/BBRI/?n_quarters=8",
+          "derivedFrom": [
+            "b541f736-f797-4ae9-9f60-03df5b04dead",
+            "6030db1e-613b-42af-b6ff-ecc5a841b9b8"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:17.437Z"
+        },
+        {
+          "id": "75f4ec86-2ca5-458f-9ecf-243006937c4e",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "roe_trend",
+          "metric": "roe_pct",
+          "ticker": "BBRI",
+          "value": 17.11855276483754,
+          "unit": "percent",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:14.277Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=financials",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:18.418Z"
+        },
+        {
+          "id": "cbc3b5da-9325-4a75-af7c-cdcb51402cfa",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "roe_trend",
+          "metric": "roe_prior_3y_avg_pct",
+          "ticker": "BBRI",
+          "value": 18.28,
+          "unit": "percent",
+          "economicPeriod": "FY2022-FY2024",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:14.277Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=financials",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:18.418Z"
+        },
+        {
+          "id": "d3a06470-a138-455d-9ac2-1f718a60c302",
+          "claimId": "391e74f9-d1f1-4658-b36e-8c01fa114e5f",
+          "checkId": "roe_trend",
+          "metric": "roe_trend_pp",
+          "ticker": "BBRI",
+          "value": -1.16,
+          "unit": "percentage_points",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": "FY2022-FY2024",
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:14.277Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=financials",
+          "derivedFrom": [
+            "75f4ec86-2ca5-458f-9ecf-243006937c4e",
+            "cbc3b5da-9325-4a75-af7c-cdcb51402cfa"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:18.418Z"
+        }
+      ]
+    },
+    {
+      "id": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+      "sessionId": "5b6205a2-b584-4098-8ef8-aef684f1d17c",
+      "ordinal": 1,
+      "originalText": "valuasinya murah dibanding bank besar lain",
+      "normalizedText": "BBRI's valuation is cheaper compared to other large banks",
+      "ticker": "BBRI",
+      "entityMention": "BBRI",
+      "claimType": "RELATIVE_VALUATION",
+      "comparisonType": "PEER",
+      "timeScope": null,
+      "verifiability": "PARTIAL",
+      "contractId": "relative-valuation-v2",
+      "assessment": "NOT_SUPPORTED",
+      "scopeNote": "Comparison group is vague without specific names",
+      "stopReason": "SUFFICIENT",
+      "checkStates": {
+        "states": [
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "valuation_metric",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "45fce9fd-0e2c-4d50-91fe-aafb1ae04c71"
+            ]
+          },
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "peer_set",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "a1dd6663-06fd-4095-93dc-9ec24dc47961"
+            ]
+          },
+          {
+            "kind": "required",
+            "note": null,
+            "status": "completed",
+            "checkId": "peer_baseline",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "b7852c42-65d0-4367-89ca-157425c95020"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "pbv_cross_check",
+            "outcome": "weakens",
+            "evidenceIds": [
+              "3fb3dd92-6849-48b5-b38a-e92746a06545"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "roe_vs_peers",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "bc4302fe-36cd-40d6-aabd-3fea652cf59e"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "own_history",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "2ffa356d-28b7-4b10-afe5-feb764fb22f1"
+            ]
+          },
+          {
+            "kind": "counter",
+            "note": null,
+            "status": "completed",
+            "checkId": "price_drawdown",
+            "outcome": "neutral",
+            "evidenceIds": [
+              "797a7abb-e9a0-479d-91c5-7bd9dc38ac3d"
+            ]
+          }
+        ],
+        "coverage": {
+          "label": "3 of 3 required checks available",
+          "invalid": 0,
+          "required": 3,
+          "completed": 3,
+          "unavailable": 0
+        }
+      },
+      "peerSet": {
+        "period": "2026-09-30",
+        "excluded": [
+          {
+            "reason": "target company",
+            "ticker": "BBRI"
+          }
+        ],
+        "frozenAt": "2026-10-01T10:45:20.477Z",
+        "included": [
+          {
+            "ticker": "BBCA",
+            "subsector": "Banks",
+            "metricValue": 12.757326518681,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "BBNI",
+            "subsector": "Banks",
+            "metricValue": 6.01602291890665,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "BDMN",
+            "subsector": "Banks",
+            "metricValue": 7.63099932767454,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "BMRI",
+            "subsector": "Banks",
+            "metricValue": 5.29361781746288,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "BNGA",
+            "subsector": "Banks",
+            "metricValue": 6.24255052311436,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "BNLI",
+            "subsector": "Banks",
+            "metricValue": 18.3436667175707,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "BRIS",
+            "subsector": "Banks",
+            "metricValue": 8.12432394764272,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "MEGA",
+            "subsector": "Banks",
+            "metricValue": 13.7155585552394,
+            "metricPeriod": "2026-09-30"
+          },
+          {
+            "ticker": "NISP",
+            "subsector": "Banks",
+            "metricValue": 5.43833155437456,
+            "metricPeriod": "2026-09-30"
+          }
+        ],
+        "minPeers": 4,
+        "subsector": "Banks",
+        "sufficient": true,
+        "targetTicker": "BBRI",
+        "policyVersion": "peer-policy-v1"
+      },
+      "extractor": "llm:openai/gpt-4.1-mini",
+      "direction": "bullish",
+      "spanStart": 42,
+      "spanEnd": 84,
+      "trace": [
+        {
+          "id": "bc5a0420-d604-4fc9-839a-54b13072b57e",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 0,
+          "action": "PLAN",
+          "reason": "Contract relative-valuation-v2: required checks valuation_metric, peer_set, peer_baseline; counterchecks pbv_cross_check; counter-hypotheses roe_vs_peers, own_history, price_drawdown.",
+          "startedAt": "2026-10-01T10:45:18.437Z",
+          "finishedAt": "2026-10-01T10:45:18.437Z",
+          "evidenceIds": [],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "029a2c72-8047-47fa-8661-8736151b0c8e",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 1,
+          "action": "get_peer_candidates",
+          "reason": "Identifying the relevant peer set is foundational for any valuation comparison and necessary before comparing valuation metrics.",
+          "startedAt": "2026-10-01T10:45:19.329Z",
+          "finishedAt": "2026-10-01T10:45:20.477Z",
+          "evidenceIds": [
+            "a1dd6663-06fd-4095-93dc-9ec24dc47961"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "peer_set",
+          "expectation": "supports",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "2ff9b355-4ebd-41e3-a74b-08cbf1b7fdee",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 2,
+          "action": "EVALUATE",
+          "reason": "peer_set: completed (neutral)",
+          "startedAt": "2026-10-01T10:45:20.485Z",
+          "finishedAt": "2026-10-01T10:45:20.485Z",
+          "evidenceIds": [
+            "a1dd6663-06fd-4095-93dc-9ec24dc47961"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "73597269-a233-4ce1-83d0-79c404d36952",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 3,
+          "action": "get_valuation_metrics",
+          "reason": "First, we need the P/E valuation metric for BBRI to establish its valuation level before comparing it with peers.",
+          "startedAt": "2026-10-01T10:45:21.392Z",
+          "finishedAt": "2026-10-01T10:45:21.392Z",
+          "evidenceIds": [
+            "45fce9fd-0e2c-4d50-91fe-aafb1ae04c71"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "valuation_metric",
+          "expectation": "supports",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "b21bba2e-af44-4687-a429-2ce5d7d102a2",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 4,
+          "action": "EVALUATE",
+          "reason": "valuation_metric: completed (neutral)",
+          "startedAt": "2026-10-01T10:45:21.400Z",
+          "finishedAt": "2026-10-01T10:45:21.400Z",
+          "evidenceIds": [
+            "45fce9fd-0e2c-4d50-91fe-aafb1ae04c71"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "37d13f71-ec14-4003-825a-e4b40cce17ff",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 5,
+          "action": "get_valuation_metrics",
+          "reason": "To establish whether BBRI's P/E ratio is actually cheaper compared to its peers, which is the core of the claim.",
+          "startedAt": "2026-10-01T10:45:22.432Z",
+          "finishedAt": "2026-10-01T10:45:22.432Z",
+          "evidenceIds": [
+            "3db1bd8d-cd1f-445b-b4de-7daa9c31493f",
+            "321831a3-6d1c-4acf-af03-504667ea6867",
+            "b7852c42-65d0-4367-89ca-157425c95020"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "peer_baseline",
+          "expectation": "supports",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "bfd31194-c647-4094-8b09-43565aa412cc",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 6,
+          "action": "EVALUATE",
+          "reason": "peer_baseline: completed (neutral)",
+          "startedAt": "2026-10-01T10:45:22.441Z",
+          "finishedAt": "2026-10-01T10:45:22.441Z",
+          "evidenceIds": [
+            "b7852c42-65d0-4367-89ca-157425c95020"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "6675f90a-f635-4b66-941b-82c5c7f66269",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 7,
+          "action": "get_valuation_metrics",
+          "reason": "Checking the P/BV ratio relative to peers directly addresses valuation cheapness from another angle, possibly confirming or contradicting the claim.",
+          "startedAt": "2026-10-01T10:45:23.426Z",
+          "finishedAt": "2026-10-01T10:45:23.427Z",
+          "evidenceIds": [
+            "f8248e0e-142b-4bc1-a7d5-f13c1ea39652",
+            "03631391-cd43-4220-a36e-6267af563cfa",
+            "3fb3dd92-6849-48b5-b38a-e92746a06545"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "pbv_cross_check",
+          "expectation": "neutral",
+          "expectationHeld": false,
+          "outcome": "weakens"
+        },
+        {
+          "id": "6a7b0745-a1e2-417e-b980-f72175f8a25d",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 8,
+          "action": "EVALUATE",
+          "reason": "pbv_cross_check: completed (weakens)",
+          "startedAt": "2026-10-01T10:45:23.435Z",
+          "finishedAt": "2026-10-01T10:45:23.435Z",
+          "evidenceIds": [
+            "3fb3dd92-6849-48b5-b38a-e92746a06545"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "9560238f-3244-436b-aa7c-7d0b2feeb29c",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 9,
+          "action": "get_annual_financials",
+          "reason": "To understand if BBRI's cheaper valuation is justified by lower profitability (ROE) compared to peers, which could explain the valuation discrepancy.",
+          "startedAt": "2026-10-01T10:45:24.411Z",
+          "finishedAt": "2026-10-01T10:45:24.812Z",
+          "evidenceIds": [
+            "881b0dbb-5dbf-48ac-a549-217fce1fb8f4",
+            "887c6577-ae08-495f-b836-d507a0befe6a",
+            "bc4302fe-36cd-40d6-aabd-3fea652cf59e"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "roe_vs_peers",
+          "expectation": "weakens",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "805c3afb-7f1c-4ad3-9788-ed91b8e2827a",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 10,
+          "action": "EVALUATE",
+          "reason": "roe_vs_peers: completed (neutral)",
+          "startedAt": "2026-10-01T10:45:24.820Z",
+          "finishedAt": "2026-10-01T10:45:24.820Z",
+          "evidenceIds": [
+            "bc4302fe-36cd-40d6-aabd-3fea652cf59e"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "9a1ec85f-b122-4069-8cc9-7fdc30889c9c",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 11,
+          "action": "get_valuation_metrics",
+          "reason": "Checking if BBRI's current P/E ratio is normal for the company helps determine if its valuation is truly cheap relative to its own history.",
+          "startedAt": "2026-10-01T10:45:25.798Z",
+          "finishedAt": "2026-10-01T10:45:25.798Z",
+          "evidenceIds": [
+            "2b05c68f-fbcf-4aed-ae2d-4aaff365e9b6",
+            "c00a24a1-33c2-4bf9-9af7-66dea71b36ff",
+            "2ffa356d-28b7-4b10-afe5-feb764fb22f1"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "own_history",
+          "expectation": "weakens",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "4dff7569-8dfd-4208-8458-35917ef572a7",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 12,
+          "action": "EVALUATE",
+          "reason": "own_history: completed (neutral)",
+          "startedAt": "2026-10-01T10:45:25.806Z",
+          "finishedAt": "2026-10-01T10:45:25.806Z",
+          "evidenceIds": [
+            "2ffa356d-28b7-4b10-afe5-feb764fb22f1"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "5d696505-ad24-4f86-9b33-b3cb9b354b52",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 13,
+          "action": "get_valuation_metrics",
+          "reason": "To understand if the low valuation is due to a significant recent share price decline, which would weaken the bullish claim on valuation.",
+          "startedAt": "2026-10-01T10:45:26.751Z",
+          "finishedAt": "2026-10-01T10:45:26.751Z",
+          "evidenceIds": [
+            "cbf86cf3-6480-43b3-acd2-a762c83d83b6",
+            "5d4a767f-8ecf-4e7e-ae08-e220492a0fe1",
+            "797a7abb-e9a0-479d-91c5-7bd9dc38ac3d"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": "price_drawdown",
+          "expectation": "weakens",
+          "expectationHeld": false,
+          "outcome": "neutral"
+        },
+        {
+          "id": "cb942873-8fe3-4483-90d8-517b238ca0f7",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 14,
+          "action": "EVALUATE",
+          "reason": "price_drawdown: completed (neutral)",
+          "startedAt": "2026-10-01T10:45:26.759Z",
+          "finishedAt": "2026-10-01T10:45:26.759Z",
+          "evidenceIds": [
+            "797a7abb-e9a0-479d-91c5-7bd9dc38ac3d"
+          ],
+          "resultStatus": "OK",
+          "stopReason": null,
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        },
+        {
+          "id": "2d575f2a-26f5-49ea-b4ce-597f7acc1c69",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "sequence": 15,
+          "action": "STOP",
+          "reason": "All eligible checks are resolved.",
+          "startedAt": "2026-10-01T10:45:26.762Z",
+          "finishedAt": "2026-10-01T10:45:26.762Z",
+          "evidenceIds": [],
+          "resultStatus": "OK",
+          "stopReason": "SUFFICIENT",
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        }
+      ],
+      "evidence": [
+        {
+          "id": "a1dd6663-06fd-4095-93dc-9ec24dc47961",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "peer_set",
+          "metric": "peer_count",
+          "ticker": "BBRI",
+          "value": 9,
+          "unit": "count",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:45:20.477Z",
+          "sourceLocator": "sectors:/companies/?where=sub_sector+%3D+%27Banks%27&order_by=-market_cap&limit=10",
+          "derivedFrom": [],
+          "calculationVersion": "peer-policy-v1",
+          "status": "VALID",
+          "note": "included: BBCA, BBNI, BDMN, BMRI, BNGA, BNLI, BRIS, MEGA, NISP; excluded: 1",
+          "createdAt": "2026-10-01T10:45:20.478Z"
+        },
+        {
+          "id": "45fce9fd-0e2c-4d50-91fe-aafb1ae04c71",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "valuation_metric",
+          "metric": "target_pe",
+          "ticker": "BBRI",
+          "value": 7.55964761540832,
+          "unit": "ratio",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:45:19.491Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=valuation%2Cdividend",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:21.393Z"
+        },
+        {
+          "id": "3db1bd8d-cd1f-445b-b4de-7daa9c31493f",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "peer_baseline",
+          "metric": "peer_median_pe",
+          "ticker": "BBRI",
+          "value": 7.631,
+          "unit": "ratio",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:45:20.477Z",
+          "sourceLocator": "sectors:/companies/?where=sub_sector+%3D+%27Banks%27&order_by=-market_cap&limit=10",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": "n=9",
+          "createdAt": "2026-10-01T10:45:22.434Z"
+        },
+        {
+          "id": "321831a3-6d1c-4acf-af03-504667ea6867",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "peer_baseline",
+          "metric": "target_pe_for_peer_comparison",
+          "ticker": "BBRI",
+          "value": 7.55964761540832,
+          "unit": "ratio",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:45:19.491Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=valuation%2Cdividend",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:22.434Z"
+        },
+        {
+          "id": "b7852c42-65d0-4367-89ca-157425c95020",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "peer_baseline",
+          "metric": "pe_vs_peer_median_pct",
+          "ticker": "BBRI",
+          "value": -0.93,
+          "unit": "percent",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:45:20.477Z",
+          "sourceLocator": "sectors:/companies/?where=sub_sector+%3D+%27Banks%27&order_by=-market_cap&limit=10",
+          "derivedFrom": [
+            "321831a3-6d1c-4acf-af03-504667ea6867",
+            "3db1bd8d-cd1f-445b-b4de-7daa9c31493f"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": "peers: BBCA, BBNI, BDMN, BMRI, BNGA, BNLI, BRIS, MEGA, NISP",
+          "createdAt": "2026-10-01T10:45:22.434Z"
+        },
+        {
+          "id": "f8248e0e-142b-4bc1-a7d5-f13c1ea39652",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "pbv_cross_check",
+          "metric": "peer_median_pbv",
+          "ticker": "BBRI",
+          "value": 1.2705,
+          "unit": "ratio",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:45:20.477Z",
+          "sourceLocator": "sectors:/companies/?where=sub_sector+%3D+%27Banks%27&order_by=-market_cap&limit=10",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": "n=9",
+          "createdAt": "2026-10-01T10:45:23.428Z"
+        },
+        {
+          "id": "03631391-cd43-4220-a36e-6267af563cfa",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "pbv_cross_check",
+          "metric": "target_pbv_for_peer_comparison",
+          "ticker": "BBRI",
+          "value": 1.46350536838833,
+          "unit": "ratio",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:45:19.491Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=valuation%2Cdividend",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:23.428Z"
+        },
+        {
+          "id": "3fb3dd92-6849-48b5-b38a-e92746a06545",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "pbv_cross_check",
+          "metric": "pbv_vs_peer_median_pct",
+          "ticker": "BBRI",
+          "value": 15.19,
+          "unit": "percent",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:45:20.477Z",
+          "sourceLocator": "sectors:/companies/?where=sub_sector+%3D+%27Banks%27&order_by=-market_cap&limit=10",
+          "derivedFrom": [
+            "03631391-cd43-4220-a36e-6267af563cfa",
+            "f8248e0e-142b-4bc1-a7d5-f13c1ea39652"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": "peers: BBCA, BBNI, BDMN, BMRI, BNGA, BNLI, BRIS, MEGA, NISP",
+          "createdAt": "2026-10-01T10:45:23.428Z"
+        },
+        {
+          "id": "881b0dbb-5dbf-48ac-a549-217fce1fb8f4",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "roe_vs_peers",
+          "metric": "roe_pct",
+          "ticker": "BBRI",
+          "value": 17.11855276483754,
+          "unit": "percent",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:14.277Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=financials",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:24.814Z"
+        },
+        {
+          "id": "887c6577-ae08-495f-b836-d507a0befe6a",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "roe_vs_peers",
+          "metric": "peer_median_roe_pct",
+          "ticker": "BBRI",
+          "value": 11.82,
+          "unit": "percent",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:14.277Z",
+          "sourceLocator": "sectors:/companies/?where=sub_sector+%3D+%27Banks%27&order_by=-market_cap&limit=10",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": "n=9; peers: BBCA, BBNI, BDMN, BMRI, BNGA, BNLI, BRIS, MEGA, NISP",
+          "createdAt": "2026-10-01T10:45:24.814Z"
+        },
+        {
+          "id": "bc4302fe-36cd-40d6-aabd-3fea652cf59e",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "roe_vs_peers",
+          "metric": "roe_vs_peer_median_pp",
+          "ticker": "BBRI",
+          "value": 5.29,
+          "unit": "percentage_points",
+          "economicPeriod": "FY2025",
+          "comparisonPeriod": null,
+          "observationDate": null,
+          "retrievalTime": "2026-10-01T10:45:14.277Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=financials",
+          "derivedFrom": [
+            "881b0dbb-5dbf-48ac-a549-217fce1fb8f4",
+            "887c6577-ae08-495f-b836-d507a0befe6a"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:24.814Z"
+        },
+        {
+          "id": "2b05c68f-fbcf-4aed-ae2d-4aaff365e9b6",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "own_history",
+          "metric": "pe_own_history_median",
+          "ticker": "BBRI",
+          "value": 12.23,
+          "unit": "ratio",
+          "economicPeriod": "FY2022-FY2025",
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:45:19.491Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=valuation%2Cdividend",
+          "derivedFrom": [],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:25.800Z"
+        },
+        {
+          "id": "c00a24a1-33c2-4bf9-9af7-66dea71b36ff",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "own_history",
+          "metric": "target_pe_for_history",
+          "ticker": "BBRI",
+          "value": 7.55964761540832,
+          "unit": "ratio",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:45:19.491Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=valuation%2Cdividend",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:25.800Z"
+        },
+        {
+          "id": "2ffa356d-28b7-4b10-afe5-feb764fb22f1",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "own_history",
+          "metric": "pe_vs_own_history_pct",
+          "ticker": "BBRI",
+          "value": -38.21,
+          "unit": "percent",
+          "economicPeriod": null,
+          "comparisonPeriod": "FY2022-FY2025",
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:45:19.491Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=valuation%2Cdividend",
+          "derivedFrom": [
+            "c00a24a1-33c2-4bf9-9af7-66dea71b36ff",
+            "2b05c68f-fbcf-4aed-ae2d-4aaff365e9b6"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:25.800Z"
+        },
+        {
+          "id": "cbf86cf3-6480-43b3-acd2-a762c83d83b6",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "price_drawdown",
+          "metric": "last_close",
+          "ticker": "BBRI",
+          "value": 3140,
+          "unit": "IDR",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:45:19.577Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=overview",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:26.753Z"
+        },
+        {
+          "id": "5d4a767f-8ecf-4e7e-ae08-e220492a0fe1",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "price_drawdown",
+          "metric": "high_52w",
+          "ticker": "BBRI",
+          "value": 4050,
+          "unit": "IDR",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2025-11-03",
+          "retrievalTime": "2026-10-01T10:45:19.577Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=overview",
+          "derivedFrom": [],
+          "calculationVersion": null,
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:26.753Z"
+        },
+        {
+          "id": "797a7abb-e9a0-479d-91c5-7bd9dc38ac3d",
+          "claimId": "cc60cbcf-3691-4265-bd25-70a68ee5d359",
+          "checkId": "price_drawdown",
+          "metric": "drawdown_from_52w_high_pct",
+          "ticker": "BBRI",
+          "value": -22.47,
+          "unit": "percent",
+          "economicPeriod": null,
+          "comparisonPeriod": null,
+          "observationDate": "2026-09-30",
+          "retrievalTime": "2026-10-01T10:45:19.577Z",
+          "sourceLocator": "sectors:/company/report/BBRI/?sections=overview",
+          "derivedFrom": [
+            "cbf86cf3-6480-43b3-acd2-a762c83d83b6",
+            "5d4a767f-8ecf-4e7e-ae08-e220492a0fe1"
+          ],
+          "calculationVersion": "calc-v1",
+          "status": "VALID",
+          "note": null,
+          "createdAt": "2026-10-01T10:45:26.753Z"
+        }
+      ]
+    },
+    {
+      "id": "34bfdb02-b2be-441b-889a-a159b3d2cdf1",
+      "sessionId": "5b6205a2-b584-4098-8ef8-aef684f1d17c",
+      "ordinal": 2,
+      "originalText": "harga akan naik ke 6000",
+      "normalizedText": "BBRI's price will rise to 6000",
+      "ticker": "BBRI",
+      "entityMention": "BBRI",
+      "claimType": "FORWARD_LOOKING",
+      "comparisonType": "ABSOLUTE",
+      "timeScope": null,
+      "verifiability": "NO",
+      "contractId": null,
+      "assessment": "UNVERIFIABLE",
+      "scopeNote": "Future price prediction is not verifiable",
+      "stopReason": "OUT_OF_SCOPE",
+      "checkStates": {
+        "states": [],
+        "coverage": null
+      },
+      "peerSet": null,
+      "extractor": "llm:openai/gpt-4.1-mini",
+      "direction": "bullish",
+      "spanStart": 86,
+      "spanEnd": 109,
+      "trace": [
+        {
+          "id": "491c1037-3584-47fd-8880-2e49c2cde574",
+          "claimId": "34bfdb02-b2be-441b-889a-a159b3d2cdf1",
+          "sequence": 0,
+          "action": "STOP",
+          "reason": "Future price prediction is not verifiable",
+          "startedAt": "2026-10-01T10:45:26.770Z",
+          "finishedAt": "2026-10-01T10:45:26.770Z",
+          "evidenceIds": [],
+          "resultStatus": "OK",
+          "stopReason": "OUT_OF_SCOPE",
+          "planner": "llm:openai/gpt-4.1-mini",
+          "checkId": null,
+          "expectation": null,
+          "expectationHeld": null,
+          "outcome": null
+        }
+      ],
+      "evidence": []
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "thesis": "TLKM dividennya tinggi dan growth kuat, valuasinya juga murah dibanding emiten telco lain.",
+  "ticker": "TLKM",
+  "model": "openai/gpt-4.1-mini",
+  "dataMode": "live",
+  "measuredAt": "2026-10-01T10:44:54.111Z",
+  "answer": "TLKM memang memiliki dividen yield yang tinggi mencapai sekitar 9.75% pada tahun 2026 yang menunjukkan pengembalian dividen yang menarik. Namun, payout ratio perusahaan cukup tinggi yaitu sekitar 126.57%, yang berarti perusahaan membayar dividen lebih besar dari laba bersih mereka, ini bisa menjadi risiko keberlanjutan dividen jika tidak diimbangi dengan kinerja keuangan yang kuat.\n\nMengenai growth, pendapatan dan laba bersih perusahaan masih menunjukkan fluktuasi dan tidak selalu tumbuh konsisten setiap tahun. Misalnya, laba bersih tahun 2025 lebih rendah dibandingkan tahun-tahun sebelumnya, tapi mengalami peningkatan di kuartal-kuartal awal 2026.\n\nUntuk valuasi, P/E ratio TLKM sekitar 13 pada 2026 tergolong cukup murah dibandingkan dengan P/E beberapa tahun sebelumnya yang lebih tinggi (misalnya 19.35 di tahun 2025). Ini bisa menunjukkan valuasi yang menarik.\n\nSecara keseluruhan, thesis bahwa TLKM memiliki dividen tinggi dan valuasi murah relatif benar, namun growth-nya tidak selalu kuat dan payout ratio yang tinggi perlu diperhatikan sebagai risiko.",
+  "numbers": 4,
+  "untraceable": [
+    "9.75"
+  ],
+  "languageIssues": []
+}
