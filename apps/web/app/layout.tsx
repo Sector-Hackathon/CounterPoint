@@ -1,17 +1,18 @@
 import type { Metadata } from 'next';
-import { IBM_Plex_Sans } from 'next/font/google';
+import { IBM_Plex_Sans, Schibsted_Grotesk } from 'next/font/google';
 import './globals.css';
 
-const plex = IBM_Plex_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-plex' });
+const body = IBM_Plex_Sans({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-body' });
+const display = Schibsted_Grotesk({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--font-display' });
 
 export const metadata: Metadata = {
-  title: 'Counterpoint: evidence checks for stock theses',
-  description: 'Paste an Indonesian stock thesis. Counterpoint splits it into claims, checks each against Sectors data, and shows what the evidence supports.',
+  title: 'Counterpoint',
+  description: 'Paste an Indonesian stock thesis. Counterpoint tests each claim against Sectors data and builds the strongest case against it.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={plex.variable}>
+    <html lang="id" className={`${body.variable} ${display.variable}`}>
       <body>{children}</body>
     </html>
   );
