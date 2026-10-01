@@ -6,7 +6,7 @@ PRD §21.1: the same thesis and the same Sectors data bundle (quarterly and annu
 
 | Case | Numbers in answer | Not in data bundle | Advice/causal language flagged |
 | --- | --- | --- | --- |
-| `bbri-example` | 3 | 1 (`6000`, quoted from the thesis) | 1 |
+| `bbri-example` | 3 | 1 (`6000`, quoted from the thesis) | 1 (causal "karena") |
 | `tlkm-example` | 4 | 1 (`9.75`, a rounding of 9.7466%) | 0 |
 
 The plain model mostly quotes numbers correctly from the data it is given. The differences are in what it concludes:
