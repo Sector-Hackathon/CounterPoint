@@ -60,10 +60,14 @@ export interface StepEvent {
   stopReason: string | null;
   checkId: string | null;
   phase: 'required' | 'counter' | 'counterpoint' | null;
-  hypothesis: string | null;
-  expectation: 'supports' | 'weakens' | 'neutral' | null;
-  expectationHeld: boolean | null;
+  /** The question under test, why it matters, and the rule that decides it. */
+  question: string | null;
+  purpose: string | null;
+  rule: string | null;
   outcome: 'supports' | 'weakens' | 'neutral' | null;
+  /** What the result did to the claim, and any further questions it opened. */
+  effect: string | null;
+  opened: string[];
   evidence: EvidenceSummary[];
 }
 
@@ -90,19 +94,22 @@ export type SessionEvent =
 export interface ChangeCondition {
   checkId: string;
   label: string;
-  comparator: 'at_least' | 'above' | 'at_most' | 'below';
-  threshold: number;
-  current: number;
-  unit: 'percent' | 'percentage_points' | 'ratio';
+  /** Null when the evidence is simply missing: there is no measured value to move. */
+  comparator: 'at_least' | 'above' | 'at_most' | 'below' | null;
+  threshold: number | null;
+  current: number | null;
+  unit: 'percent' | 'percentage_points' | 'ratio' | null;
   period: string | null;
-  evidenceId: string;
-  effect: 'would_support' | 'would_stop_weakening';
+  evidenceId: string | null;
+  effect: 'would_support' | 'would_stop_weakening' | 'missing_evidence';
+  /** Set only when re-running the assessment rule with this change actually moves the verdict. */
+  wouldBecome: Assessment | null;
 }
 
 export interface CounterpointHypothesis {
   checkId: string;
   hypothesis: string;
-  status: 'confirmed' | 'refuted' | 'untestable' | 'not_tested';
+  status: 'confirmed' | 'refuted' | 'untestable' | 'not_tested' | 'not_applicable';
   statement: Statement | null;
   note: string | null;
 }

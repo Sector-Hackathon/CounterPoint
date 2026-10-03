@@ -11,6 +11,7 @@ import {
   type Coverage,
   type Assessment,
   type CounterpointHypothesis,
+  firedTriggers,
   getContract,
   phaseOf,
   validateStatement,
@@ -116,7 +117,10 @@ export function composeClaimReport(input: ComposeInput): ClaimReport {
               ? 'confirmed'
               : 'refuted'
             : s.status === 'pending'
-              ? 'not_tested'
+              ? // A gated question the evidence never raised was not skipped for budget reasons.
+                check.triggeredBy?.length && firedTriggers(check, states).length === 0
+                ? 'not_applicable'
+                : 'not_tested'
               : 'untestable',
         statement: s.status === 'completed' ? statementFor(s, describe(s.checkId), byId) : null,
         note: s.note,
@@ -154,7 +158,9 @@ export function composeClaimReport(input: ComposeInput): ClaimReport {
         }
       : null,
     counterpoint: contract && claim.direction === 'bullish' ? { hypotheses, openQuestions: contract.openQuestions ?? [] } : null,
-    changeConditions: contract ? whatWouldChange(contract, states, evidence, claim.direction) : [],
+    changeConditions: contract
+      ? whatWouldChange(contract, states, evidence, claim.direction, claim.verifiability)
+      : [],
   };
 }
 

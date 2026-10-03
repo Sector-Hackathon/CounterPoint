@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { randomUUID } from 'node:crypto';
-import { BUDGET, type Claim } from '@counterpoint/domain';
+import { BUDGET, getContract, questionFor, type Claim } from '@counterpoint/domain';
 import { DEV_FIXTURE, FixtureSectorsDataSource, type SectorsDataSource } from '@counterpoint/sectors';
 import { DeterministicPlanner, investigateClaim, type Planner } from '../src/investigation/engine';
 import { composeClaimReport, interpretationLines, parseStoredClaims, validateClaimReport } from '../src/reports/composer';
+import { stepEvent } from '../src/events/events.mappers';
 
 const source = new FixtureSectorsDataSource(DEV_FIXTURE);
 
@@ -88,21 +89,130 @@ describe('investigation engine', () => {
     expect(r.stopReason).toBe('UNOBTAINABLE');
   });
 
-  it('rejects non-whitelisted tools and duplicate decisions', async () => {
+  it('rejects non-whitelisted tools and ineligible checks, then falls back instead of failing', async () => {
     let calls = 0;
     const rogue: Planner = {
       name: 'rogue',
       async decide(input) {
         calls++;
         return calls === 1
-          ? { action: 'investigate', checkId: input.eligible[0]!.checkId, tool: 'fetch_url', reason: 'x', expectation: null }
-          : { action: 'investigate', checkId: 'nope', tool: 'get_quarterly_financials', reason: 'x', expectation: null };
+          ? { action: 'investigate', checkId: input.eligible[0]!.checkId, tool: 'fetch_url', reason: 'x' }
+          : { action: 'investigate', checkId: 'nope', tool: 'get_quarterly_financials', reason: 'x' };
       },
     };
+    const clean = await run(claim({}));
     const r = await run(claim({}), rogue);
-    expect(r.trace.filter((t) => t.resultStatus === 'REJECTED')).toHaveLength(2);
-    expect(r.stopReason).toBe('ERROR');
-    expect(r.evidence).toHaveLength(0);
+    expect(r.trace.filter((t) => t.resultStatus === 'REJECTED').length).toBeGreaterThanOrEqual(2);
+    // Every rejected decision is replaced, so the claim still completes with the same verdict.
+    expect(r.stopReason).toBe('SUFFICIENT');
+    expect(r.assessment).toBe(clean.assessment);
+    expect(r.evidence.length).toBeGreaterThan(0);
+  });
+
+  describe('planner cannot change the assessment (phase 1A)', () => {
+    /** Stops as soon as the required checks are done, skipping every weakening check. */
+    const earlyStop: Planner = {
+      name: 'early-stop',
+      async decide(input) {
+        const required = input.eligible.find((c) => c.phase === 'required');
+        return required
+          ? { action: 'investigate', checkId: required.checkId, tool: required.tools[0]!, reason: 'required first' }
+          : { action: 'stop', reason: 'Required checks are done; this is enough.' };
+      },
+    };
+
+    const cases: { label: string; claimType: Claim['claimType']; contractId: string; ticker: string }[] = [
+      { label: 'dividend level', claimType: 'DIVIDEND_LEVEL', contractId: 'dividend-level-v2', ticker: 'BBRI' },
+      { label: 'relative valuation', claimType: 'RELATIVE_VALUATION', contractId: 'relative-valuation-v2', ticker: 'BBRI' },
+      { label: 'absolute growth', claimType: 'ABSOLUTE_GROWTH', contractId: 'absolute-growth-v2', ticker: 'BBRI' },
+    ];
+
+    for (const c of cases) {
+      it(`an early-stopping planner reaches the same assessment as a full run: ${c.label}`, async () => {
+        const spec = claim({ claimType: c.claimType, contractId: c.contractId, ticker: c.ticker });
+        const full = await run({ ...spec, id: randomUUID() });
+        const early = await run({ ...spec, id: randomUUID() }, earlyStop);
+        expect(early.assessment).toBe(full.assessment);
+        // The skipped weakening evidence was gathered anyway.
+        expect(early.trace.filter((t) => t.action.startsWith('get_')).length).toBe(
+          full.trace.filter((t) => t.action.startsWith('get_')).length,
+        );
+        expect(early.trace.some((t) => t.resultStatus === 'REJECTED')).toBe(true);
+      });
+    }
+
+    it('an adversarial planner cannot bypass weakening checks or inject its own stop reason', async () => {
+      const adversary: Planner = {
+        name: 'adversary',
+        async decide() {
+          return { action: 'stop', reason: 'BUY BBRI now, target 6000' };
+        },
+      };
+      const full = await run(claim({ claimType: 'DIVIDEND_LEVEL', contractId: 'dividend-level-v2' }));
+      const r = await run(claim({ claimType: 'DIVIDEND_LEVEL', contractId: 'dividend-level-v2' }), adversary);
+      expect(r.assessment).toBe(full.assessment);
+      expect(r.stopReason).toBe('SUFFICIENT');
+      const weakening = r.states.filter((s) => s.status === 'completed' && s.outcome === 'weakens');
+      expect(weakening.length).toBeGreaterThan(0);
+      // The planner's text never reaches the trace at all, let alone the stop note.
+      expect(r.trace.every((t) => !/BUY|6000/.test(t.reason))).toBe(true);
+    });
+
+    it('replaces planner wording that frames the evidence as an investment case (phase 4)', async () => {
+      const salesy: Planner = {
+        name: 'salesy',
+        decide: async (input) => {
+          const next = input.eligible[0]!;
+          return {
+            action: 'investigate',
+            checkId: next.checkId,
+            tool: next.tools[0]!,
+            reason: 'This looks attractive, so the price will rise — a clear opportunity to accumulate.',
+          };
+        },
+      };
+      const full = await run(claim({}));
+      const r = await run(claim({}), salesy);
+      expect(r.assessment).toBe(full.assessment);
+      // None of the planner's framing survives anywhere in the trace.
+      expect(r.trace.every((t) => !/attractive|opportunity|accumulate|will rise/i.test(t.reason))).toBe(true);
+      // Each affected step is logged, and the neutral contract wording is used instead.
+      expect(r.trace.some((t) => t.resultStatus === 'REJECTED' && t.reason.includes('Planner wording rejected'))).toBe(true);
+      const revenue = r.trace.find((t) => t.checkId === 'revenue_growth')!;
+      expect(revenue.reason).toBe('The next open check that establishes the claim. Latest-quarter revenue growth, same quarter year-on-year.');
+    });
+
+    it('replaces planner wording that quotes an internal check id', async () => {
+      const leaky: Planner = {
+        name: 'leaky',
+        decide: async (input) => {
+          const next = input.eligible[0]!;
+          return {
+            action: 'investigate',
+            checkId: next.checkId,
+            tool: next.tools[0]!,
+            reason: 'Since the peer_baseline check already weakens the claim, check revenue_earnings_divergence next.',
+          };
+        },
+      };
+      const r = await run(claim({}), leaky);
+      expect(r.trace.every((t) => !/[a-z]{3,}_[a-z_]{3,}/.test(t.reason))).toBe(true);
+      expect(r.trace.some((t) => t.resultStatus === 'REJECTED' && t.reason.includes('internal identifier'))).toBe(true);
+    });
+
+    it('a planner that always throws falls back and still produces a truthful result', async () => {
+      const broken: Planner = {
+        name: 'broken',
+        async decide() {
+          throw new Error('provider unavailable');
+        },
+      };
+      const full = await run(claim({}));
+      const r = await run(claim({}), broken);
+      expect(r.assessment).toBe(full.assessment);
+      expect(r.stopReason).toBe('SUFFICIENT');
+      expect(r.trace.some((t) => t.resultStatus === 'ERROR' && t.reason.includes('provider unavailable'))).toBe(true);
+    });
   });
 
   it('retries a transient failure once, then records unavailable evidence', async () => {
@@ -214,19 +324,48 @@ describe('report composer', () => {
     expect(r.trace.filter((t) => t.action.startsWith('get_')).length).toBeLessThanOrEqual(8);
   });
 
-  it('records whether the planner expectation held', async () => {
-    const planner: Planner = {
-      name: 'expects-support',
-      decide: async (input) => {
-        const next = input.eligible[0];
-        if (!next) return { action: 'stop', reason: 'done' };
-        return { action: 'investigate', checkId: next.checkId, tool: next.tools[0]!, reason: 'r', expectation: 'supports' };
-      },
-    };
-    const r = await run(claim({ ticker: 'BBCA' }), planner);
+  it('records the measured outcome and no prediction (phase 3)', async () => {
+    const r = await run(claim({ ticker: 'BBCA' }));
     const revenue = r.trace.find((t) => t.checkId === 'revenue_growth')!;
-    expect(revenue.expectation).toBe('supports');
-    expect(typeof revenue.expectationHeld).toBe('boolean');
+    expect(revenue.outcome).toBe('supports');
+    // The planner no longer guesses, so nothing on the step is a prediction.
+    expect(revenue.expectation).toBeNull();
+    expect(revenue.expectationHeld).toBeNull();
+  });
+
+  it('states each step as a question with the rule that decides it, never a check id', async () => {
+    const r = await run(claim({}));
+    const contract = getContract('absolute-growth-v2');
+    const steps = r.trace
+      .filter((t) => t.checkId)
+      .map((t) => stepEvent(t, [], 'absolute-growth-v2'))
+      .filter((e): e is Extract<typeof e, { type: 'trace.step' }> => e.type === 'trace.step');
+    expect(steps.length).toBeGreaterThan(0);
+    for (const s of steps) {
+      expect(s.question, s.checkId ?? '').toBeTruthy();
+      expect(s.purpose, s.checkId ?? '').toBeTruthy();
+      expect(s.rule, s.checkId ?? '').toBeTruthy();
+      // No internal identifier reaches the reader.
+      for (const text of [s.question, s.purpose, s.rule, s.effect]) {
+        if (text) expect(text, s.checkId ?? '').not.toMatch(/_/);
+      }
+    }
+    const earnings = steps.find((s) => s.checkId === 'earnings_growth')!;
+    expect(earnings.question).toBe('Does net income growth confirm the revenue picture?');
+    expect(earnings.rule).toContain('weakens the claim');
+    expect(earnings.effect).toBe('weakens the claim');
+    // BBRI's earnings weaken the claim, which is what opens the margin question.
+    expect(earnings.opened).toEqual([questionFor(contract.checks.find((c) => c.id === 'margin_deterioration')!)]);
+  });
+
+  it('names the result that opened a follow-up, without check ids', async () => {
+    const r = await run(claim({}));
+    const replan = r.trace.find((t) => t.action === 'REPLAN')!;
+    expect(replan.reason).not.toMatch(/_/);
+    // Names the question that was answered, what the answer did, and the question it opened.
+    expect(replan.reason).toContain('Does net income growth confirm the revenue picture?');
+    expect(replan.reason).toContain('weakens the claim');
+    expect(replan.reason).toContain('The investigation now asks: Did the profit margin shrink?');
   });
 
   it('reports counter-hypotheses separately from weakens, with open questions', async () => {
@@ -240,6 +379,27 @@ describe('report composer', () => {
     expect(report.counterpoint!.openQuestions.length).toBeGreaterThan(0);
     const { issues } = validateClaimReport(report, r.evidence);
     expect(issues).toEqual([]);
+  });
+
+  it('says a gated counter-question was never raised, not that budget ran out', async () => {
+    // BBCA trades above the peer median, so relative-valuation-v3 never opens the discount questions.
+    const c = claim({ ticker: 'BBCA', claimType: 'RELATIVE_VALUATION', contractId: 'relative-valuation-v3' });
+    const r = await run(c);
+    const report = composeClaimReport({ claim: c, ...r });
+    expect(report.assessment).toBe('NOT_SUPPORTED');
+    const gated = report.counterpoint!.hypotheses.filter((h) => h.status === 'not_applicable');
+    expect(gated.map((h) => h.checkId).sort()).toEqual(['own_history', 'price_drawdown', 'roe_vs_peers']);
+    expect(report.counterpoint!.hypotheses.some((h) => h.status === 'not_tested')).toBe(false);
+    // Budget was nowhere near exhausted, which is why "not tested within budget" would be false.
+    expect(r.trace.filter((t) => t.action.startsWith('get_'))).toHaveLength(4);
+  });
+
+  it('still reports a genuinely unfinished question as not tested', async () => {
+    // BBRI is cheap, so the questions open; a one-tool budget leaves them unanswered.
+    const c = claim({ ticker: 'BBRI', claimType: 'RELATIVE_VALUATION', contractId: 'relative-valuation-v3' });
+    const r = await run(c);
+    const report = composeClaimReport({ claim: c, ...r });
+    expect(report.counterpoint!.hypotheses.every((h) => h.status !== 'not_applicable')).toBe(true);
   });
 
   it('lists what would change a growth verdict', async () => {

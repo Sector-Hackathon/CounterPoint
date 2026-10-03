@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SUPPORTED_CLAIM_TYPES, contractForClaimType, type ClaimType, type Verifiability } from '@counterpoint/domain';
+import { SUPPORTED_CLAIM_TYPES, contractForClaimType, guardLanguage, type ClaimType, type Verifiability } from '@counterpoint/domain';
 import { LlmService } from '../llm/llm.service';
 import { EXTRACTION_SYSTEM, ExtractionSchema, extractionUser, type Extraction } from '../llm/prompts';
 
@@ -34,12 +34,23 @@ export class ClaimsService {
   toContract(type: ClaimType, verifiability: Verifiability, scopeNote: string | null) {
     const supported = SUPPORTED_CLAIM_TYPES.includes(type);
     const contract = supported ? contractForClaimType(type) : null;
+    const note = safeScopeNote(scopeNote, type);
     return {
       contractId: contract && verifiability !== 'NO' ? contract.id : null,
       verifiability: supported ? verifiability : ('NO' as const),
-      scopeNote: supported ? scopeNote : (scopeNote ?? SCOPE_NOTES[type] ?? null),
+      scopeNote: supported ? note : (note ?? SCOPE_NOTES[type] ?? null),
     };
   }
+}
+
+/**
+ * A scope note is model-written and is shown in the report as missing evidence, so it passes the
+ * advice guard. Wording that frames the claim as an investment case falls back to the canned note
+ * for that claim type, which says the same thing without the framing.
+ */
+export function safeScopeNote(note: string | null, type: ClaimType): string | null {
+  if (!note) return null;
+  return guardLanguage(note).length ? (SCOPE_NOTES[type] ?? null) : note;
 }
 
 const RULES: { type: ClaimType; comparison: 'ABSOLUTE' | 'HISTORICAL' | 'PEER'; re: RegExp }[] = [

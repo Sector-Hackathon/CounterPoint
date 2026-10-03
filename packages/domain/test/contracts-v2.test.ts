@@ -20,10 +20,11 @@ const ev = (metric: string, value: number | null, status: EvidenceItem['status']
 const requiredDone = [ev('revenue_yoy_pct', 12), ev('earnings_yoy_pct', 30), ev('annual_earnings_yoy_pct', 15)];
 
 describe('v2 contracts', () => {
-  it('maps supported claim types to v2', () => {
+  it('maps supported claim types to their current contract', () => {
     expect(contractForClaimType('ABSOLUTE_GROWTH')?.id).toBe('absolute-growth-v2');
     expect(contractForClaimType('DIVIDEND_LEVEL')?.id).toBe('dividend-level-v2');
-    expect(contractForClaimType('RELATIVE_VALUATION')?.id).toBe('relative-valuation-v2');
+    // Relative valuation moved to v3, which gates the discount questions; see contracts-v3.test.ts.
+    expect(contractForClaimType('RELATIVE_VALUATION')?.id).toBe('relative-valuation-v3');
   });
 
   it('keeps v1 contracts registered for old reports', () => {

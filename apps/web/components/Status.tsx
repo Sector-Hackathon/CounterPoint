@@ -1,6 +1,6 @@
 import type { Assessment } from '@/lib/api';
 
-const TEXT: Record<Assessment | 'PENDING', string> = {
+export const ASSESSMENT_TEXT: Record<Assessment | 'PENDING', string> = {
   SUPPORTED: 'Supported',
   PARTIALLY_SUPPORTED: 'Partly supported',
   NOT_SUPPORTED: 'Not supported',
@@ -10,5 +10,5 @@ const TEXT: Record<Assessment | 'PENDING', string> = {
 
 export function Status({ value }: { value: Assessment | null }) {
   const v = value ?? 'PENDING';
-  return <span className="status" data-s={v}>{TEXT[v]}</span>;
+  return <span className="status" data-s={v}>{ASSESSMENT_TEXT[v]}</span>;
 }

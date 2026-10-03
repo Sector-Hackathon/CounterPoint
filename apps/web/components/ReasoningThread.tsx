@@ -2,13 +2,18 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import type { StepEvent } from '@/lib/api';
 import { isHeadlineMetric, metricLabel, stepHeadline } from '@/lib/format';
+import { isVisibleStep } from '@/lib/session-logic';
 import { CountUp } from './CountUp';
 
-const PREDICT: Record<string, string> = { supports: 'support the claim', weakens: 'weaken the claim', neutral: 'be inconclusive' };
-
+/**
+ * The agent's execution trace. Each step states the question it is testing and the rule that
+ * will decide it *before* the data arrives, then the result, what it did to the claim, and any
+ * further question it opened. All of it comes from the versioned evidence contract — never from
+ * model reasoning, and never with an internal check id on screen.
+ */
 export function ReasoningThread({ steps }: { steps: StepEvent[] }) {
   const reduce = useReducedMotion();
-  const visible = steps.filter((s) => s.action !== 'EVALUATE' || s.resultStatus !== 'OK');
+  const visible = steps.filter(isVisibleStep);
   return (
     <ol className="thread" aria-live="polite" aria-relevant="additions">
       <AnimatePresence initial={false}>
@@ -22,28 +27,61 @@ export function ReasoningThread({ steps }: { steps: StepEvent[] }) {
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
             <div style={{ fontWeight: 600 }}>
-              {s.phase === 'counterpoint' ? <span className="voice-counter">Testing the counter-case</span> : stepHeadline(s)}
-              {s.resultStatus !== 'OK' && <span className="muted small"> · {s.resultStatus === 'NO_DATA' ? 'no data' : s.resultStatus.toLowerCase()}</span>}
+              {s.question ?? stepHeadline(s)}
+              {s.resultStatus === 'NO_DATA' && <span className="muted small"> · no data</span>}
+              {s.resultStatus === 'ERROR' && <span className="muted small"> · error</span>}
             </div>
-            <p style={{ margin: '2px 0 6px' }}>{bodyText(s)}</p>
-            {s.expectation && (
-              <p className="prediction" style={{ margin: '0 0 6px' }}>
-                Expected this to {PREDICT[s.expectation]}.{' '}
-                {s.expectationHeld !== null && (
-                  <span className="held" data-held={String(s.expectationHeld)}>{s.expectationHeld ? 'It did.' : 'It didn’t.'}</span>
-                )}
+
+            {/* Why this question is being asked now. Omitted where it would repeat the headline. */}
+            {s.question && (
+              <p className="small muted" style={{ margin: '2px 0 0' }}>
+                {s.purpose ? `${s.purpose} · ${stepHeadline(s)}` : stepHeadline(s)}
               </p>
             )}
-            {s.action === 'REPLAN' && <ForkMark />}
+            <p style={{ margin: '4px 0 6px' }}>{bodyText(s)}</p>
+
+            {/* The decision rule, stated before the result. */}
+            {s.rule && (
+              <p className="rule small tabular" style={{ margin: '0 0 6px' }}>
+                {s.rule}
+              </p>
+            )}
+
+            {/* The measured result. */}
             {s.evidence.filter((e) => isHeadlineMetric(e.metric)).length > 0 && (
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                {s.evidence.filter((e) => isHeadlineMetric(e.metric)).map((e) => (
-                  <span key={e.id} className="chip" data-status={e.status}>
-                    {metricLabel(e.metric)} <strong><CountUp value={e.value} unit={e.unit} /></strong>
-                    {e.economicPeriod && <span className="muted small">{e.economicPeriod}{e.comparisonPeriod ? ` vs ${e.comparisonPeriod}` : ''}</span>}
-                    {e.status !== 'VALID' && <span className="muted small">{e.note ?? 'unavailable'}</span>}
-                  </span>
-                ))}
+                {s.evidence
+                  .filter((e) => isHeadlineMetric(e.metric))
+                  .map((e) => (
+                    <span key={e.id} className="chip" data-status={e.status}>
+                      {metricLabel(e.metric)} <strong><CountUp value={e.value} unit={e.unit} /></strong>
+                      {e.economicPeriod && (
+                        <span className="muted small">
+                          {e.economicPeriod}
+                          {e.comparisonPeriod ? ` vs ${e.comparisonPeriod}` : ''}
+                        </span>
+                      )}
+                      {e.status !== 'VALID' && <span className="muted small">{e.note ?? 'unavailable'}</span>}
+                    </span>
+                  ))}
+              </div>
+            )}
+
+            {/* What it did to the claim. */}
+            {s.effect && (
+              <p className="effect" data-outcome={s.outcome ?? undefined} style={{ margin: '6px 0 0' }}>
+                {capitalize(s.effect)}
+              </p>
+            )}
+
+            {/* Which further investigation this result opened. */}
+            {s.opened.length > 0 && (
+              <div style={{ margin: '6px 0 0' }}>
+                <ForkMark />
+                <p className="small" style={{ margin: 0 }}>
+                  Opens {s.opened.length === 1 ? 'a new question' : `${s.opened.length} new questions`}:{' '}
+                  <span className="voice-counter">{s.opened.join(' ')}</span>
+                </p>
               </div>
             )}
           </motion.li>
@@ -71,9 +109,7 @@ function ForkMark() {
   );
 }
 
-/** The plan step's stored reason lists internal check ids; show what it means instead. */
-function bodyText(s: StepEvent): string {
-  if (s.phase === 'counterpoint' && s.hypothesis) return s.hypothesis;
-  if (s.action === 'PLAN') return 'Lined up the checks this claim needs, the follow-ups to run if something contradicts it, and the counter-case to test.';
-  return s.reason;
-}
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+/** Every stored reason is already written as prose, including the plan step's. */
+const bodyText = (s: StepEvent): string => s.reason;

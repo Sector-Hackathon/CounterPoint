@@ -26,6 +26,6 @@ export class LlmPlanner implements Planner {
     );
     const out = await this.llm.parse(PlannerSchema, { system: PLANNER_SYSTEM, user, effort: 'low', maxTokens: 2000, label: 'planner' });
     if (out.action === 'stop') return { action: 'stop', reason: out.reason };
-    return { action: 'investigate', checkId: out.check_id ?? '', tool: out.tool ?? '', reason: out.reason, expectation: out.expectation ?? null };
+    return { action: 'investigate', checkId: out.check_id ?? '', tool: out.tool ?? '', reason: out.reason };
   }
 }

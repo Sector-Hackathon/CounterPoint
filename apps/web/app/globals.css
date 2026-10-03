@@ -110,9 +110,20 @@ mark.claim-span[data-verifiable='NO'] { background: var(--hatch), var(--paper-ra
 .thread > li::before { content: ''; position: absolute; left: -24px; top: 7px; width: 10px; height: 10px; border-radius: 50%; background: var(--paper); box-shadow: inset 0 0 0 2px var(--ink-2); }
 .thread > li[data-phase='counterpoint']::before { box-shadow: inset 0 0 0 2px var(--counter); }
 .thread > li[data-kind='replan']::before { background: var(--counter); box-shadow: none; }
-.thread .prediction { font-size: 0.85rem; color: var(--ink-2); }
-.thread .held[data-held='false'] { color: var(--counter); font-weight: 600; }
-.thread .held[data-held='true'] { color: var(--thesis); font-weight: 600; }
+/* The decision rule, stated before the data arrives. */
+.thread .rule { color: var(--ink-2); border-left: 2px solid var(--rule); padding-left: 10px; }
+/* What the result did to the claim. */
+.thread .effect { font-size: 0.9rem; font-weight: 600; }
+.thread .effect[data-outcome='supports'] { color: var(--thesis); }
+.thread .effect[data-outcome='weakens'] { color: var(--counter); }
+.thread .effect[data-outcome='neutral'] { color: var(--ink-2); }
+
+/* Which evidence the session is built on. Stated on both the investigation and the report. */
+.data-mode { margin: 0; padding: 10px 14px; border-radius: var(--r-chip); font-size: 0.9rem; }
+.data-mode[data-mode='live'] { background: var(--paper-raised); box-shadow: inset 0 0 0 1px var(--rule); color: var(--ink-2); }
+.data-mode[data-mode='live'] strong { color: var(--thesis); }
+.data-mode[data-mode='fixture'] { background: var(--hatch), var(--paper-raised); box-shadow: inset 0 0 0 2px var(--counter); color: var(--ink); }
+.data-mode[data-mode='fixture'] strong { color: var(--counter); }
 
 .drawer { position: fixed; inset: 0 0 0 auto; width: min(480px, 100vw); background: var(--paper-raised); box-shadow: -24px 0 48px rgb(22 25 31 / 0.18); padding: 28px; overflow-y: auto; z-index: 20; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

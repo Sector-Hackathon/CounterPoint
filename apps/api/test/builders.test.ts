@@ -29,10 +29,41 @@ describe('counterpoint metric builders', () => {
     expect(e.economicPeriod).toBe('FY2024');
   });
 
-  it('prior fiscal year net income growth', async () => {
+  it('base-effect year is the fiscal year the latest quarter is measured against', async () => {
+    // Latest quarter is 2025Q2, so the base year is FY2024 — not FY2023, the year before the
+    // latest annual report. Growth of the base year itself: FY2024 vs FY2023.
     const e = await valueOf('prior_fy_earnings_yoy_pct', 'BBRI');
-    expect(e.value).toBeCloseTo(((60_400 - 62_000) / 62_000) * 100, 1);
-    expect(e.economicPeriod).toBe('FY2023');
+    expect(e.economicPeriod).toBe('FY2024');
+    expect(e.comparisonPeriod).toBe('FY2023');
+    expect(e.value).toBeCloseTo(((60_100 - 60_400) / 60_400) * 100, 1);
+  });
+
+  it('base-effect year does not drift when the annual series lags the quarterly one', async () => {
+    // Quarterly reaches 2026Q2 → base year FY2025 (-10%). The year before the latest annual
+    // report would be FY2024 (+100%): opposite sign, so the two choices are not interchangeable.
+    const lagging: FixtureSet = {
+      retrievedAt: '2026-09-25T00:00:00.000Z',
+      companies: [{ ticker: 'LAGS', name: 'PT Lagging Tbk', sector: 'Financials', subsector: 'Banks' }],
+      quarterly: {
+        LAGS: [
+          { period: '2025Q2', revenue: 1_000, netIncome: 100 },
+          { period: '2026Q2', revenue: 1_200, netIncome: 150 },
+        ],
+      },
+      annual: {
+        LAGS: [
+          { year: 2023, revenue: 500, netIncome: 50 },
+          { year: 2024, revenue: 1_000, netIncome: 100 },
+          { year: 2025, revenue: 900, netIncome: 90 },
+        ],
+      },
+      dividends: {},
+      valuation: {},
+    };
+    const e = await valueOf('prior_fy_earnings_yoy_pct', 'LAGS', lagging);
+    expect(e.economicPeriod).toBe('FY2025');
+    expect(e.comparisonPeriod).toBe('FY2024');
+    expect(e.value).toBeCloseTo(-10, 1);
   });
 
   it('ROE trend: latest minus mean of prior three years', async () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pollToEvents, shouldFallBack, wrapFocus } from '../lib/session-logic';
+import { isVisibleStep, pollToEvents, shouldFallBack, wrapFocus } from '../lib/session-logic';
 
 describe('SSE fallback (final review Important 1)', () => {
   it('falls back immediately when the browser has closed the stream', () => {
@@ -30,5 +30,25 @@ describe('drawer focus wrap (final review Important 3)', () => {
   });
   it('returns -1 to let the browser move focus inside the range', () => {
     expect(wrapFocus(1, 3, false)).toBe(-1);
+  });
+});
+
+describe('isVisibleStep', () => {
+  const step = (action: string, resultStatus: string) => ({ action, resultStatus });
+
+  it('hides the engine’s own bookkeeping and replaced planner proposals', () => {
+    expect(isVisibleStep(step('EVALUATE', 'OK'))).toBe(false);
+    expect(isVisibleStep(step('EVALUATE', 'REJECTED'))).toBe(false);
+  });
+
+  it('never hides a failure, missing data, or any real investigation step', () => {
+    // A provider or retrieval failure stays on screen even though it is an EVALUATE step.
+    expect(isVisibleStep(step('EVALUATE', 'ERROR'))).toBe(true);
+    expect(isVisibleStep(step('EVALUATE', 'NO_DATA'))).toBe(true);
+    for (const action of ['PLAN', 'REPLAN', 'STOP', 'get_quarterly_financials', 'get_peer_candidates']) {
+      for (const status of ['OK', 'ERROR', 'NO_DATA', 'REJECTED']) {
+        expect(isVisibleStep(step(action, status)), `${action}/${status}`).toBe(true);
+      }
+    }
   });
 });

@@ -9,6 +9,7 @@ import { Status } from '@/components/Status';
 import { BudgetMeter } from '@/components/BudgetMeter';
 import { ReasoningThread } from '@/components/ReasoningThread';
 import { CounterLane } from '@/components/CounterLane';
+import { DataModeBanner } from '@/components/DataModeBanner';
 
 export default function Investigation() {
   const { id } = useParams<{ id: string }>();
@@ -34,11 +35,7 @@ export default function Investigation() {
 
   return (
     <main className="page">
-      {dataMode === 'fixture' && (
-        <p className="small" role="note" style={{ background: 'var(--hatch), var(--paper-raised)', padding: '8px 12px', borderRadius: 'var(--r-chip)', marginTop: 0 }}>
-          Synthetic sample data, not live Sectors data. Numbers are illustrative only.
-        </p>
-      )}
+      <DataModeBanner mode={dataMode} />
       {state.rawThesis ? (
         <ThesisSplit rawThesis={state.rawThesis} claims={state.claims} settled={settled} />
       ) : (
@@ -73,7 +70,7 @@ export default function Investigation() {
                   {c.direction === 'bearish' ? (
                     <p className="muted small">This claim is bearish, so the counter-case is any evidence of strength, shown in the thread.</p>
                   ) : (
-                    <CounterLane steps={c.steps} />
+                    <CounterLane steps={c.steps} finished={c.assessment !== null} />
                   )}
                 </div>
               </div>

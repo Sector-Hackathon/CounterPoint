@@ -17,8 +17,11 @@ export const ClaimCase = z.object({
     /** Whether the case must (true) or must not (false) take a contradiction-driven replan. */
     replan: z.boolean().optional(),
     maxToolCalls: z.number().int().optional(),
-    /** Expected counter-hypothesis outcomes by check id (final-week spec F1). */
-    counterpoint: z.record(z.string(), z.enum(['confirmed', 'refuted', 'untestable'])).optional(),
+    /**
+     * Expected counter-hypothesis outcomes by check id (final-week spec F1). `not_tested` asserts
+     * that a question was correctly never asked, which is how a gated branch is pinned down.
+     */
+    counterpoint: z.record(z.string(), z.enum(['confirmed', 'refuted', 'untestable', 'not_tested'])).optional(),
   }),
 });
 export type ClaimCase = z.infer<typeof ClaimCase>;
