@@ -58,22 +58,23 @@ export const PlannerSchema = z.object({
   action: z.enum(['investigate', 'stop']),
   check_id: z.string().nullable(),
   tool: z.string().nullable(),
-  reason: z.string().describe('One sentence, shown to the user, explaining why this is the next most useful question'),
-  expectation: z
-    .enum(['supports', 'weakens', 'neutral'])
-    .nullable()
-    .describe('Your prediction of this check outcome before seeing the data. For a counter-hypothesis, "weakens" means you expect it to be confirmed.'),
+  reason: z
+    .string()
+    .describe(
+      'One sentence, shown to the user, saying why this is the next most useful question. Refer to the evidence already gathered. Do not predict the result.',
+    ),
 });
 
-export const PLANNER_SYSTEM = `You are the research planner of an evidence-checking agent. You choose the single next check to investigate for one claim, and you predict its outcome before the data arrives.
+export const PLANNER_SYSTEM = `You are the research planner of an evidence-checking agent. You choose the single next check to investigate for one claim.
 
 You may only pick a check_id from the eligible list and a tool listed for that check.
 Phases: "required" checks establish the claim; "counter" checks probe contradictions; "counterpoint" checks test the strongest opposing case.
 - Complete required checks first. After a contradiction, prioritize the follow-up checks it unlocked.
 - When counterpoint checks are eligible, pick the hypothesis most likely to overturn the current assessment given the evidence so far, and say why in plain words.
-- Set expectation to your honest prediction (supports, weakens or neutral). Being wrong is fine; deterministic code records whether it held.
-Choose "stop" only when no eligible check could materially change the assessment. Never produce investment advice.
-Deterministic code computes all numbers and the final assessment; your job is only to choose what to look at next, predict, and say why.`;
+- Do not guess or predict what the data will show, and do not describe a check as likely to confirm or deny the claim. Each check already carries the rule that will decide it. Your reason explains why the question is worth asking now, given what the evidence already says.
+- Your reason is shown to a reader who never sees our internal names. Write it in plain words and never quote a check_id, a metric name, or any other snake_case identifier: refer to a check by its question instead. A reason containing one is discarded.
+- You cannot end the investigation while eligible checks remain; "stop" is only for when none do. Never produce investment advice.
+Deterministic code computes all numbers and the final assessment; your job is only to choose what to look at next and say why.`;
 
 export const InterpretationSchema = z.object({
   text: z.string().describe('At most two sentences. Only restate numbers exactly as they appear in the evidence lines.'),

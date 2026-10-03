@@ -1,4 +1,15 @@
-import { getContract, phaseOf, type Claim, type EvidenceItem, type ExecutionTrace } from '@counterpoint/domain';
+import {
+  checksOpenedBy,
+  effectText,
+  getContract,
+  phaseOf,
+  purposeFor,
+  questionFor,
+  ruleTextFor,
+  type Claim,
+  type EvidenceItem,
+  type ExecutionTrace,
+} from '@counterpoint/domain';
 import type { ClaimSeed, EvidenceSummary, SessionEvent } from './events.types';
 
 export function summarize(e: EvidenceItem): EvidenceSummary {
@@ -14,8 +25,14 @@ export function summarize(e: EvidenceItem): EvidenceSummary {
   };
 }
 
+/**
+ * One auditable step: the question, why it matters, the rule that decides it, the result, the
+ * effect on the claim, and any follow-up it opened. Everything is derived from the versioned
+ * contract and the stored trace row, so a replay rebuilds the identical step.
+ */
 export function stepEvent(t: ExecutionTrace, evidence: EvidenceItem[], contractId: string | null): SessionEvent {
-  const check = contractId && t.checkId ? getContract(contractId).checks.find((c) => c.id === t.checkId) : undefined;
+  const contract = contractId ? getContract(contractId) : null;
+  const check = contract && t.checkId ? contract.checks.find((c) => c.id === t.checkId) : undefined;
   return {
     id: `trace:${t.id}`,
     type: 'trace.step',
@@ -27,10 +44,13 @@ export function stepEvent(t: ExecutionTrace, evidence: EvidenceItem[], contractI
     stopReason: t.stopReason,
     checkId: t.checkId,
     phase: check ? phaseOf(check) : null,
-    hypothesis: check?.hypothesis ?? null,
-    expectation: t.expectation,
-    expectationHeld: t.expectationHeld,
+    question: check ? questionFor(check) : null,
+    purpose: check ? purposeFor(check) : null,
+    rule: check && contract ? ruleTextFor(check, contract.thresholds) : null,
     outcome: t.outcome,
+    effect: t.outcome ? effectText(t.outcome) : null,
+    opened:
+      contract && check && t.outcome ? checksOpenedBy(contract, check.id, t.outcome).map(questionFor) : [],
     evidence: evidence.map(summarize),
   };
 }

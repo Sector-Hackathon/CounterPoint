@@ -11,7 +11,7 @@ const claims: SessionEvent = {
 };
 const step = (seq: number, action: string, extra: Partial<Extract<SessionEvent, { type: 'trace.step' }>> = {}): SessionEvent => ({
   id: `trace:${seq}`, type: 'trace.step', claimId: 'c1', sequence: seq, action, reason: 'r', resultStatus: 'OK', stopReason: null,
-  checkId: null, phase: null, hypothesis: null, expectation: null, expectationHeld: null, outcome: null, evidence: [], ...extra,
+  checkId: null, phase: null, question: null, purpose: null, rule: null, outcome: null, effect: null, opened: [], evidence: [], ...extra,
 });
 
 describe('session reducer', () => {

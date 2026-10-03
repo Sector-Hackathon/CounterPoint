@@ -29,12 +29,13 @@ const TOOLS: Record<string, string> = {
   get_peer_candidates: 'Built the peer set',
 };
 
-export function stepHeadline(s: Pick<StepEvent, 'action'>): string {
+export function stepHeadline(s: Pick<StepEvent, 'action' | 'resultStatus'>): string {
   if (TOOLS[s.action]) return TOOLS[s.action]!;
   if (s.action === 'REPLAN') return 'Changed course';
   if (s.action === 'PLAN') return 'Picked the checks';
   if (s.action === 'STOP') return 'Stopped';
-  return 'Weighed the evidence';
+  // An EVALUATE step is only shown when something was rejected, so say that rather than "weighed".
+  return s.resultStatus === 'REJECTED' ? 'Rejected a step' : 'Weighed the evidence';
 }
 
 const METRICS: Record<string, string> = {
@@ -64,10 +65,18 @@ export const metricLabel = (m: string) => METRICS[m] ?? m.replace(/_/g, ' ');
 /** Derived metrics only: raw inputs (revenue, net income) stay in the evidence drawer. */
 export const isHeadlineMetric = (m: string) => m in METRICS;
 
-const CMP: Record<ChangeCondition['comparator'], string> = { at_least: 'at least', above: 'above', at_most: 'at most', below: 'below' };
+const CMP: Record<NonNullable<ChangeCondition['comparator']>, string> = {
+  at_least: 'at least',
+  above: 'above',
+  at_most: 'at most',
+  below: 'below',
+};
 
 export function conditionText(c: ChangeCondition): string {
+  if (c.effect === 'missing_evidence' || c.comparator === null || c.threshold === null || c.current === null) {
+    return `${c.label} is missing. Obtaining it would complete this check.`;
+  }
   const effect = c.effect === 'would_support' ? 'to count as support' : 'to stop counting against the claim';
   const when = c.period ? ` (${c.period})` : '';
-  return `${c.label} would need to be ${CMP[c.comparator]} ${formatValue(c.threshold, c.unit)} ${effect}. It is ${formatValue(c.current, c.unit)}${when}.`;
+  return `${c.label} would need to be ${CMP[c.comparator]} ${formatValue(c.threshold, c.unit ?? 'percent')} ${effect}. It is ${formatValue(c.current, c.unit ?? 'percent')}${when}.`;
 }

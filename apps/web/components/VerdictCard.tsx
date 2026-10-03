@@ -1,6 +1,6 @@
 'use client';
 import { motion, useReducedMotion } from 'motion/react';
-import type { ClaimReport, Statement } from '@/lib/api';
+import type { ClaimReport, CounterpointHypothesis, Statement } from '@/lib/api';
 import { ChangeConditions } from './ChangeConditions';
 import { Status } from './Status';
 
@@ -10,11 +10,30 @@ function Statements({ items, onOpen }: { items: Statement[]; onOpen: (id: string
       {items.map((s, i) => (
         <li key={i}>
           {s.text}{' '}
-          {s.evidenceIds[0] && <button className="quiet small" style={{ padding: '2px 8px' }} onClick={() => onOpen(s.evidenceIds[s.evidenceIds.length - 1]!)}>Source</button>}
+          {s.evidenceIds[0] && <button className="quiet small" style={{ padding: '2px 8px' }} onClick={() => onOpen(s.evidenceIds[0]!)}>Source</button>}
         </li>
       ))}
     </ul>
   );
+}
+
+/**
+ * Why a counter-question has the answer it does. A question the evidence never raised is
+ * reported as exactly that, and never as one the agent ran out of budget for.
+ */
+function hypothesisResult(h: CounterpointHypothesis): string {
+  switch (h.status) {
+    case 'confirmed':
+      return 'Yes, the data shows this.';
+    case 'refuted':
+      return 'No, the data doesn’t show this.';
+    case 'untestable':
+      return `Couldn’t test: ${h.note ?? 'data unavailable'}.`;
+    case 'not_applicable':
+      return 'Not asked — the claim did not pass its own checks, so there was nothing to explain.';
+    default:
+      return 'Not tested within budget.';
+  }
 }
 
 /** The report's moment: thesis and counterpoint lanes slide together around the verdict. */
@@ -42,8 +61,7 @@ export function VerdictCard({ quote, report, onOpen }: { quote: string; report: 
             <ul style={{ margin: report.weakens.length ? '12px 0 0' : 0, paddingLeft: 18, display: 'grid', gap: 8 }}>
               {counter.map((h) => (
                 <li key={h.checkId}>
-                  <strong>{h.hypothesis}</strong>{' '}
-                  <span className="small">{h.status === 'confirmed' ? 'Yes, the data shows this.' : h.status === 'refuted' ? 'No, the data doesn’t show this.' : h.status === 'untestable' ? `Couldn’t test: ${h.note ?? 'data unavailable'}.` : 'Not tested within budget.'}</span>
+                  <strong>{h.hypothesis}</strong> <span className="small">{hypothesisResult(h)}</span>
                   {h.statement && <div className="small muted">{h.statement.text}</div>}
                 </li>
               ))}

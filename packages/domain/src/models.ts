@@ -110,21 +110,33 @@ export type ReportStatement = z.infer<typeof ReportStatement>;
 export const ChangeCondition = z.object({
   checkId: z.string(),
   label: z.string(),
-  comparator: z.enum(['at_least', 'above', 'at_most', 'below']),
-  threshold: z.number(),
-  current: z.number(),
-  unit: z.enum(['percent', 'percentage_points', 'ratio']),
+  /** Null for evidence that is simply missing: there is no measured value to move. */
+  comparator: z.enum(['at_least', 'above', 'at_most', 'below']).nullable().default(null),
+  threshold: z.number().nullable().default(null),
+  current: z.number().nullable().default(null),
+  unit: z.enum(['percent', 'percentage_points', 'ratio']).nullable().default(null),
   period: z.string().nullable(),
-  evidenceId: z.string(),
+  evidenceId: z.string().nullable().default(null),
   /** What happens to the check if the condition is met. */
-  effect: z.enum(['would_support', 'would_stop_weakening']),
+  effect: z.enum(['would_support', 'would_stop_weakening', 'missing_evidence']),
+  /**
+   * The assessment this one change would produce, obtained by re-running the deterministic
+   * assessment rule with the check flipped. Null when the verdict would not change, so the
+   * report never claims a change it cannot demonstrate.
+   */
+  wouldBecome: Assessment.nullable().default(null),
 });
 export type ChangeCondition = z.infer<typeof ChangeCondition>;
 
 export const CounterpointHypothesis = z.object({
   checkId: z.string(),
   hypothesis: z.string(),
-  status: z.enum(['confirmed', 'refuted', 'untestable', 'not_tested']),
+  /**
+   * `not_applicable` means the contract never opened the question, because the result that would
+   * have raised it did not occur. That is a different statement from `not_tested`, which means
+   * the question was open but the budget ran out, so the two are never shown with the same words.
+   */
+  status: z.enum(['confirmed', 'refuted', 'untestable', 'not_tested', 'not_applicable']),
   statement: ReportStatement.nullable(),
   note: z.string().nullable(),
 });

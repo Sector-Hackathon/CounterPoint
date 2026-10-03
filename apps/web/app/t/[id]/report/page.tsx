@@ -5,6 +5,7 @@ import { api, type EvidenceItem, type ReportView } from '@/lib/api';
 import { useSessionEvents } from '@/lib/use-session-events';
 import { VerdictCard } from '@/components/VerdictCard';
 import { EvidenceDrawer } from '@/components/EvidenceDrawer';
+import { DataModeBanner } from '@/components/DataModeBanner';
 
 export default function Report() {
   const { id } = useParams<{ id: string }>();
@@ -13,6 +14,11 @@ export default function Report() {
   const [evidence, setEvidence] = useState<EvidenceItem[]>([]);
   const [open, setOpen] = useState<EvidenceItem | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [dataMode, setDataMode] = useState<'live' | 'fixture' | null>(null);
+
+  useEffect(() => {
+    api.getSession(id).then((s) => setDataMode(s.dataMode)).catch(() => setDataMode(null));
+  }, [id]);
 
   useEffect(() => {
     if (!state.reportId) return;
@@ -31,6 +37,7 @@ export default function Report() {
   return (
     <main className="page" style={{ display: 'grid', gap: 28 }}>
       <p><a href={`/t/${id}`}>Back to the investigation</a></p>
+      <DataModeBanner mode={dataMode} />
       {state.rawThesis && <blockquote style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: '1.3rem', maxWidth: '50ch' }}>{state.rawThesis}</blockquote>}
       {error && <p role="alert">{error}</p>}
       {!report && !error && !state.reportId && ['FAILED', 'PARTIAL', 'COMPLETED'].includes(state.status) && (

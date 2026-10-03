@@ -39,10 +39,15 @@ export type SessionEvent =
       stopReason: string | null;
       checkId: string | null;
       phase: 'required' | 'counter' | 'counterpoint' | null;
-      hypothesis: string | null;
-      expectation: CheckOutcome | null;
-      expectationHeld: boolean | null;
+      /** The question under test, the reason it matters, and the rule that decides it. */
+      question: string | null;
+      purpose: string | null;
+      rule: string | null;
       outcome: CheckOutcome | null;
+      /** What the outcome did to the claim, in words. */
+      effect: string | null;
+      /** Questions this result opened, derived from the contract's triggers. */
+      opened: string[];
       evidence: EvidenceSummary[];
     }
   | { id: string; type: 'claim.assessed'; claimId: string; assessment: Assessment; stopReason: string; coverage: Coverage | null }

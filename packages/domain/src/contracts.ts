@@ -3,6 +3,7 @@ import { band, ok, type CheckOutcome } from './check-helpers';
 import type { EvidenceItem } from './models';
 import { BUDGET, type Assessment, type CheckPhase, type ClaimDirection, type ClaimType, type ToolName, type Verifiability } from './ontology';
 import { absoluteGrowthV2, dividendLevelV2, relativeValuationV2 } from './contracts-v2';
+import { relativeValuationV3 } from './contracts-v3';
 
 export type { CheckOutcome } from './check-helpers';
 export type CheckKind = 'required' | 'counter';
@@ -20,6 +21,43 @@ export interface FlipRule {
   unit: 'percent' | 'percentage_points' | 'ratio';
 }
 
+/**
+ * A condition on an already-resolved check that opens a later one. A bare check id is shorthand
+ * for "that check weakened the claim", which is how every v1/v2 trigger is written.
+ */
+export type CheckTrigger = string | { check: string; outcome: CheckOutcome };
+
+export function describeTrigger(t: CheckTrigger): string {
+  return typeof t === 'string' ? `${t} (weakens)` : `${t.check} (${t.outcome})`;
+}
+
+function triggerMet(t: CheckTrigger, resolved: Map<string, CheckOutcome | null>): boolean {
+  return typeof t === 'string' ? resolved.get(t) === 'weakens' : resolved.get(t.check) === t.outcome;
+}
+
+const resolvedOutcomes = (states: CheckState[]): Map<string, CheckOutcome | null> =>
+  new Map(states.filter((s) => s.status === 'completed').map((s) => [s.checkId, s.outcome]));
+
+/** The triggers that have actually opened this check, for the trace's replan reason. */
+export function firedTriggers(check: CheckDefinition, states: CheckState[]): string[] {
+  const resolved = resolvedOutcomes(states);
+  return (check.triggeredBy ?? []).filter((t) => triggerMet(t, resolved)).map(describeTrigger);
+}
+
+/**
+ * The checks that one check resolving to `outcome` makes eligible. Used to tell the reader which
+ * further investigation a result just opened, without them having to know any check ids.
+ */
+export function checksOpenedBy(
+  contract: EvidenceContract,
+  checkId: string,
+  outcome: CheckOutcome,
+): CheckDefinition[] {
+  const matches = (t: CheckTrigger) =>
+    typeof t === 'string' ? t === checkId && outcome === 'weakens' : t.check === checkId && t.outcome === outcome;
+  return contract.checks.filter((c) => c.triggeredBy?.some(matches));
+}
+
 export interface CheckDefinition {
   id: string;
   kind: CheckKind;
@@ -35,10 +73,11 @@ export interface CheckDefinition {
   /** Whitelisted tools able to produce those metrics. */
   tools: ToolName[];
   /**
-   * Counterchecks only become eligible once one of these checks has weakened the claim.
-   * This is what makes the investigation path evidence-dependent rather than a fixed checklist.
+   * This check only becomes eligible once one of these triggers is met — a named check having
+   * resolved to a named outcome. That is what makes the investigation path evidence-dependent
+   * rather than a fixed checklist: the same contract asks different questions of different data.
    */
-  triggeredBy?: string[];
+  triggeredBy?: CheckTrigger[];
   /** Deterministic evaluation; `ok: false` marks the evidence invalid for this check. */
   evaluate(values: MetricValues, t: Thresholds): Calc<CheckOutcome>;
 }
@@ -260,13 +299,14 @@ export const CONTRACTS: Record<string, EvidenceContract> = {
   [absoluteGrowthV2.id]: absoluteGrowthV2,
   [dividendLevelV2.id]: dividendLevelV2,
   [relativeValuationV2.id]: relativeValuationV2,
+  [relativeValuationV3.id]: relativeValuationV3,
 };
 
 /** Current contract per claim type. Older versions stay in CONTRACTS so stored reports resolve. */
 const CURRENT: Partial<Record<ClaimType, EvidenceContract>> = {
   ABSOLUTE_GROWTH: absoluteGrowthV2,
   DIVIDEND_LEVEL: dividendLevelV2,
-  RELATIVE_VALUATION: relativeValuationV2,
+  RELATIVE_VALUATION: relativeValuationV3,
 };
 
 export function contractForClaimType(type: ClaimType): EvidenceContract | null {
@@ -362,8 +402,9 @@ const PHASE_ORDER: Record<CheckPhase, number> = { required: 0, counter: 1, count
 
 /**
  * Checks still worth investigating: required, then counterchecks, then counter-hypotheses.
- * Triggered counterchecks appear only after a trigger weakened the claim. Counter-hypotheses
- * appear only once no required check is pending, and stop after BUDGET.maxCounterpoints ran.
+ * A triggered check appears only once one of its triggers is met, so what the evidence said
+ * decides which questions remain. Counter-hypotheses appear only once no required check is
+ * pending, and stop after BUDGET.maxCounterpoints ran.
  */
 export function openChecks(
   contract: EvidenceContract,
@@ -372,13 +413,11 @@ export function openChecks(
   direction: ClaimDirection = 'bullish',
 ): CheckDefinition[] {
   const pending = new Set(states.filter((s) => s.status === 'pending').map((s) => s.checkId));
-  const weakened = new Set(
-    states.filter((s) => s.status === 'completed' && s.outcome === 'weakens').map((s) => s.checkId),
-  );
+  const resolved = resolvedOutcomes(states);
   const requiredPending = states.some((s) => s.kind === 'required' && s.status === 'pending');
   return contract.checks
     .filter((c) => pending.has(c.id))
-    .filter((c) => !c.triggeredBy || c.triggeredBy.some((t) => weakened.has(t)))
+    .filter((c) => !c.triggeredBy || c.triggeredBy.some((t) => triggerMet(t, resolved)))
     // The hypothesis catalog is written for bullish claims; a bearish claim's counterpoint is its inverted checks.
     .filter(
       (c) =>

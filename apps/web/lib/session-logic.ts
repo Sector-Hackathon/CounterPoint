@@ -16,6 +16,22 @@ export function pollToEvents(s: { status: string; error: string | null; finalRep
   return events;
 }
 
+/**
+ * Which trace steps belong in the reader's thread.
+ *
+ * Hidden: the engine's own bookkeeping (`EVALUATE`/`OK`), and a planner proposal the guards
+ * replaced (`EVALUATE`/`REJECTED`) — the action that actually ran, with its neutral rationale,
+ * appears as the very next step, so showing the discarded proposal would only read as a fault.
+ * Both stay in the persisted trace and in `GET /theses/:id/trace` for audit.
+ *
+ * Never hidden: failed retrievals and provider errors (`ERROR`), missing evidence (`NO_DATA`),
+ * exhausted budgets and every real investigation outcome, which arrive as tool, REPLAN or STOP steps.
+ */
+export function isVisibleStep(s: { action: string; resultStatus: string }): boolean {
+  if (s.action !== 'EVALUATE') return true;
+  return s.resultStatus !== 'OK' && s.resultStatus !== 'REJECTED';
+}
+
 /** Focus trap for a dialog: index to move to when Tab leaves the range, or -1 to let the browser handle it. */
 export function wrapFocus(index: number, count: number, backwards: boolean): number {
   if (count === 0) return -1;

@@ -179,10 +179,24 @@ export const METRIC_BUILDERS: Record<string, Builder> = {
     ];
   },
 
+  /**
+   * Base effect: how the fiscal year the latest quarter is measured against performed. For
+   * 2026Q2 vs 2025Q2 that base year is FY2025, which is not necessarily the year before the
+   * latest annual report — the annual series often lags the quarterly one by a year.
+   */
   async prior_fy_earnings_yoy_pct(ctx, checkId) {
     const s = await annual(ctx);
-    const a = anchor(s);
-    return yoyMetric(ctx, checkId, s, a && { kind: 'annual', year: a.year - 1 }, 'netIncome', 'prior_fy_earnings_yoy_pct');
+    const q = await quarterly(ctx);
+    const latestQuarter = anchor(q);
+    const base = {
+      metric: 'prior_fy_earnings_yoy_pct',
+      unit: 'percent' as const,
+      sourceLocator: s.sourceLocator,
+      retrievalTime: s.retrievedAt,
+    };
+    if (!latestQuarter) return unavailable(ctx, checkId, base, 'no reported quarters to anchor the base year');
+    const baseYear = latestQuarter.year - 1;
+    return yoyMetric(ctx, checkId, s, { kind: 'annual', year: baseYear }, 'netIncome', 'prior_fy_earnings_yoy_pct');
   },
 
   async roe_trend_pp(ctx, checkId) {
