@@ -1,10 +1,13 @@
+'use client';
+import { useLanguage } from '@/components/LanguageProvider';
 import { budgetUse, type ClaimState } from '@/lib/session-state';
 
 export function BudgetMeter({ claim }: { claim: ClaimState }) {
+  const { t } = useLanguage();
   const u = budgetUse(claim);
   return (
     <p className="small muted" style={{ margin: 0 }}>
-      Tool calls {u.toolCalls} of 8 · Changes of course {u.replans} of 2 · Counter-checks {u.counterpoints} of 3
+      {t('Pengambilan data')} {u.toolCalls} {t('dari')} 8 · {t('Perubahan langkah')} {u.replans} {t('dari')} 2 · {t('Uji alasan tandingan')} {u.counterpoints} {t('dari')} 3
     </p>
   );
 }

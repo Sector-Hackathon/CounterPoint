@@ -1,4 +1,5 @@
 'use client';
+import { useLanguage } from '@/components/LanguageProvider';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
@@ -12,6 +13,7 @@ import { CounterLane } from '@/components/CounterLane';
 import { DataModeBanner } from '@/components/DataModeBanner';
 
 export default function Investigation() {
+  const { t } = useLanguage();
   const { id } = useParams<{ id: string }>();
   const { state } = useSessionEvents(id);
   const [settled, setSettled] = useState(false);
@@ -39,7 +41,7 @@ export default function Investigation() {
       {state.rawThesis ? (
         <ThesisSplit rawThesis={state.rawThesis} claims={state.claims} settled={settled} />
       ) : (
-        <p className="muted" aria-live="polite">Reading the thesis and finding the claims in it…</p>
+        <p className="muted" aria-live="polite">{t('Membaca pesan dan mengenali klaimnya…')}</p>
       )}
       {state.status === 'AWAITING_CONFIRMATION' && <ConfirmCompany sessionId={id} />}
       {state.error && <p role="alert" style={{ color: 'var(--resolve)' }}>{state.error}</p>}
@@ -57,18 +59,18 @@ export default function Investigation() {
               </div>
               <div className="lanes">
                 <div>
-                  <div className="lane-title voice-thesis">The thesis says</div>
+                  <div className="lane-title voice-thesis">{t('Klaim dalam pesan')}</div>
                   <p style={{ margin: 0 }}>{c.normalizedText}</p>
                   {c.coverage && <p className="small muted">{c.coverage.label}</p>}
                 </div>
                 <div>
-                  <div className="lane-title">What the agent did</div>
+                  <div className="lane-title">{t('Pemeriksaan yang dilakukan')}</div>
                   <ReasoningThread steps={c.steps} />
                 </div>
                 <div>
-                  <div className="lane-title voice-counter">The counterpoint</div>
+                  <div className="lane-title voice-counter">{t('Alasan tandingan')}</div>
                   {c.direction === 'bearish' ? (
-                    <p className="muted small">This claim is bearish, so the counter-case is any evidence of strength, shown in the thread.</p>
+                    <p className="muted small">{t('Klaim ini menyatakan kelemahan. Bukti kekuatan yang dapat menyanggahnya ditampilkan pada langkah pemeriksaan.')}</p>
                   ) : (
                     <CounterLane steps={c.steps} finished={c.assessment !== null} />
                   )}
@@ -79,7 +81,7 @@ export default function Investigation() {
       {state.reportId && (
         <p style={{ marginTop: 48 }}>
           <a className="button" href={`/t/${id}/report`}>
-            Read the evidence report
+            {t('Baca laporan bukti')}
           </a>
         </p>
       )}

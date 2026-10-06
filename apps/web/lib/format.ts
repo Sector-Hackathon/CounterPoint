@@ -1,4 +1,5 @@
 import type { ChangeCondition, StepEvent } from './api';
+import { translate, type Language } from './locale';
 
 /** Formats a value for display. Minus signs use U+2212 so negative numbers read cleanly in tabular figures. */
 export function formatValue(v: number | null, unit: string): string {
@@ -21,62 +22,63 @@ export function formatValue(v: number | null, unit: string): string {
 }
 
 const TOOLS: Record<string, string> = {
-  get_company_profile: 'Read company profile',
-  get_quarterly_financials: 'Read quarterly financials',
-  get_annual_financials: 'Read annual financials',
-  get_dividend_history: 'Read dividend history',
-  get_valuation_metrics: 'Read valuation',
-  get_peer_candidates: 'Built the peer set',
+  get_company_profile: 'Membaca profil perusahaan',
+  get_quarterly_financials: 'Membaca laporan kuartalan',
+  get_annual_financials: 'Membaca laporan tahunan',
+  get_dividend_history: 'Membaca riwayat dividen',
+  get_valuation_metrics: 'Membaca valuasi',
+  get_peer_candidates: 'Memilih perusahaan pembanding',
 };
 
-export function stepHeadline(s: Pick<StepEvent, 'action' | 'resultStatus'>): string {
-  if (TOOLS[s.action]) return TOOLS[s.action]!;
-  if (s.action === 'REPLAN') return 'Changed course';
-  if (s.action === 'PLAN') return 'Picked the checks';
-  if (s.action === 'STOP') return 'Stopped';
+export function stepHeadline(s: Pick<StepEvent, 'action' | 'resultStatus'>, language: Language = 'id'): string {
+  if (TOOLS[s.action]) return translate(language, TOOLS[s.action]!);
+  if (s.action === 'REPLAN') return translate(language, 'Mengubah langkah pemeriksaan');
+  if (s.action === 'PLAN') return translate(language, 'Memilih pemeriksaan');
+  if (s.action === 'STOP') return translate(language, 'Pemeriksaan berhenti');
   // An EVALUATE step is only shown when something was rejected, so say that rather than "weighed".
-  return s.resultStatus === 'REJECTED' ? 'Rejected a step' : 'Weighed the evidence';
+  return translate(language, s.resultStatus === 'REJECTED' ? 'Menolak langkah yang tidak sesuai' : 'Menilai bukti');
 }
 
 const METRICS: Record<string, string> = {
-  revenue_yoy_pct: 'Revenue growth YoY',
-  earnings_yoy_pct: 'Net income growth YoY',
-  annual_earnings_yoy_pct: 'Annual net income growth',
-  prior_fy_earnings_yoy_pct: 'Prior-year net income growth',
-  earnings_minus_revenue_growth_pp: 'Net income minus revenue growth',
-  net_margin_change_pp: 'Net margin change',
-  roe_trend_pp: 'ROE change',
-  dividend_yield_pct: 'Trailing yield',
-  dividend_yield_hist_avg_pct: 'Average yield',
-  yield_change_pct: 'Yield change',
-  dps_change_pct: 'Dividend per share change',
-  payout_ratio_pct: 'Payout ratio',
+  revenue_yoy_pct: 'Pertumbuhan pendapatan YoY',
+  earnings_yoy_pct: 'Pertumbuhan laba bersih YoY',
+  annual_earnings_yoy_pct: 'Pertumbuhan laba bersih tahunan',
+  prior_fy_earnings_yoy_pct: 'Pertumbuhan laba bersih tahun sebelumnya',
+  earnings_minus_revenue_growth_pp: 'Selisih pertumbuhan laba dan pendapatan',
+  net_margin_change_pp: 'Perubahan margin bersih',
+  roe_trend_pp: 'Perubahan ROE',
+  dividend_yield_pct: 'Yield dividen 12 bulan terakhir',
+  dividend_yield_hist_avg_pct: 'Rata-rata yield dividen',
+  yield_change_pct: 'Perubahan yield dividen',
+  dps_change_pct: 'Perubahan dividen per saham',
+  payout_ratio_pct: 'Rasio pembayaran dividen',
   target_pe: 'P/E',
-  peer_count: 'Valid peers',
-  pe_vs_peer_median_pct: 'P/E vs peer median',
-  pbv_vs_peer_median_pct: 'P/BV vs peer median',
-  roe_vs_peer_median_pp: 'ROE vs peer median',
-  pe_vs_own_history_pct: 'P/E vs own history',
-  drawdown_from_52w_high_pct: 'From 52-week high',
+  peer_count: 'Perusahaan pembanding yang valid',
+  pe_vs_peer_median_pct: 'P/E dibanding median perusahaan pembanding',
+  pbv_vs_peer_median_pct: 'P/BV dibanding median perusahaan pembanding',
+  roe_vs_peer_median_pp: 'ROE dibanding median perusahaan pembanding',
+  pe_vs_own_history_pct: 'P/E dibanding riwayat sendiri',
+  drawdown_from_52w_high_pct: 'Perubahan dari harga tertinggi 52 minggu',
 };
 
-export const metricLabel = (m: string) => METRICS[m] ?? m.replace(/_/g, ' ');
+export const metricLabel = (m: string, language: Language = 'id') => translate(language, METRICS[m] ?? m.replace(/_/g, ' '));
 
 /** Derived metrics only: raw inputs (revenue, net income) stay in the evidence drawer. */
 export const isHeadlineMetric = (m: string) => m in METRICS;
 
 const CMP: Record<NonNullable<ChangeCondition['comparator']>, string> = {
-  at_least: 'at least',
-  above: 'above',
-  at_most: 'at most',
-  below: 'below',
+  at_least: 'minimal',
+  above: 'di atas',
+  at_most: 'maksimal',
+  below: 'di bawah',
 };
 
-export function conditionText(c: ChangeCondition): string {
+export function conditionText(c: ChangeCondition, language: Language = 'id'): string {
+  const t = (message: string, values?: Record<string, string | number>) => translate(language, message, values);
   if (c.effect === 'missing_evidence' || c.comparator === null || c.threshold === null || c.current === null) {
-    return `${c.label} is missing. Obtaining it would complete this check.`;
+    return t('{label} belum tersedia. Data ini diperlukan untuk melengkapi pemeriksaan.', { label: c.label });
   }
-  const effect = c.effect === 'would_support' ? 'to count as support' : 'to stop counting against the claim';
+  const effect = t(c.effect === 'would_support' ? 'agar mendukung klaim' : 'agar tidak lagi melemahkan klaim');
   const when = c.period ? ` (${c.period})` : '';
-  return `${c.label} would need to be ${CMP[c.comparator]} ${formatValue(c.threshold, c.unit ?? 'percent')} ${effect}. It is ${formatValue(c.current, c.unit ?? 'percent')}${when}.`;
+  return t('{label} perlu {comparator} {threshold} {effect}. Saat ini {current}{period}.', { label: c.label, comparator: t(CMP[c.comparator]), threshold: formatValue(c.threshold, c.unit ?? 'percent'), effect, current: formatValue(c.current, c.unit ?? 'percent'), period: when });
 }

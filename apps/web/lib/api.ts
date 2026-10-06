@@ -23,6 +23,7 @@ export interface SessionView {
   error: string | null;
   finalReportId: string | null;
   entities: EntityView[];
+  claims?: { id: string; originalText: string }[];
 }
 
 export interface Statement {

@@ -1,16 +1,18 @@
 'use client';
+import { useLanguage } from '@/components/LanguageProvider';
 import { motion, useReducedMotion } from 'motion/react';
 import type { ClaimReport, CounterpointHypothesis, Statement } from '@/lib/api';
 import { ChangeConditions } from './ChangeConditions';
 import { Status } from './Status';
 
 function Statements({ items, onOpen }: { items: Statement[]; onOpen: (id: string) => void }) {
+  const { t } = useLanguage();
   return (
     <ul style={{ margin: 0, paddingLeft: 18, display: 'grid', gap: 8 }}>
       {items.map((s, i) => (
         <li key={i}>
           {s.text}{' '}
-          {s.evidenceIds[0] && <button className="quiet small" style={{ padding: '2px 8px' }} onClick={() => onOpen(s.evidenceIds[0]!)}>Source</button>}
+          {s.evidenceIds[0] && <button className="quiet small" style={{ padding: '2px 8px' }} onClick={() => onOpen(s.evidenceIds[0]!)}>{t('Lihat sumber')}</button>}
         </li>
       ))}
     </ul>
@@ -21,59 +23,60 @@ function Statements({ items, onOpen }: { items: Statement[]; onOpen: (id: string
  * Why a counter-question has the answer it does. A question the evidence never raised is
  * reported as exactly that, and never as one the agent ran out of budget for.
  */
-function hypothesisResult(h: CounterpointHypothesis): string {
+function hypothesisResult(h: CounterpointHypothesis, t: ReturnType<typeof useLanguage>['t']): string {
   switch (h.status) {
     case 'confirmed':
-      return 'Yes, the data shows this.';
+      return t('Ya, data mendukung alasan tandingan ini.');
     case 'refuted':
-      return 'No, the data doesn’t show this.';
+      return t('Data tidak mendukung alasan tandingan ini.');
     case 'untestable':
-      return `Couldn’t test: ${h.note ?? 'data unavailable'}.`;
+      return `${t('Belum dapat diuji')}: ${h.note ?? t('data tidak tersedia')}.`;
     case 'not_applicable':
-      return 'Not asked — the claim did not pass its own checks, so there was nothing to explain.';
+      return t('Tidak diuji karena klaim sudah gagal pada pemeriksaan dasarnya.');
     default:
-      return 'Not tested within budget.';
+      return t('Belum diuji karena batas pemeriksaan.');
   }
 }
 
 /** The report's moment: thesis and counterpoint lanes slide together around the verdict. */
 export function VerdictCard({ quote, report, onOpen }: { quote: string; report: ClaimReport; onOpen: (evidenceId: string) => void }) {
+  const { t } = useLanguage();
   const reduce = useReducedMotion();
   const counter = report.counterpoint?.hypotheses ?? [];
   const lane = (from: number) => (reduce ? {} : { initial: { x: from, opacity: 0 }, animate: { x: 0, opacity: 1 }, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const } });
   return (
-    <article className="sheet" style={{ display: 'grid', gap: 24 }}>
+    <article id={`claim-${report.claimId}`} className="sheet" style={{ display: 'grid', gap: 24, scrollMarginTop: 24 }}>
       <header style={{ display: 'flex', gap: 16, alignItems: 'baseline', flexWrap: 'wrap' }}>
         <h2>“{quote}”</h2>
         <Status value={report.assessment} />
-        <span className="small muted" style={{ marginLeft: 'auto' }}>{report.coverage.label}</span>
+        <span className="small muted" style={{ marginLeft: 'auto' }}>{t('{completed} dari {required} pemeriksaan wajib tersedia', { completed: report.coverage.completed, required: report.coverage.required })}</span>
       </header>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 28 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 28 }}>
         <motion.section {...lane(-24)}>
-          <div className="lane-title voice-thesis">For the thesis</div>
-          {report.supports.length ? <Statements items={report.supports} onOpen={onOpen} /> : <p className="muted">Nothing in the data supports it yet.</p>}
-          {report.context.length > 0 && (<><div className="lane-title" style={{ marginTop: 16 }}>Context</div><Statements items={report.context} onOpen={onOpen} /></>)}
+          <div className="lane-title voice-thesis">{t('Bukti pendukung')}</div>
+          {report.supports.length ? <Statements items={report.supports} onOpen={onOpen} /> : <p className="muted">{t('Belum ada bukti pendukung dari pemeriksaan ini.')}</p>}
+          {report.context.length > 0 && (<><div className="lane-title" style={{ marginTop: 16 }}>{t('Konteks')}</div><Statements items={report.context} onOpen={onOpen} /></>)}
         </motion.section>
         <motion.section {...lane(24)}>
-          <div className="lane-title voice-counter">The counterpoint</div>
+          <div className="lane-title voice-counter">{t('Bukti yang melemahkan')}</div>
           {report.weakens.length > 0 && <Statements items={report.weakens} onOpen={onOpen} />}
           {counter.length > 0 && (
             <ul style={{ margin: report.weakens.length ? '12px 0 0' : 0, paddingLeft: 18, display: 'grid', gap: 8 }}>
               {counter.map((h) => (
                 <li key={h.checkId}>
-                  <strong>{h.hypothesis}</strong> <span className="small">{hypothesisResult(h)}</span>
+                  <strong>{h.hypothesis}</strong> <span className="small">{hypothesisResult(h, t)}</span>
                   {h.statement && <div className="small muted">{h.statement.text}</div>}
                 </li>
               ))}
             </ul>
           )}
-          {!report.weakens.length && !counter.length && <p className="muted">No counter-evidence found within the checks run.</p>}
+          {!report.weakens.length && !counter.length && <p className="muted">{t('Belum ditemukan bukti pelemah pada pemeriksaan yang dijalankan.')}</p>}
         </motion.section>
       </div>
       <ChangeConditions items={report.changeConditions} onOpen={onOpen} />
       {(report.missing.length > 0 || (report.counterpoint?.openQuestions.length ?? 0) > 0) && (
         <div style={{ background: 'var(--hatch), var(--paper)', borderRadius: 'var(--r-chip)', padding: 16 }}>
-          <div className="lane-title">What the data can’t tell you</div>
+          <div className="lane-title">{t('Data yang belum tersedia dan batasan')}</div>
           <ul style={{ margin: 0, paddingLeft: 18 }}>
             {report.missing.map((m, i) => <li key={`m${i}`}>{m}</li>)}
             {report.counterpoint?.openQuestions.map((q, i) => <li key={`q${i}`}>{q}</li>)}
@@ -83,8 +86,8 @@ export function VerdictCard({ quote, report, onOpen }: { quote: string; report: 
       {report.interpretation && <p style={{ margin: 0 }}>{report.interpretation.text}</p>}
       {report.peerSet && (
         <details>
-          <summary>Peer set ({report.peerSet.included.length} companies, {report.peerSet.period})</summary>
-          <p className="small">Included: {report.peerSet.included.join(', ')}</p>
+          <summary>{t('Perusahaan pembanding')} ({report.peerSet.included.length} {t('perusahaan')}, {report.peerSet.period})</summary>
+          <p className="small" >{t('Digunakan')}: {report.peerSet.included.join(', ')}</p>
           <ul className="small">{report.peerSet.excluded.map((e) => <li key={e.ticker}>{e.ticker}: {e.reason}</li>)}</ul>
         </details>
       )}

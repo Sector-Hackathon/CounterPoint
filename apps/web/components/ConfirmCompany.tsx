@@ -1,9 +1,11 @@
 'use client';
+import { useLanguage } from '@/components/LanguageProvider';
 import { useEffect, useState } from 'react';
 import { api, type EntityView } from '@/lib/api';
 
 /** Shown when a mention matches several companies: the investigation waits for the user instead of guessing. */
 export function ConfirmCompany({ sessionId }: { sessionId: string }) {
+  const { t } = useLanguage();
   const [entities, setEntities] = useState<EntityView[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,8 +18,8 @@ export function ConfirmCompany({ sessionId }: { sessionId: string }) {
 
   return (
     <section className="sheet" style={{ display: 'grid', gap: 16, marginTop: 32, maxWidth: 640 }} aria-live="polite">
-      <h2>Which company do you mean?</h2>
-      {unknownOnly && <p>None of the companies in this thesis are listed on IDX in Sectors data. Check the ticker and try again.</p>}
+      <h2>{t('Perusahaan mana yang dimaksud?')}</h2>
+      {unknownOnly && <p>{t('Perusahaan dalam pesan belum ditemukan di data Sectors. Periksa ticker lalu coba lagi.')}</p>}
       {ambiguous.map((e) => (
         <EntityChoice key={e.id} sessionId={sessionId} entity={e} onError={setError} />
       ))}
@@ -27,11 +29,12 @@ export function ConfirmCompany({ sessionId }: { sessionId: string }) {
 }
 
 function EntityChoice({ sessionId, entity, onError }: { sessionId: string; entity: EntityView; onError: (m: string) => void }) {
+  const { t } = useLanguage();
   const [choice, setChoice] = useState(entity.candidates[0]?.ticker ?? '');
   const [busy, setBusy] = useState(false);
   return (
     <div style={{ display: 'grid', gap: 8 }}>
-      <label htmlFor={`e-${entity.id}`}>“{entity.mention}” matches several companies.</label>
+      <label htmlFor={`e-${entity.id}`}>“{entity.mention}” {t('cocok dengan beberapa perusahaan.')}</label>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         <select
           id={`e-${entity.id}`}
@@ -57,7 +60,7 @@ function EntityChoice({ sessionId, entity, onError }: { sessionId: string; entit
             }
           }}
         >
-          {busy ? 'Confirming…' : 'Confirm company'}
+          {busy ? t('Mengonfirmasi…') : t('Konfirmasi perusahaan')}
         </button>
       </div>
     </div>

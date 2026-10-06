@@ -25,7 +25,7 @@ scripts/      Sectors data-spike probe
 
 ## Quick start
 
-Requirements: Node 20+, pnpm 10, Docker.
+Requirements: Node 22+, pnpm 10, Docker.
 
 ```bash
 pnpm install
@@ -34,8 +34,10 @@ docker compose up -d postgres   # Postgres on localhost:5433
 pnpm build:packages
 pnpm --filter @counterpoint/api db:push
 pnpm dev:api                    # http://localhost:4000/health
-pnpm dev:web                    # http://localhost:3000
+pnpm dev:web                    # http://localhost:3005 (FRONTEND_PORT in .env)
 ```
+
+The web commands (`dev`, `build`, and `start`) read the root `.env` for public frontend settings. `FRONTEND_PORT` controls the frontend server port; `API_PORT` controls the backend, and `WEB_ORIGIN` must match the frontend URL for CORS. Restart the server after changing its port. An existing shell `FRONTEND_PORT` takes precedence over the file.
 
 ### Modes
 
@@ -47,6 +49,8 @@ pnpm dev:web                    # http://localhost:3000
 `SESSION_DEADLINE_MS` (default `90000`) is the hard limit for one investigation; when it is reached the report is built from what was found and marked partial.
 
 Assessments are always produced by deterministic contract rules, never by the LLM.
+
+The web interface offers Bahasa Indonesia and English through the language selector on every page. The preference is saved locally in the browser. Interface labels, metric names, report summaries, and copied results follow the selected language; original quotes and backend evidence narratives keep their original wording.
 
 ## Tests and evaluation
 
