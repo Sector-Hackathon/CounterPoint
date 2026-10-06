@@ -12,13 +12,15 @@ import { ReasoningThread } from '@/components/ReasoningThread';
 import { CounterLane } from '@/components/CounterLane';
 import { DataModeBanner } from '@/components/DataModeBanner';
 import { FlowSteps } from '@/components/FlowSteps';
+import { AgentFlow } from '@/components/AgentFlow';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 export default function Investigation() {
   const { t } = useLanguage();
   const { id } = useParams<{ id: string }>();
-  const { state } = useSessionEvents(id);
+  const { state, connection } = useSessionEvents(id);
+  const [view, setView] = useState<'summary' | 'flow'>('summary');
   const [settled, setSettled] = useState(false);
   const [dataMode, setDataMode] = useState<'live' | 'fixture' | null>(null);
   const [startError, setStartError] = useState<string | null>(null);
@@ -64,6 +66,11 @@ export default function Investigation() {
         {state.reportId && <Link className="button primary" href={`/t/${id}/report`}>{t('Baca laporan bukti')}<ArrowRight size={17} aria-hidden="true" /></Link>}
       </section>
       <DataModeBanner mode={dataMode} />
+      <div className="investigation-views" role="group" aria-label={t('Tampilan pemeriksaan')}>
+        <button type="button" aria-pressed={view === 'summary'} onClick={() => setView('summary')}>{t('Ringkasan')}</button>
+        <button type="button" aria-pressed={view === 'flow'} onClick={() => setView('flow')}>{t('Alur agent')}</button>
+      </div>
+      {view === 'flow' && <AgentFlow state={state} connection={connection} />}
       {state.rawThesis ? (
         <details className="source-message">
           <summary>{t('Pesan asli dan klaim yang ditemukan')}</summary>
@@ -75,7 +82,7 @@ export default function Investigation() {
       {state.status === 'AWAITING_CONFIRMATION' && <ConfirmCompany sessionId={id} />}
       {(state.error || startError) && <p className="notice" role="alert">{state.error || startError}</p>}
       {terminal && !state.reportId && <p className="notice" role="note">{t('Pemeriksaan berakhir tanpa laporan')} · <Link href="/">{t('Cek pesan lagi')}</Link></p>}
-      {settled &&
+      {view === 'summary' && settled &&
         state.claims
           .filter((c) => c.verifiability !== 'NO')
           .map((c, index) => (

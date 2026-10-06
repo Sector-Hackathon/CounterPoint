@@ -27,13 +27,17 @@ export const initialState: SessionState = {
 };
 
 function addStep(steps: StepEvent[], e: StepEvent): StepEvent[] {
-  if (steps.some((s) => s.id === e.id)) return steps;
+  const previous = steps.find((s) => s.claimId === e.claimId && s.sequence === e.sequence);
+  if (previous?.id === e.id || (previous && previous.resultStatus !== 'RUNNING' && e.resultStatus === 'RUNNING')) return steps;
+  if (previous) return steps.map((s) => s === previous ? e : s);
   return [...steps, e].sort((a, b) => a.sequence - b.sequence);
 }
 
 /** Pure event reducer: the same event list always rebuilds the same screen, live or replayed. */
-export function reduce(state: SessionState, e: SessionEvent): SessionState {
+export function reduce(state: SessionState, e: SessionEvent | { type: 'reset' }): SessionState {
   switch (e.type) {
+    case 'reset':
+      return initialState;
     case 'session.status':
       return { ...state, status: e.status, error: e.error };
     case 'claims.extracted': {

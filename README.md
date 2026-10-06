@@ -52,6 +52,8 @@ Assessments are always produced by deterministic contract rules, never by the LL
 
 The web interface offers Bahasa Indonesia and English through the language selector on every page. The preference is saved locally in the browser. Interface labels, metric names, report summaries, and copied results follow the selected language; original quotes and backend evidence narratives keep their original wording.
 
+The investigation screen offers **Summary** and **Agent workflow** views. The workflow shows recorded execution nodes in order, with click-through rationale, assessment rules, evidence, timestamps, and outcomes. Claims run sequentially. A started retrieval is persisted before execution and updated when it completes, so reconnects can rebuild an in-flight node. Polling uses the read-only `/theses/:id/event-snapshot` endpoint when SSE is unavailable. Existing sessions show their recorded completed steps; only new runs have retrieval-start events. After updating, run `pnpm build:packages` and restart the API and web servers. No database migration is needed.
+
 ## Tests and evaluation
 
 ```bash

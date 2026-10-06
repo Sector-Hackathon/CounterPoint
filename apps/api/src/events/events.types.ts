@@ -36,6 +36,8 @@ export type SessionEvent =
       action: string;
       reason: string;
       resultStatus: string;
+      startedAt?: string;
+      finishedAt?: string | null;
       stopReason: string | null;
       checkId: string | null;
       phase: 'required' | 'counter' | 'counterpoint' | null;

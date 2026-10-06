@@ -59,11 +59,16 @@ export class InvestigationService {
           planner,
           newId: randomUUID,
           deadline,
+          onTraceStart: async (t) => {
+            await this.prisma.executionTrace.create({ data: {
+              ...t, startedAt: new Date(t.startedAt), finishedAt: null, planner: planner.name,
+            } });
+            this.events.publish(sessionId, stepEvent(t, [], claim.contractId));
+          },
           onTrace: async (t, items) => {
             // Evidence is persisted per step so a replay mid-run shows the same values as the live stream.
             if (items.length) await this.prisma.evidenceItem.createMany({ data: items.map((e) => ({ ...e })) });
-            await this.prisma.executionTrace.create({
-              data: {
+            const data = {
                 id: t.id,
                 claimId: t.claimId,
                 sequence: t.sequence,
@@ -79,8 +84,12 @@ export class InvestigationService {
                 expectation: t.expectation,
                 expectationHeld: t.expectationHeld,
                 outcome: t.outcome,
-              },
-            });
+              };
+            if (t.action.startsWith('get_')) {
+              await this.prisma.executionTrace.update({ where: { id: t.id }, data });
+            } else {
+              await this.prisma.executionTrace.create({ data });
+            }
             this.events.publish(sessionId, stepEvent(t, items, claim.contractId));
           },
         });

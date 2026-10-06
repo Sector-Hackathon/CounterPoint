@@ -58,6 +58,8 @@ export interface StepEvent {
   action: string;
   reason: string;
   resultStatus: string;
+  startedAt?: string;
+  finishedAt?: string | null;
   stopReason: string | null;
   checkId: string | null;
   phase: 'required' | 'counter' | 'counterpoint' | null;
@@ -187,6 +189,7 @@ export const api = {
   createThesis: (thesis: string) =>
     request<{ id: string }>('/theses', { method: 'POST', body: JSON.stringify({ thesis }) }),
   getSession: (id: string) => request<SessionView>(`/theses/${id}`),
+  getEventSnapshot: (id: string) => request<SessionEvent[]>(`/theses/${id}/event-snapshot`),
   confirmEntity: (id: string, entityId: string, ticker: string) =>
     request<SessionView>(`/theses/${id}/entities/${entityId}/confirm`, { method: 'POST', body: JSON.stringify({ ticker }) }),
   investigate: (id: string) => request<{ status: string }>(`/theses/${id}/investigate`, { method: 'POST' }),

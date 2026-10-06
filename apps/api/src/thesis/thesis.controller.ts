@@ -78,6 +78,12 @@ export class ThesisController {
     return this.events.stream(id) as Observable<MessageEvent>;
   }
 
+  /** Read-only replay for browsers whose SSE connection falls back to polling. */
+  @Get(':id/event-snapshot')
+  eventSnapshot(@Param('id', ParseUUIDPipe) id: string) {
+    return this.events.replay(id);
+  }
+
   @Get(':id/trace')
   trace(@Param('id', ParseUUIDPipe) id: string) {
     return this.theses.trace(id);
