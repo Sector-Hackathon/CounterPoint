@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { IBM_Plex_Sans, Schibsted_Grotesk } from 'next/font/google';
 import './globals.css';
-import { LanguageProvider, LanguageSwitcher } from '@/components/LanguageProvider';
+import { LanguageProvider } from '@/components/LanguageProvider';
+import { AppHeader } from '@/components/AppHeader';
 
 const body = IBM_Plex_Sans({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-body' });
 const display = Schibsted_Grotesk({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--font-display' });
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id" className={`${body.variable} ${display.variable}`}>
-      <body><LanguageProvider><LanguageSwitcher />{children}</LanguageProvider></body>
+      <body><LanguageProvider><AppHeader />{children}</LanguageProvider></body>
     </html>
   );
 }

@@ -1,17 +1,24 @@
 'use client';
 import { useLanguage } from '@/components/LanguageProvider';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { Upload, LoaderCircle, Check } from 'lucide-react';
 import { api } from '@/lib/api';
 
-export function ScreenshotDrop({ onText }: { onText: (text: string) => void }) {
+export function ScreenshotDrop({ onText, disabled = false, onBusyChange }: { onText: (text: string) => void; disabled?: boolean; onBusyChange?: (busy: boolean) => void }) {
   const { t } = useLanguage();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [filename, setFilename] = useState<string | null>(null);
+  const inFlight = useRef(false);
 
   async function read(file: File) {
+    if (disabled || inFlight.current) return;
+    setFilename(null);
     if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) return setError('Gunakan screenshot PNG, JPEG, atau WebP.');
     if (file.size > 4 * 1024 * 1024) return setError('Screenshot melebihi 4 MB. Potong gambar lalu coba lagi.');
     setBusy(true);
+    inFlight.current = true;
+    onBusyChange?.(true);
     setError(null);
     try {
       const b64 = await new Promise<string>((res, rej) => {
@@ -22,22 +29,34 @@ export function ScreenshotDrop({ onText }: { onText: (text: string) => void }) {
       });
       const { text } = await api.extractText(b64, file.type);
       onText(text);
+      setFilename(file.name);
     } catch (e) {
       setError((e as Error).message);
     } finally {
       setBusy(false);
+      inFlight.current = false;
+      onBusyChange?.(false);
     }
   }
 
   return (
-    <label
+    <div>
+    <label className="screenshot-upload" data-disabled={disabled || busy}>
+      <span className="upload-icon">{busy ? <LoaderCircle size={19} className="spin" aria-hidden="true" /> : <Upload size={19} aria-hidden="true" />}</span>
+      <span>
+        <strong>{busy ? t('Membaca screenshot…') : t('Punya screenshot? Unggah di sini')}</strong>
+        <span className="small muted">{t('Pilih atau tarik gambar · PNG, JPEG, WebP · maks. 4 MB')}</span>
+      </span>
+      <input type="file" disabled={disabled || busy} accept="image/png,image/jpeg,image/webp" className="upload-input"
       onDragOver={(e) => e.preventDefault()}
       onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) void read(f); }}
-      style={{ display: 'block', padding: 16, borderRadius: 'var(--r-sheet)', boxShadow: 'inset 0 0 0 1px var(--rule)', cursor: 'pointer' }}
-    >
-      <input type="file" accept="image/png,image/jpeg,image/webp" className="visually-hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) void read(f); }} />
-      {busy ? t('Membaca screenshot…') : t('Atau unggah screenshot postingan (maks. 4 MB)')}
-      {error && <span role="alert" style={{ display: 'block', color: 'var(--resolve)' }}>{t(error)}</span>}
+      aria-label={t('Punya screenshot? Unggah di sini')}
+      onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) void read(f); }} />
     </label>
+    <div aria-live="polite">{busy && <p className="small muted">{t('Membaca screenshot…')}</p>}
+      {filename && <p className="upload-result small"><Check size={15} aria-hidden="true" />{filename} · {t('Teks siap diedit sebelum diperiksa.')}</p>}
+    </div>
+    {error && <p role="alert" className="notice small">{t(error)}</p>}
+    </div>
   );
 }

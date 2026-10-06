@@ -5,6 +5,7 @@ import type { Assessment, EvidenceItem, ReportView } from '@/lib/api';
 import { assessmentText, buildShareText, dataModeLabel, retrievalLabel, summarizeReport } from '@/lib/report-summary';
 import { formatValue, isHeadlineMetric, metricLabel } from '@/lib/format';
 import type { Language } from '@/lib/locale';
+import { Copy } from 'lucide-react';
 
 export function ReportSummary({ report, quotes, evidence, evidenceReady, dataMode, partial }: {
   report: ReportView;
@@ -44,14 +45,15 @@ export function ReportSummary({ report, quotes, evidence, evidenceReady, dataMod
       <div style={{ display: 'flex', gap: 16, justifyContent: 'space-between', flexWrap: 'wrap', alignItems: 'center' }}>
         <h1 id="summary-title" style={{ fontSize: '1.6rem' }}>{t('Ringkasan pemeriksaan')}</h1>
         <button className="quiet" onClick={() => void copy()} disabled={!evidenceReady || copyState === 'copying'}>
+          <Copy size={16} aria-hidden="true" />
           {copyState === 'copying' ? t('Menyalin…') : t('Salin hasil untuk dibagikan')}
         </button>
       </div>
       <p style={{ margin: 0 }}>{t('{count} klaim dinilai berdasarkan bukti dan aturan pemeriksaan.', { count: summary.total })}</p>
-      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 12 }}>
+      <ul className="summary-counts">
         {(Object.keys(summary.counts) as Assessment[]).map((status) => (
-          <li key={status} style={{ display: 'grid', gap: 8 }}>
-            <strong className="tabular" style={{ fontSize: '1.5rem' }}>{summary.counts[status]}</strong>
+          <li key={status}>
+            <strong className="tabular">{summary.counts[status]}</strong>
             <span className="status" data-s={status}>{assessmentText(status, language)}</span>
           </li>
         ))}
@@ -66,9 +68,9 @@ export function ReportSummary({ report, quotes, evidence, evidenceReady, dataMod
         </ul>
       </div>}
       <p className="small muted" style={{ margin: 0 }}>{t('Status menunjukkan dukungan bukti terhadap klaim, bukan peluang harga saham akan naik. Detail pendukung dan pelemah tersedia di setiap klaim di bawah.')}</p>
-      {(summary.partial || partial) && <p role="note" style={{ margin: 0 }}>{t('Sebagian pemeriksaan belum lengkap. Perhatikan data yang belum tersedia dan batas pemeriksaan pada laporan.')}</p>}
+      {(summary.partial || partial) && <p role="note" className="notice">{t('Sebagian pemeriksaan belum lengkap. Perhatikan data yang belum tersedia dan batas pemeriksaan pada laporan.')}</p>}
       {report.validationStatus === 'REPAIRED' && <p className="small muted" style={{ margin: 0 }}>{t('Sebagian pernyataan dihapus karena tidak lolos validasi bukti.')}</p>}
-      {report.validationStatus === 'FAILED' && <p role="alert">{t('Validasi laporan gagal. Hasil belum dapat diandalkan.')}</p>}
+      {report.validationStatus === 'FAILED' && <p role="alert" className="notice">{t('Validasi laporan gagal. Hasil belum dapat diandalkan.')}</p>}
       <p className="small muted" style={{ margin: 0 }}>{dataModeLabel(dataMode, language)} · {evidenceReady ? `${t('Data diambil')}: ${retrievalLabel(evidence, language)}` : t('Memuat waktu pengambilan data…')}</p>
       <p className="small" role="status" style={{ margin: 0 }}>
         {copyState === 'copied' && copiedLanguage === language ? t('Hasil dan tautan laporan sudah disalin. Kamu bisa menempelkannya di grup.') : copyState === 'manual' ? t('Browser tidak mengizinkan salin otomatis. Pilih dan salin teks di bawah.') : ''}

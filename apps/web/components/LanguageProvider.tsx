@@ -29,12 +29,12 @@ export const useLanguage = () => useContext(LanguageContext);
 
 export function LanguageSwitcher() {
   const { language, setLanguage, t } = useLanguage();
-  return <div className="page" style={{ paddingTop: 16, paddingBottom: 0, display: 'flex', justifyContent: 'flex-end' }}>
-    <label className="small" style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-      {t('Bahasa tampilan')}
-      <select value={language} onChange={(e) => setLanguage(parseLanguage(e.target.value))} style={{ font: 'inherit', padding: '8px 12px', borderRadius: 'var(--r-chip)', background: 'var(--paper-raised)', color: 'var(--ink)', border: '1px solid var(--rule)' }}>
-        <option value="id">Bahasa Indonesia</option>
-        <option value="en">English</option>
+  return <div className="language-control">
+    <label>
+      <span className="visually-hidden">{t('Bahasa tampilan')}</span>
+      <select value={language} onChange={(e) => setLanguage(parseLanguage(e.target.value))}>
+        <option value="id">ID · Indonesia</option>
+        <option value="en">EN · English</option>
       </select>
     </label>
   </div>;

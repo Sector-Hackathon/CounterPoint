@@ -46,18 +46,20 @@ export function VerdictCard({ quote, report, onOpen }: { quote: string; report: 
   const lane = (from: number) => (reduce ? {} : { initial: { x: from, opacity: 0 }, animate: { x: 0, opacity: 1 }, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const } });
   return (
     <article id={`claim-${report.claimId}`} className="sheet" style={{ display: 'grid', gap: 24, scrollMarginTop: 24 }}>
-      <header style={{ display: 'flex', gap: 16, alignItems: 'baseline', flexWrap: 'wrap' }}>
+      <header className="verdict-header">
+        <div className="verdict-title">
         <h2>“{quote}”</h2>
         <Status value={report.assessment} />
-        <span className="small muted" style={{ marginLeft: 'auto' }}>{t('{completed} dari {required} pemeriksaan wajib tersedia', { completed: report.coverage.completed, required: report.coverage.required })}</span>
+        </div>
+        <span className="small muted">{t('{completed} dari {required} pemeriksaan wajib tersedia', { completed: report.coverage.completed, required: report.coverage.required })}</span>
       </header>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 28 }}>
-        <motion.section {...lane(-24)}>
+      <div className="evidence-columns">
+        <motion.section className="evidence-panel" {...lane(-24)}>
           <div className="lane-title voice-thesis">{t('Bukti pendukung')}</div>
           {report.supports.length ? <Statements items={report.supports} onOpen={onOpen} /> : <p className="muted">{t('Belum ada bukti pendukung dari pemeriksaan ini.')}</p>}
           {report.context.length > 0 && (<><div className="lane-title" style={{ marginTop: 16 }}>{t('Konteks')}</div><Statements items={report.context} onOpen={onOpen} /></>)}
         </motion.section>
-        <motion.section {...lane(24)}>
+        <motion.section className="evidence-panel" data-voice="counter" {...lane(24)}>
           <div className="lane-title voice-counter">{t('Bukti yang melemahkan')}</div>
           {report.weakens.length > 0 && <Statements items={report.weakens} onOpen={onOpen} />}
           {counter.length > 0 && (
