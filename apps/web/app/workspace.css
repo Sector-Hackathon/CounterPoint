@@ -120,3 +120,26 @@
 .check-foot .composer-status { display: none; }
 .check-foot .composer-status:has([role='alert']) { display: grid; }
 @media (max-width: 900px) { .check-column { padding: 24px 16px 24px; } .check-foot { padding: 10px 12px 12px; } .claim-card-head { flex-direction: column; } .thesis-block { justify-self: stretch; } }
+.check #summary-title { font-size: 1.15rem !important; }
+.summary-counts .status { white-space: normal; text-align: left; line-height: 1.3; }
+.summary-counts strong { font-size: 1.5rem; }
+
+/* ---------- Pages inside the shell (history) ---------- */
+.shell-main .page { padding-top: 40px; }
+.shell-main .page-heading h1 { font-size: 1.6rem; line-height: 1.25; margin-top: 4px; }
+.shell-main .page-heading p { font-size: .95rem; }
+.shell-main .history-card h2 { font-size: .95rem; font-weight: 500; }
+.shell-main .sheet { box-shadow: none; }
+
+/* ---------- Landing: neutral, one quiet accent ---------- */
+.hero-copy h1 > span { color: inherit; }
+.hero-preview::before { display: none; }
+.landing-kicker { background: var(--hover); color: var(--ink-2); }
+.landing-how { background: var(--surface-highlight); }
+.how-cards > li, .how-cards > li:first-child, .how-cards > li:nth-child(2), .how-cards > li:nth-child(3) { border-top: 1px solid var(--rule); box-shadow: none; }
+.story-question { background: var(--hover); border-left-color: var(--rule-strong); }
+.story-question .story-number { color: var(--ink); border-color: var(--rule-strong); }
+.landing-final { background: var(--paper-raised); border: 1px solid var(--rule); color: var(--ink); box-shadow: none; }
+.landing-final .eyebrow, .landing-final p { color: var(--quiet); }
+.trust-symbol, .trust-list article > span, .auth-icon { background: var(--hover); color: var(--ink); }
+.app-header { background: var(--paper); }
