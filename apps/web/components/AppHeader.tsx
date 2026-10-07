@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { History, Plus, LogOut } from 'lucide-react';
+import { ArrowRight, History, Plus, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { LanguageSwitcher, useLanguage } from './LanguageProvider';
@@ -31,12 +31,13 @@ export function AppHeader() {
         <Link href="/" className="brand" aria-label="Counterpoint">
           <Image className="brand-logo" src="/brand/counterpoint-logo-concept.png" alt="Counterpoint" width={2172} height={724} priority />
         </Link>
+        {isLanding && <nav className="landing-header-nav" aria-label={t('Tentang produk')}><a href="#why-counterpoint">{t('Kenapa Counterpoint')}</a><a href="#how-it-works">{t('Cara kerja')}</a><a href="#faq">{t('FAQ')}</a></nav>}
         <div className="header-actions">
-          {isLanding && <nav className="landing-header-nav" aria-label={t('Tentang produk')}><a href="#why-counterpoint">{t('Kenapa Counterpoint')}</a><a href="#how-it-works">{t('Cara kerja')}</a></nav>}
           <LanguageSwitcher />
           <ThemeSwitcher />
-          {user ? <div className="header-account"><span className="account-avatar" aria-hidden="true">{user.name.slice(0, 1).toUpperCase()}</span><span className="account-name" title={user.email}>{user.name}</span><button className="quiet" disabled={busy} onClick={() => void logout()} aria-label={t('Keluar')} title={t('Keluar')}><LogOut size={17} aria-hidden="true" /></button></div> : status !== 'loading' && !isAuth && <Link className="button quiet" href="/sign-in">{t('Masuk')}</Link>}
-          {isLanding && <Link href={user ? '/check' : '/sign-up'} className="button primary landing-header-cta">{t(user ? 'Buka aplikasi' : 'Buat akun')}</Link>}
+          {user ? <div className="header-account"><span className="account-avatar" aria-hidden="true">{user.name.slice(0, 1).toUpperCase()}</span><span className="account-name" title={user.email}>{user.name}</span><button className="quiet" disabled={busy} onClick={() => void logout()} aria-label={t('Keluar')} title={t('Keluar')}><LogOut size={17} aria-hidden="true" /></button></div> : status !== 'loading' && !isAuth && !isLanding && <Link className="button quiet" href="/sign-in">{t('Masuk')}</Link>}
+          {/* One entry point on the landing page: /check sends signed-out visitors to sign-in, which links to sign-up. */}
+          {isLanding && <Link href="/check" className="button primary landing-header-cta">{t('Buka aplikasi')}<ArrowRight size={17} aria-hidden="true" /></Link>}
         </div>
       </div>
       {!isLanding && !isAuth && <nav className="app-tabs" aria-label={t('Navigasi utama')}>
