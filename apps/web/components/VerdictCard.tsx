@@ -40,7 +40,7 @@ function hypothesisResult(h: CounterpointHypothesis, t: ReturnType<typeof useLan
 }
 
 /** The report's moment: thesis and counterpoint lanes slide together around the verdict. */
-export function VerdictCard({ quote, report, onOpen }: { quote: string; report: ClaimReport; onOpen: (evidenceId: string) => void }) {
+export function VerdictCard({ quote, report, onOpen, children }: { quote: string; report: ClaimReport; onOpen: (evidenceId: string) => void; children?: React.ReactNode }) {
   const { language, t } = useLanguage();
   const reduce = useReducedMotion();
   const counter = report.counterpoint?.hypotheses ?? [];
@@ -94,6 +94,7 @@ export function VerdictCard({ quote, report, onOpen }: { quote: string; report: 
           <ul className="small">{report.peerSet.excluded.map((e) => <li key={e.ticker}>{e.ticker}: {t(e.reason)}</li>)}</ul>
         </details>
       )}
+      {children}
     </article>
   );
 }
