@@ -40,6 +40,9 @@ export function stepHeadline(s: Pick<StepEvent, 'action' | 'resultStatus'>, lang
 }
 
 const METRICS: Record<string, string> = {
+  revenue_yoy_pct_prev_quarter: 'Pertumbuhan pendapatan kuartal sebelumnya',
+  last_dividend_age_days: 'Hari sejak dividen terakhir',
+  latest_dividend_vs_prior_median_pct: 'Dividen terakhir vs median sebelumnya',
   revenue_yoy_pct: 'Pertumbuhan pendapatan YoY',
   earnings_yoy_pct: 'Pertumbuhan laba bersih YoY',
   annual_earnings_yoy_pct: 'Pertumbuhan laba bersih tahunan',

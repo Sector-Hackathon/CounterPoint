@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { IBM_Plex_Sans, Inter, Schibsted_Grotesk } from 'next/font/google';
 import './globals.css';
 import './workspace.css';
+import './analytics.css';
 import { LanguageProvider } from '@/components/LanguageProvider';
 import { AppHeader } from '@/components/AppHeader';
 import { ThemeProvider } from '@/components/ThemeProvider';
