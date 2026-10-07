@@ -56,7 +56,7 @@ export default function Investigation() {
   return (
     <main id="main-content" className="page investigation-page">
       <FlowSteps current={1} />
-      <Link href="/" className="back-link"><ArrowLeft size={16} aria-hidden="true" />{t('Kembali ke input')}</Link>
+      <Link href="/check" className="back-link"><ArrowLeft size={16} aria-hidden="true" />{t('Kembali ke input')}</Link>
       <section className="session-status" aria-labelledby="investigation-title">
         <div role="status">
           <h1 id="investigation-title">{t(statusLabel)}</h1>
@@ -81,7 +81,7 @@ export default function Investigation() {
       )}
       {state.status === 'AWAITING_CONFIRMATION' && <ConfirmCompany sessionId={id} />}
       {(state.error || startError) && <p className="notice" role="alert">{state.error || startError}</p>}
-      {terminal && !state.reportId && <p className="notice" role="note">{t('Pemeriksaan berakhir tanpa laporan')} · <Link href="/">{t('Cek pesan lagi')}</Link></p>}
+      {terminal && !state.reportId && <p className="notice" role="note">{t('Pemeriksaan berakhir tanpa laporan')} · <Link href="/check">{t('Cek pesan lagi')}</Link></p>}
       {view === 'summary' && settled &&
         state.claims
           .filter((c) => c.verifiability !== 'NO')

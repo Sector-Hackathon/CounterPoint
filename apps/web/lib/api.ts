@@ -17,6 +17,7 @@ export interface EntityView {
 /** Session snapshot; used for ambiguous-company confirmation and as the polling fallback. */
 export interface SessionView {
   id: string;
+  createdAt?: string;
   rawThesis: string;
   status: string;
   dataMode: 'live' | 'fixture';
@@ -168,6 +169,7 @@ export const eventsUrl = (id: string) => `${API_URL}/theses/${id}/events`;
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     ...init,
+    credentials: 'include',
     headers: { 'content-type': 'application/json', ...(init?.headers ?? {}) },
     cache: 'no-store',
   });
@@ -180,14 +182,19 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     } catch {
       // non-JSON error body; show it as-is
     }
+    if (res.status === 401 && !path.startsWith('/auth/')) window.dispatchEvent(new Event('counterpoint.auth-required'));
     throw new Error(message || `Request failed (${res.status})`);
   }
   return res.json() as Promise<T>;
 }
 
 export const api = {
-  createThesis: (thesis: string) =>
-    request<{ id: string }>('/theses', { method: 'POST', body: JSON.stringify({ thesis }) }),
+  me: () => request<{ user: PublicUser | null }>('/auth/me'),
+  signIn: (email: string, password: string) => request<{ user: PublicUser }>('/auth/sign-in', { method: 'POST', body: JSON.stringify({ email, password }) }),
+  signUp: (name: string, email: string, password: string) => request<{ user: PublicUser }>('/auth/sign-up', { method: 'POST', body: JSON.stringify({ name, email, password }) }),
+  signOut: () => request<{ ok: boolean }>('/auth/sign-out', { method: 'POST' }),
+  getHistory: (page: number, query: string, filter: string, signal?: AbortSignal) => request<HistoryPage>(`/theses?${new URLSearchParams({ page: String(page), query, filter })}`, { signal }),
+  createThesis: (thesis: string) => request<{ id: string; status?: string }>('/theses', { method: 'POST', body: JSON.stringify({ thesis }) }),
   getSession: (id: string) => request<SessionView>(`/theses/${id}`),
   getEventSnapshot: (id: string) => request<SessionEvent[]>(`/theses/${id}/event-snapshot`),
   confirmEntity: (id: string, entityId: string, ticker: string) =>
@@ -198,3 +205,7 @@ export const api = {
   extractText: (imageBase64: string, mimeType: string) =>
     request<{ text: string }>('/theses/extract-text', { method: 'POST', body: JSON.stringify({ imageBase64, mimeType }) }),
 };
+
+export interface PublicUser { id: string; name: string; email: string }
+export interface HistoryEntry { id: string; text: string; createdAt: string; status: string; reportId: string | null; tickers: string[] }
+export interface HistoryPage { items: HistoryEntry[]; total: number; page: number; pageSize: number }

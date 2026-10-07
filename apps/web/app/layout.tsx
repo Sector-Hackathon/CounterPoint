@@ -4,6 +4,7 @@ import './globals.css';
 import { LanguageProvider } from '@/components/LanguageProvider';
 import { AppHeader } from '@/components/AppHeader';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { AuthProvider } from '@/components/AuthProvider';
 
 const body = IBM_Plex_Sans({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-body' });
 const display = Schibsted_Grotesk({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--font-display' });
@@ -17,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="id" suppressHydrationWarning className={`${body.variable} ${display.variable}`}>
       <head><script dangerouslySetInnerHTML={{ __html: "try{const t=localStorage.getItem('counterpoint.theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch{}" }} /></head>
-      <body><LanguageProvider><ThemeProvider><AppHeader />{children}</ThemeProvider></LanguageProvider></body>
+      <body><LanguageProvider><ThemeProvider><AuthProvider><AppHeader />{children}</AuthProvider></ThemeProvider></LanguageProvider></body>
     </html>
   );
 }

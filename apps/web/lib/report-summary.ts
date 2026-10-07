@@ -66,6 +66,7 @@ export function buildShareText(input: {
     `${t('Data diambil')}: ${retrievalLabel(evidence, language)}.`,
     t('Periode tiap metrik dan bukti pendukung tersedia di laporan.'),
     `${t('Laporan')}: ${url}`,
+    t('Tautan laporan hanya dapat dibuka oleh akun pemiliknya.'),
     t('Informasi dan analisis saja, bukan rekomendasi beli, jual, atau tahan saham.'),
   ].join('\n');
 }

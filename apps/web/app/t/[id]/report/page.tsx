@@ -61,7 +61,7 @@ export default function Report() {
       {error && <p role="alert" className="notice">{error}</p>}
       {!report && !error && !state.reportId && ['FAILED', 'PARTIAL', 'COMPLETED'].includes(state.status) && (
         <p role="alert">
-          {t('Pemeriksaan berakhir tanpa laporan')}{state.error ? `: ${state.error}` : '.'} <a href="/">{t('Cek pesan lagi')}</a>
+          {t('Pemeriksaan berakhir tanpa laporan')}{state.error ? `: ${state.error}` : '.'} <a href="/check">{t('Cek pesan lagi')}</a>
         </p>
       )}
       {!report && !error && (state.reportId || !['FAILED', 'PARTIAL', 'COMPLETED'].includes(state.status)) && (

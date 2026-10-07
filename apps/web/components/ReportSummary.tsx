@@ -73,7 +73,7 @@ export function ReportSummary({ report, quotes, evidence, evidenceReady, dataMod
       {report.validationStatus === 'FAILED' && <p role="alert" className="notice">{t('Validasi laporan gagal. Hasil belum dapat diandalkan.')}</p>}
       <p className="small muted" style={{ margin: 0 }}>{dataModeLabel(dataMode, language)} · {evidenceReady ? `${t('Data diambil')}: ${retrievalLabel(evidence, language)}` : t('Memuat waktu pengambilan data…')}</p>
       <p className="small" role="status" style={{ margin: 0 }}>
-        {copyState === 'copied' && copiedLanguage === language ? t('Hasil dan tautan laporan sudah disalin. Kamu bisa menempelkannya di grup.') : copyState === 'manual' ? t('Browser tidak mengizinkan salin otomatis. Pilih dan salin teks di bawah.') : ''}
+        {copyState === 'copied' && copiedLanguage === language ? t('Hasil sudah disalin untuk dibagikan. Tautan laporan hanya dapat dibuka oleh akunmu.') : copyState === 'manual' ? t('Browser tidak mengizinkan salin otomatis. Pilih dan salin teks di bawah.') : ''}
       </p>
       {manualUrl && <label style={{ display: 'grid', gap: 8 }}>{t('Ringkasan untuk disalin')}
         <textarea readOnly value={buildShareText({ report, quotes, evidence, dataMode, partial, language, url: manualUrl })} rows={10} onFocus={(e) => e.currentTarget.select()} style={{ width: '100%', font: 'inherit', padding: 12, color: 'var(--ink)', background: 'var(--paper)', border: '1px solid var(--rule)', borderRadius: 'var(--r-chip)' }} />
