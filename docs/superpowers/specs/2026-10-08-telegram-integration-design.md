@@ -134,7 +134,7 @@ Errors: an expired or used code → "Kode kedaluwarsa atau sudah dipakai. Buat k
 
 ## Testing
 
-- **API unit tests (Vitest or the API's existing test runner):**
+- **API unit tests (Vitest, in `apps/api/test/`):**
   - `LinkCodeService`: single use, expiry, hash-only storage, a new code invalidates old ones.
   - `bot-copy`: scoreboard formatting and truncation.
   - `TelegramConversation` with a fake `ChatPort` and fake services: unlinked user, text too short, a photo leading to confirm, the one-active-check limit, ticker buttons, completion leading to the scoreboard, failure.
