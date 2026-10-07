@@ -76,7 +76,7 @@ export const EvidenceItem = z.object({
 });
 export type EvidenceItem = z.infer<typeof EvidenceItem>;
 
-export const TraceResult = z.enum(['OK', 'NO_DATA', 'ERROR', 'REJECTED']);
+export const TraceResult = z.enum(['RUNNING', 'OK', 'NO_DATA', 'ERROR', 'REJECTED']);
 export type TraceResult = z.infer<typeof TraceResult>;
 
 export const Expectation = z.enum(['supports', 'weakens', 'neutral']);

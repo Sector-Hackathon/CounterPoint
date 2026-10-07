@@ -1,4 +1,6 @@
-import { BadRequestException, Body, Controller, Get, HttpCode, Ip, type MessageEvent, NotFoundException, Param, ParseUUIDPipe, Post, Sse } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpCode, Ip, type MessageEvent, NotFoundException, Param, ParseUUIDPipe, Post, Query, Req, Sse, UseGuards } from '@nestjs/common';
+import { AuthGuard, ThesisOwnerGuard } from '../auth/auth.guard';
+import type { AuthRequest } from '../auth/auth.service';
 import type { Observable } from 'rxjs';
 import { EventsService } from '../events/events.service';
 import { LlmService } from '../llm/llm.service';
@@ -22,6 +24,7 @@ function parse<T extends z.ZodTypeAny>(schema: T, body: unknown): z.infer<T> {
 }
 
 @Controller('theses')
+@UseGuards(AuthGuard, ThesisOwnerGuard)
 export class ThesisController {
   constructor(
     private readonly theses: ThesisService,
@@ -33,10 +36,10 @@ export class ThesisController {
   ) {}
 
   @Post()
-  async create(@Body() body: unknown, @Ip() ip: string) {
+  async create(@Body() body: unknown, @Ip() ip: string, @Req() request: AuthRequest) {
     const { thesis } = parse(CreateThesis, body);
     await this.limiter.check(ip);
-    const session = await this.theses.create(thesis);
+    const session = await this.theses.create(thesis, request.user.id);
     return { id: session.id, status: session.status };
   }
 
@@ -78,8 +81,23 @@ export class ThesisController {
     return this.events.stream(id) as Observable<MessageEvent>;
   }
 
+  @Get()
+  history(@Query() query: unknown, @Req() request: AuthRequest) {
+    const input = parse(z.object({ page: z.coerce.number().int().min(1).max(10000).default(1), query: z.string().trim().max(200).default(''), filter: z.enum(['all', 'reports', 'active', 'failed']).default('all') }), query);
+    return this.theses.history(request.user.id, input);
+  }
+
+  /** Read-only replay for browsers whose SSE connection falls back to polling. */
+  @Get(':id/event-snapshot')
+  eventSnapshot(@Param('id', ParseUUIDPipe) id: string) {
+    return this.events.replay(id);
+  }
+
   @Get(':id/trace')
   trace(@Param('id', ParseUUIDPipe) id: string) {
     return this.theses.trace(id);
   }
+
+  @Get(':id/status')
+  status(@Param('id', ParseUUIDPipe) id: string) { return this.theses.status(id); }
 }

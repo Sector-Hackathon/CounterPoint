@@ -2,6 +2,7 @@ import type { SessionEvent } from './api';
 
 /** EventSource.CLOSED. The browser closes for good on a non-200 reply (e.g. a 502 during a deploy). */
 const CLOSED = 2;
+export function permanentSessionError(status: number): boolean { return [400, 401, 403, 404, 410].includes(status); }
 
 /** Fall back to polling when the stream is closed for good, or after repeated transient errors. */
 export function shouldFallBack(readyState: number, errors: number): boolean {

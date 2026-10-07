@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <title>Counterpoint</title>
+  <rect width="256" height="256" rx="48" fill="#fff"/>
+  <path d="M128 24h-24a80 80 0 0 0 0 160h8v-40h-8a40 40 0 0 1 0-80h24Z" fill="#2446cf"/>
+  <path d="M128 232h24a80 80 0 0 0 0-160h-8v40h8a40 40 0 0 1 0 80h-24Z" fill="#15181d"/>
+  <path d="m128 104 24 24-24 24-24-24Z" fill="#15181d"/>
+</svg>

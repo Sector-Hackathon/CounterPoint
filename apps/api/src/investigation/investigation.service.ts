@@ -59,11 +59,16 @@ export class InvestigationService {
           planner,
           newId: randomUUID,
           deadline,
+          onTraceStart: async (t) => {
+            await this.prisma.executionTrace.create({ data: {
+              ...t, startedAt: new Date(t.startedAt), finishedAt: null, planner: planner.name,
+            } });
+            this.events.publish(sessionId, stepEvent(t, [], claim.contractId));
+          },
           onTrace: async (t, items) => {
             // Evidence is persisted per step so a replay mid-run shows the same values as the live stream.
             if (items.length) await this.prisma.evidenceItem.createMany({ data: items.map((e) => ({ ...e })) });
-            await this.prisma.executionTrace.create({
-              data: {
+            const data = {
                 id: t.id,
                 claimId: t.claimId,
                 sequence: t.sequence,
@@ -79,8 +84,8 @@ export class InvestigationService {
                 expectation: t.expectation,
                 expectationHeld: t.expectationHeld,
                 outcome: t.outcome,
-              },
-            });
+              };
+            await this.prisma.executionTrace.upsert({ where: { id: t.id }, create: data, update: data });
             this.events.publish(sessionId, stepEvent(t, items, claim.contractId));
           },
         });
@@ -116,6 +121,7 @@ export class InvestigationService {
       this.logger.log(JSON.stringify({ event: 'session_completed', sessionId, ms: Date.now() - started }));
     } catch (err) {
       this.logger.error(`investigation failed for ${sessionId}: ${(err as Error).stack}`);
+      await this.prisma.executionTrace.updateMany({ where: { claim: { sessionId }, resultStatus: 'RUNNING' }, data: { resultStatus: 'ERROR', stopReason: 'ERROR', finishedAt: new Date() } }).catch((cleanupError: Error) => this.logger.error(`trace cleanup failed: ${cleanupError.message}`));
       await this.prisma.thesisSession.update({
         where: { id: sessionId },
         data: { status: 'FAILED', error: (err as Error).message },

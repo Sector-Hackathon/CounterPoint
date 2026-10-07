@@ -34,13 +34,15 @@ export function stepEvent(t: ExecutionTrace, evidence: EvidenceItem[], contractI
   const contract = contractId ? getContract(contractId) : null;
   const check = contract && t.checkId ? contract.checks.find((c) => c.id === t.checkId) : undefined;
   return {
-    id: `trace:${t.id}`,
+    id: `trace:${t.id}${t.resultStatus === 'RUNNING' ? ':started' : ''}`,
     type: 'trace.step',
     claimId: t.claimId,
     sequence: t.sequence,
     action: t.action,
     reason: t.reason,
     resultStatus: t.resultStatus,
+    startedAt: t.startedAt,
+    finishedAt: t.finishedAt,
     stopReason: t.stopReason,
     checkId: t.checkId,
     phase: check ? phaseOf(check) : null,

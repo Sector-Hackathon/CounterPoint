@@ -1,4 +1,5 @@
 'use client';
+import { useLanguage } from '@/components/LanguageProvider';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import type { StepEvent } from '@/lib/api';
 import { isHeadlineMetric, metricLabel, stepHeadline } from '@/lib/format';
@@ -11,7 +12,8 @@ import { CountUp } from './CountUp';
  * further question it opened. All of it comes from the versioned evidence contract — never from
  * model reasoning, and never with an internal check id on screen.
  */
-export function ReasoningThread({ steps }: { steps: StepEvent[] }) {
+export function ReasoningThread({ steps, terminal = false }: { steps: StepEvent[]; terminal?: boolean }) {
+  const { language, t } = useLanguage();
   const reduce = useReducedMotion();
   const visible = steps.filter(isVisibleStep);
   return (
@@ -27,15 +29,16 @@ export function ReasoningThread({ steps }: { steps: StepEvent[] }) {
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
             <div style={{ fontWeight: 600 }}>
-              {s.question ?? stepHeadline(s)}
-              {s.resultStatus === 'NO_DATA' && <span className="muted small"> · no data</span>}
-              {s.resultStatus === 'ERROR' && <span className="muted small"> · error</span>}
+              {s.question ?? stepHeadline(s, language)}
+              {s.resultStatus === 'RUNNING' && <span className="muted small"> · {t(terminal ? 'Terhenti' : 'Sedang berjalan')}</span>}
+              {s.resultStatus === 'NO_DATA' && <span className="muted small"> · {t('data tidak tersedia')}</span>}
+              {s.resultStatus === 'ERROR' && <span className="muted small"> · {t('terjadi kendala')}</span>}
             </div>
 
             {/* Why this question is being asked now. Omitted where it would repeat the headline. */}
             {s.question && (
               <p className="small muted" style={{ margin: '2px 0 0' }}>
-                {s.purpose ? `${s.purpose} · ${stepHeadline(s)}` : stepHeadline(s)}
+                {s.purpose ? `${s.purpose} · ${stepHeadline(s, language)}` : stepHeadline(s, language)}
               </p>
             )}
             <p style={{ margin: '4px 0 6px' }}>{bodyText(s)}</p>
@@ -54,14 +57,14 @@ export function ReasoningThread({ steps }: { steps: StepEvent[] }) {
                   .filter((e) => isHeadlineMetric(e.metric))
                   .map((e) => (
                     <span key={e.id} className="chip" data-status={e.status}>
-                      {metricLabel(e.metric)} <strong><CountUp value={e.value} unit={e.unit} /></strong>
+                      {metricLabel(e.metric, language)} <strong><CountUp value={e.value} unit={e.unit} /></strong>
                       {e.economicPeriod && (
                         <span className="muted small">
                           {e.economicPeriod}
                           {e.comparisonPeriod ? ` vs ${e.comparisonPeriod}` : ''}
                         </span>
                       )}
-                      {e.status !== 'VALID' && <span className="muted small">{e.note ?? 'unavailable'}</span>}
+                      {e.status !== 'VALID' && <span className="muted small">{e.note ?? t('tidak tersedia')}</span>}
                     </span>
                   ))}
               </div>
@@ -79,7 +82,7 @@ export function ReasoningThread({ steps }: { steps: StepEvent[] }) {
               <div style={{ margin: '6px 0 0' }}>
                 <ForkMark />
                 <p className="small" style={{ margin: 0 }}>
-                  Opens {s.opened.length === 1 ? 'a new question' : `${s.opened.length} new questions`}:{' '}
+                  {t('Membuka {count} pertanyaan lanjutan', { count: s.opened.length })}:{' '}
                   <span className="voice-counter">{s.opened.join(' ')}</span>
                 </p>
               </div>

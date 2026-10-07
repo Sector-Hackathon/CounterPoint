@@ -100,6 +100,8 @@ export interface InvestigationDeps {
   newId: () => string;
   now?: () => Date;
   onTrace?: (t: ExecutionTrace, evidence: EvidenceItem[]) => void | Promise<void>;
+  /** Persist and publish before retrieval so an in-flight check survives reconnects. */
+  onTraceStart?: (t: ExecutionTrace) => void | Promise<void>;
   /** Epoch ms after which the claim stops with TIMEOUT (NFR-005). */
   deadline?: number;
 }
@@ -107,8 +109,8 @@ export interface InvestigationDeps {
 export async function investigateClaim(claim: Claim, deps: InvestigationDeps): Promise<InvestigationResult> {
   const now = deps.now ?? (() => new Date());
   const trace: ExecutionTrace[] = [];
-  const record = async (t: Omit<ExecutionTrace, 'id' | 'claimId' | 'sequence'>, items: EvidenceItem[] = []) => {
-    const entry: ExecutionTrace = { id: deps.newId(), claimId: claim.id, sequence: trace.length, ...t };
+  const record = async (t: Omit<ExecutionTrace, 'id' | 'claimId' | 'sequence'>, items: EvidenceItem[] = [], entryId?: string) => {
+    const entry: ExecutionTrace = { id: entryId ?? deps.newId(), claimId: claim.id, sequence: trace.length, ...t };
     trace.push(entry);
     await deps.onTrace?.(entry, items);
   };
@@ -271,6 +273,12 @@ export async function investigateClaim(claim: Claim, deps: InvestigationDeps): P
     toolCalls++;
     if (phaseOf(check) === 'counterpoint') counterpointsRun++;
     const startedAt = now().toISOString();
+    const entryId = deps.newId();
+    await deps.onTraceStart?.({
+      id: entryId, claimId: claim.id, sequence: trace.length, action: tool, reason: step.reason,
+      startedAt, finishedAt: null, evidenceIds: [], resultStatus: 'RUNNING', stopReason: null,
+      checkId: check.id, expectation: null, expectationHeld: null, outcome: null,
+    });
     const { items, failure } = await runCheck(ctx, check, evidence);
     evidence.push(...items);
     const before = new Map(states.map((s) => [s.checkId, s.status]));
@@ -294,6 +302,7 @@ export async function investigateClaim(claim: Claim, deps: InvestigationDeps): P
         outcome: state?.status === 'completed' ? state.outcome : null,
       },
       items,
+      entryId,
     );
 
     const resolved = states.filter((s) => before.get(s.checkId) === 'pending' && s.status !== 'pending');

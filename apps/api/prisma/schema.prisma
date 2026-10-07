@@ -7,6 +7,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime @default(now())
+  sessions     AuthSession[]
+  theses       ThesisSession[]
+}
+
+model AuthSession {
+  id        String   @id @default(uuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
 model ThesisSession {
   id            String   @id @default(uuid())
   rawThesis     String
@@ -16,10 +38,13 @@ model ThesisSession {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   finalReportId String?
+  userId        String?
+  user          User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   entities Entity[]
   claims   Claim[]
   reports  Report[]
+  @@index([userId, createdAt])
 }
 
 model Entity {
