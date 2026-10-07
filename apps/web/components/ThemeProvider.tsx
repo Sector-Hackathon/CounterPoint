@@ -5,15 +5,16 @@ import { useLanguage } from './LanguageProvider';
 
 type Theme = 'light' | 'dark' | 'system';
 const STORAGE_KEY = 'counterpoint.theme';
-const parseTheme = (value: string | null): Theme => value === 'light' || value === 'dark' ? value : 'system';
-const applyTheme = (theme: Theme) => {
-  if (theme === 'system') delete document.documentElement.dataset.theme;
-  else document.documentElement.dataset.theme = theme;
-};
-const ThemeContext = createContext({ theme: 'system' as Theme, setTheme: (_theme: Theme) => {} });
+/** No saved choice means dark, the workspace default; 'system' is an explicit choice. */
+const parseTheme = (value: string | null): Theme => value === 'light' || value === 'system' ? value : 'dark';
+const resolve = (theme: Theme): 'light' | 'dark' =>
+  theme === 'system' ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark') : theme;
+const applyTheme = (theme: Theme) => { document.documentElement.dataset.theme = resolve(theme); };
+const ThemeContext = createContext({ theme: 'dark' as Theme, setTheme: (_theme: Theme) => {} });
+export const useTheme = () => useContext(ThemeContext);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('system');
+  const [theme, setThemeState] = useState<Theme>('dark');
   useEffect(() => {
     let saved: Theme = 'system';
     try { saved = parseTheme(localStorage.getItem(STORAGE_KEY)); } catch { /* Storage is optional. */ }
@@ -25,7 +26,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setThemeState(next); applyTheme(next);
     };
     window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
+    const media = window.matchMedia('(prefers-color-scheme: light)');
+    const onSystem = () => { if (parseTheme(localStorage.getItem(STORAGE_KEY)) === 'system') applyTheme('system'); };
+    media.addEventListener('change', onSystem);
+    return () => { window.removeEventListener('storage', onStorage); media.removeEventListener('change', onSystem); };
   }, []);
   const setTheme = (next: Theme) => {
     setThemeState(next); applyTheme(next);

@@ -16,11 +16,14 @@ export function AppHeader() {
   const [error, setError] = useState('');
   const isLanding = pathname === '/';
   const isAuth = pathname === '/sign-in' || pathname === '/sign-up';
+  // Signed-in workspace screens use the sidebar shell instead of this header.
+  const inWorkspace = pathname === '/check' || pathname === '/history' || pathname.startsWith('/t/');
   async function logout() {
     setBusy(true); setError('');
     try { await signOut(); } catch { setError(t('Keluar gagal. Coba lagi.')); }
     finally { setBusy(false); }
   }
+  if (inWorkspace) return null;
   return <>
     <a className="skip-link" href="#main-content">{t('Langsung ke konten')}</a>
     <header className={`app-header${isLanding ? ' landing-header' : ''}`}>

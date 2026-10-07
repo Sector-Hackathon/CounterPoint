@@ -1,10 +1,10 @@
 'use client';
 import { useLanguage } from '@/components/LanguageProvider';
 import { useRef, useState } from 'react';
-import { Upload, LoaderCircle, Check } from 'lucide-react';
+import { Upload, LoaderCircle, Check, Paperclip } from 'lucide-react';
 import { api } from '@/lib/api';
 
-export function ScreenshotDrop({ onText, disabled = false, onBusyChange }: { onText: (text: string) => void; disabled?: boolean; onBusyChange?: (busy: boolean) => void }) {
+export function ScreenshotDrop({ onText, disabled = false, onBusyChange, variant = 'zone' }: { onText: (text: string) => void; disabled?: boolean; onBusyChange?: (busy: boolean) => void; variant?: 'zone' | 'icon' }) {
   const { t } = useLanguage();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,6 +37,23 @@ export function ScreenshotDrop({ onText, disabled = false, onBusyChange }: { onT
       inFlight.current = false;
       onBusyChange?.(false);
     }
+  }
+
+  if (variant === 'icon') {
+    // Compact paperclip for the composer bar; status stays next to it, announced politely.
+    return (
+      <>
+        <label className="attach icon-button" title={t('Unggah screenshot')} data-disabled={disabled || busy}>
+          {busy ? <LoaderCircle size={18} className="spin" aria-hidden="true" /> : <Paperclip size={18} aria-hidden="true" />}
+          <input type="file" disabled={disabled || busy} accept="image/png,image/jpeg,image/webp" aria-label={t('Unggah screenshot')}
+            onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) void read(f); }} />
+        </label>
+        <span className="small muted" aria-live="polite">
+          {busy ? t('Membaca screenshot…') : filename ? t('Teks dari screenshot siap diedit.') : ''}
+        </span>
+        {error && <span role="alert" className="small" style={{ color: 'var(--resolve)' }}>{t(error)}</span>}
+      </>
+    );
   }
 
   return (
