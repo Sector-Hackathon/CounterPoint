@@ -16,7 +16,8 @@ try {
   if (error.code !== 'ENOENT') throw error;
 }
 
-// Only public settings from the root .env are passed to the frontend.
+// Root .env is the single configuration source for this workspace.
+// Explicit shell/hosting env wins; root NEXT_PUBLIC_* intentionally precedes web .env.local.
 const childEnv = { ...process.env };
 for (const [key, value] of Object.entries(rootEnv)) {
   if (key.startsWith('NEXT_PUBLIC_') && childEnv[key] === undefined) {
