@@ -1,3 +1,5 @@
+import { landingEnglish } from './landing-copy';
+
 export type Language = 'id' | 'en';
 export const LANGUAGE_STORAGE_KEY = 'counterpoint.language';
 
@@ -6,6 +8,12 @@ export function parseLanguage(value: string | null): Language {
 }
 
 const english: Record<string, string> = {
+  'Pilih tema tampilan': 'Choose appearance',
+  'Tema tampilan': 'Appearance',
+  'Terang': 'Light',
+  'Gelap': 'Dark',
+  'Ikuti sistem': 'Follow system',
+  ...landingEnglish,
   'Tampilan pemeriksaan': 'Investigation view',
   'Ringkasan': 'Summary',
   'Alur agent': 'Agent workflow',
