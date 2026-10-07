@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import type { ClaimReport, CounterpointHypothesis, Statement } from '@/lib/api';
 import { ChangeConditions } from './ChangeConditions';
 import { Status } from './Status';
+import { coverageLabel } from '@/lib/display-copy';
 
 function Statements({ items, onOpen }: { items: Statement[]; onOpen: (id: string) => void }) {
   const { t } = useLanguage();
@@ -40,7 +41,7 @@ function hypothesisResult(h: CounterpointHypothesis, t: ReturnType<typeof useLan
 
 /** The report's moment: thesis and counterpoint lanes slide together around the verdict. */
 export function VerdictCard({ quote, report, onOpen }: { quote: string; report: ClaimReport; onOpen: (evidenceId: string) => void }) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const reduce = useReducedMotion();
   const counter = report.counterpoint?.hypotheses ?? [];
   const lane = (from: number) => (reduce ? {} : { initial: { x: from, opacity: 0 }, animate: { x: 0, opacity: 1 }, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const } });
@@ -51,7 +52,7 @@ export function VerdictCard({ quote, report, onOpen }: { quote: string; report: 
         <h2>“{quote}”</h2>
         <Status value={report.assessment} />
         </div>
-        <span className="small muted">{t('{completed} dari {required} pemeriksaan wajib tersedia', { completed: report.coverage.completed, required: report.coverage.required })}</span>
+        <span className="small muted">{coverageLabel(report.coverage, language)}</span>
       </header>
       <div className="evidence-columns">
         <motion.section className="evidence-panel" {...lane(-24)}>
@@ -88,7 +89,7 @@ export function VerdictCard({ quote, report, onOpen }: { quote: string; report: 
       {report.interpretation && <p style={{ margin: 0 }}>{report.interpretation.text}</p>}
       {report.peerSet && (
         <details>
-          <summary>{t('Perusahaan pembanding')} ({report.peerSet.included.length} {t('perusahaan')}, {report.peerSet.period})</summary>
+          <summary>{t('Perusahaan pembanding')} ({t('{count} perusahaan', { count: report.peerSet.included.length })}, {report.peerSet.period})</summary>
           <p className="small" >{t('Digunakan')}: {report.peerSet.included.join(', ')}</p>
           <ul className="small">{report.peerSet.excluded.map((e) => <li key={e.ticker}>{e.ticker}: {e.reason}</li>)}</ul>
         </details>

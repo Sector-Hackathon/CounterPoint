@@ -1,7 +1,7 @@
 'use client';
 import { useLanguage } from '@/components/LanguageProvider';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, FileText, Search, ShieldCheck, LoaderCircle } from 'lucide-react';
 import { api } from '@/lib/api';
 import { ScreenshotDrop } from '@/components/ScreenshotDrop';
@@ -25,6 +25,8 @@ export default function Home() {
   const [busy, setBusy] = useState(false);
   const [readingImage, setReadingImage] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const focusAfterUpload = useRef(false);
+  useEffect(() => { if (!readingImage && !busy && focusAfterUpload.current) { focusAfterUpload.current = false; inputRef.current?.focus(); } }, [readingImage, busy, thesis]);
   const [error, setError] = useState<string | null>(null);
 
   async function submit(text: string) {
@@ -66,7 +68,7 @@ export default function Home() {
           className="thesis-input"
         />
         <div className="input-help small muted"><span id="thesis-help">{t(thesis.length > 2000 ? 'Pesan melebihi 2000 karakter. Ringkas teks sebelum memeriksa.' : 'Sertakan nama saham dan alasan yang ingin dicek. Minimal 10 karakter.')}</span><span id="thesis-count" className="tabular">{thesis.length}/2000</span></div>
-        <ScreenshotDrop disabled={busy} onBusyChange={setReadingImage} onText={(text) => { setThesis(text); setError(null); inputRef.current?.focus(); }} />
+        <ScreenshotDrop disabled={busy} onBusyChange={setReadingImage} onText={(text) => { focusAfterUpload.current = true; setThesis(text); setError(null); }} />
         {error && <p className="notice" role="alert">{error}</p>}
         <div className="form-footer">
           <span className="small muted">{t('Bukti pendukung dan pelemah dalam satu laporan.')}</span>

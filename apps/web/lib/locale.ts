@@ -8,6 +8,20 @@ export function parseLanguage(value: string | null): Language {
 }
 
 const english: Record<string, string> = {
+  'Tidak ada pemeriksaan bukti yang berlaku untuk klaim ini.': 'No evidence checks apply to this claim.',
+  'Bukti sudah cukup untuk menilai klaim': 'Sufficient evidence to assess the claim',
+  'Data yang diperlukan belum tersedia': 'Required data is unavailable',
+  'Pemeriksaan ini sudah dilakukan': 'This check has already been performed',
+  'Klaim berada di luar cakupan pemeriksaan': 'The claim is outside the investigation scope',
+  'Batas jumlah pemeriksaan tercapai': 'The investigation limit was reached',
+  'Batas waktu pemeriksaan tercapai': 'The investigation timed out',
+  'Pemeriksaan mengalami kendala': 'The investigation encountered an error',
+  'Pemeriksaan dihentikan': 'The investigation was stopped',
+  'Klaim yang ditemukan tidak dapat diuji dengan data yang tersedia. Menyiapkan penjelasan dan laporan.': 'The identified claims cannot be tested with the available data. Preparing explanations and a report.',
+  '{count} perusahaan': '{count} companies',
+  'Menghubungkan ke event pemeriksaan…': 'Connecting to investigation events…',
+  'Menghubungkan ulang ke event pemeriksaan…': 'Reconnecting to investigation events…',
+  'Koneksi pemeriksaan terhenti. Muat ulang halaman untuk mencoba lagi.': 'The investigation connection stopped. Reload the page to retry.',
   'Daftar untuk menyimpan pemeriksaan dan riwayatmu.': 'Create an account to save your investigations and history.',
   'Hasil sudah disalin untuk dibagikan. Tautan laporan hanya dapat dibuka oleh akunmu.': 'Results copied for sharing. Only your account can open the report link.',
   'Tautan laporan hanya dapat dibuka oleh akun pemiliknya.': 'Only the account owner can open this report link.',
@@ -328,6 +342,8 @@ const english: Record<string, string> = {
 };
 
 export function translate(language: Language, message: string, values: Record<string, string | number> = {}): string {
-  const text = language === 'en' ? english[message] ?? message : message;
+  const disclaimer = 'Counterpoint checks the evidence behind claims you provide. It is information and analysis only, not investment advice, and does not recommend buying, selling, or holding any security.';
+  const singular: Record<string, string> = { '{count} langkah': '{count} step', '{count} perusahaan': '{count} company', 'Membuka {count} pertanyaan lanjutan': 'Opens {count} follow-up question' };
+  const text = message === disclaimer && language === 'id' ? 'Counterpoint memeriksa bukti di balik klaim yang kamu berikan. Informasi dan analisis saja, bukan nasihat investasi, serta bukan rekomendasi membeli, menjual, atau menahan efek apa pun.' : language === 'en' ? (values.count === 1 ? singular[message] : undefined) ?? english[message] ?? message : message;
   return text.replace(/\{(\w+)\}/g, (match, key: string) => values[key] === undefined ? match : String(values[key]));
 }

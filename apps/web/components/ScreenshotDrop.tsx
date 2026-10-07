@@ -41,15 +41,15 @@ export function ScreenshotDrop({ onText, disabled = false, onBusyChange }: { onT
 
   return (
     <div>
-    <label className="screenshot-upload" data-disabled={disabled || busy}>
+    <label className="screenshot-upload" data-disabled={disabled || busy}
+      onDragOver={(event) => event.preventDefault()}
+      onDrop={(event) => { event.preventDefault(); if (disabled || busy || inFlight.current) return; const file = event.dataTransfer.files[0]; if (file) void read(file); }}>
       <span className="upload-icon">{busy ? <LoaderCircle size={19} className="spin" aria-hidden="true" /> : <Upload size={19} aria-hidden="true" />}</span>
       <span>
         <strong>{busy ? t('Membaca screenshot…') : t('Punya screenshot? Unggah di sini')}</strong>
         <span className="small muted">{t('Pilih atau tarik gambar · PNG, JPEG, WebP · maks. 4 MB')}</span>
       </span>
       <input type="file" disabled={disabled || busy} accept="image/png,image/jpeg,image/webp" className="upload-input"
-      onDragOver={(e) => e.preventDefault()}
-      onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) void read(f); }}
       aria-label={t('Punya screenshot? Unggah di sini')}
       onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) void read(f); }} />
     </label>

@@ -13,11 +13,13 @@ import { CounterLane } from '@/components/CounterLane';
 import { DataModeBanner } from '@/components/DataModeBanner';
 import { FlowSteps } from '@/components/FlowSteps';
 import { AgentFlow } from '@/components/AgentFlow';
+import { coverageLabel } from '@/lib/display-copy';
+import { isVisibleStep } from '@/lib/session-logic';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 export default function Investigation() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const { id } = useParams<{ id: string }>();
   const { state, connection } = useSessionEvents(id);
   const [view, setView] = useState<'summary' | 'flow'>('summary');
@@ -60,7 +62,7 @@ export default function Investigation() {
       <section className="session-status" aria-labelledby="investigation-title">
         <div role="status">
           <h1 id="investigation-title">{t(statusLabel)}</h1>
-          <p>{checkable ? t('{completed} dari {total} klaim telah dinilai.', { completed, total: checkable }) : t(terminal ? 'Sesi telah berakhir. Lihat pesan asli dan informasi yang tersedia di bawah.' : 'Klaim dan perusahaan sedang dikenali dari pesanmu.')}</p>
+          <p>{checkable ? t('{completed} dari {total} klaim telah dinilai.', { completed, total: checkable }) : t(terminal ? 'Sesi telah berakhir. Lihat pesan asli dan informasi yang tersedia di bawah.' : state.claims.length ? 'Klaim yang ditemukan tidak dapat diuji dengan data yang tersedia. Menyiapkan penjelasan dan laporan.' : 'Klaim dan perusahaan sedang dikenali dari pesanmu.')}</p>
           {state.status === 'PARTIAL' && <p>{t('Sebagian pemeriksaan belum lengkap. Baca batasannya di laporan.')}</p>}
         </div>
         {state.reportId && <Link className="button primary" href={`/t/${id}/report`}>{t('Baca laporan bukti')}<ArrowRight size={17} aria-hidden="true" /></Link>}
@@ -91,18 +93,17 @@ export default function Investigation() {
                 <div><span className="eyebrow">{t('Klaim')} {index + 1}</span><h2 id={`h-${c.id}`}>“{c.originalText}”</h2></div>
                 <Status value={c.assessment} />
               </div>
-              <div className="claim-overview"><span className="small muted">{c.coverage?.label ?? t('Bukti sedang dikumpulkan untuk klaim ini.')}</span><BudgetMeter claim={c} /></div>
+              <div className="claim-overview"><span className="small muted">{c.coverage ? coverageLabel(c.coverage, language) : t('Bukti sedang dikumpulkan untuk klaim ini.')}</span><BudgetMeter claim={c} /></div>
               <details className="claim-details">
-                <summary>{t('Lihat langkah pemeriksaan')} · {t('{count} langkah', { count: c.steps.length })}</summary>
+                <summary>{t('Lihat langkah pemeriksaan')} · {t('{count} langkah', { count: c.steps.filter(isVisibleStep).length })}</summary>
               <div className="lanes">
                 <div>
                   <div className="lane-title voice-thesis">{t('Klaim dalam pesan')}</div>
                   <p style={{ margin: 0 }}>{c.normalizedText}</p>
-                  {c.coverage && <p className="small muted">{c.coverage.label}</p>}
                 </div>
                 <div>
                   <div className="lane-title">{t('Pemeriksaan yang dilakukan')}</div>
-                  <ReasoningThread steps={c.steps} />
+                  <ReasoningThread steps={c.steps} terminal={terminal} />
                 </div>
                 <div>
                   <div className="lane-title voice-counter">{t('Alasan tandingan')}</div>

@@ -69,7 +69,7 @@ export default function Report() {
       )}
       {report && <h2 className="report-section-title">{t('Detail hasil per klaim')}</h2>}
       {report?.claims.map((c) => <VerdictCard key={c.claimId} quote={quoteOf(c.claimId)} report={c} onOpen={onOpen} />)}
-      {report && <p className="small muted">{t('Informasi dan analisis saja, bukan rekomendasi beli, jual, atau tahan saham.')}</p>}
+      {report && <p className="small muted">{t(report.disclaimer)}</p>}
       <EvidenceDrawer item={open} all={evidence} onClose={closeDrawer} />
     </main>
   );

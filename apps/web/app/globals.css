@@ -361,7 +361,7 @@ button:not(:disabled):hover, .button:hover { filter: brightness(.94); }
 .screenshot-upload[data-disabled='true'] { opacity: .5; }
 .upload-icon { color: var(--thesis); display: flex; flex-shrink: 0; }
 .upload-input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-.upload-input:disabled { cursor: not-allowed; }
+.upload-input:disabled { cursor: not-allowed; pointer-events: none; }
 .upload-result { display: flex; align-items: center; gap: 6px; margin: 10px 0 0; overflow-wrap: anywhere; }
 .spin { animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }

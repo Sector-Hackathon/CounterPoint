@@ -12,7 +12,7 @@ import { CountUp } from './CountUp';
  * further question it opened. All of it comes from the versioned evidence contract — never from
  * model reasoning, and never with an internal check id on screen.
  */
-export function ReasoningThread({ steps }: { steps: StepEvent[] }) {
+export function ReasoningThread({ steps, terminal = false }: { steps: StepEvent[]; terminal?: boolean }) {
   const { language, t } = useLanguage();
   const reduce = useReducedMotion();
   const visible = steps.filter(isVisibleStep);
@@ -30,7 +30,7 @@ export function ReasoningThread({ steps }: { steps: StepEvent[] }) {
           >
             <div style={{ fontWeight: 600 }}>
               {s.question ?? stepHeadline(s, language)}
-              {s.resultStatus === 'RUNNING' && <span className="muted small"> · {t('Sedang berjalan')}</span>}
+              {s.resultStatus === 'RUNNING' && <span className="muted small"> · {t(terminal ? 'Terhenti' : 'Sedang berjalan')}</span>}
               {s.resultStatus === 'NO_DATA' && <span className="muted small"> · {t('data tidak tersedia')}</span>}
               {s.resultStatus === 'ERROR' && <span className="muted small"> · {t('terjadi kendala')}</span>}
             </div>
