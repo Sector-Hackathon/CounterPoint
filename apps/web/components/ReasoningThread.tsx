@@ -29,7 +29,7 @@ export function ReasoningThread({ steps, terminal = false }: { steps: StepEvent[
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
             <div style={{ fontWeight: 600 }}>
-              {s.question ?? stepHeadline(s, language)}
+              {s.question ? t(s.question) : stepHeadline(s, language)}
               {s.resultStatus === 'RUNNING' && <span className="muted small"> · {t(terminal ? 'Terhenti' : 'Sedang berjalan')}</span>}
               {s.resultStatus === 'NO_DATA' && <span className="muted small"> · {t('data tidak tersedia')}</span>}
               {s.resultStatus === 'ERROR' && <span className="muted small"> · {t('terjadi kendala')}</span>}
@@ -38,15 +38,15 @@ export function ReasoningThread({ steps, terminal = false }: { steps: StepEvent[
             {/* Why this question is being asked now. Omitted where it would repeat the headline. */}
             {s.question && (
               <p className="small muted" style={{ margin: '2px 0 0' }}>
-                {s.purpose ? `${s.purpose} · ${stepHeadline(s, language)}` : stepHeadline(s, language)}
+                {s.purpose ? `${t(s.purpose)} · ${stepHeadline(s, language)}` : stepHeadline(s, language)}
               </p>
             )}
-            <p style={{ margin: '4px 0 6px' }}>{bodyText(s)}</p>
+            <p style={{ margin: '4px 0 6px' }}>{t(bodyText(s))}</p>
 
             {/* The decision rule, stated before the result. */}
             {s.rule && (
               <p className="rule small tabular" style={{ margin: '0 0 6px' }}>
-                {s.rule}
+                {t(s.rule)}
               </p>
             )}
 
@@ -64,7 +64,7 @@ export function ReasoningThread({ steps, terminal = false }: { steps: StepEvent[
                           {e.comparisonPeriod ? ` vs ${e.comparisonPeriod}` : ''}
                         </span>
                       )}
-                      {e.status !== 'VALID' && <span className="muted small">{e.note ?? t('tidak tersedia')}</span>}
+                      {e.status !== 'VALID' && <span className="muted small">{t(e.note ?? 'tidak tersedia')}</span>}
                     </span>
                   ))}
               </div>
@@ -73,7 +73,7 @@ export function ReasoningThread({ steps, terminal = false }: { steps: StepEvent[
             {/* What it did to the claim. */}
             {s.effect && (
               <p className="effect" data-outcome={s.outcome ?? undefined} style={{ margin: '6px 0 0' }}>
-                {capitalize(s.effect)}
+                {capitalize(t(s.effect))}
               </p>
             )}
 
@@ -83,7 +83,7 @@ export function ReasoningThread({ steps, terminal = false }: { steps: StepEvent[
                 <ForkMark />
                 <p className="small" style={{ margin: 0 }}>
                   {t('Membuka {count} pertanyaan lanjutan', { count: s.opened.length })}:{' '}
-                  <span className="voice-counter">{s.opened.join(' ')}</span>
+                  <span className="voice-counter">{s.opened.map((question) => t(question)).join(' ')}</span>
                 </p>
               </div>
             )}

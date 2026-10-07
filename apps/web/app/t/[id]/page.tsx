@@ -99,7 +99,7 @@ export default function Investigation() {
               <div className="lanes">
                 <div>
                   <div className="lane-title voice-thesis">{t('Klaim dalam pesan')}</div>
-                  <p style={{ margin: 0 }}>{c.normalizedText}</p>
+                  <p style={{ margin: 0 }}>{c.originalText}</p>
                 </div>
                 <div>
                   <div className="lane-title">{t('Pemeriksaan yang dilakukan')}</div>

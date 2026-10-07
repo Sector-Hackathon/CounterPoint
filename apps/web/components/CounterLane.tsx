@@ -36,7 +36,7 @@ export function CounterLane({ steps, finished }: { steps: StepEvent[]; finished:
             className="sheet"
             style={{ padding: 16, boxShadow: `inset 3px 0 0 ${confirmed ? 'var(--counter)' : 'var(--rule)'}` }}
           >
-            <p style={{ margin: 0, fontWeight: 600 }}>{s.question}</p>
+            <p style={{ margin: 0, fontWeight: 600 }}>{s.question ? t(s.question) : null}</p>
             <p className="small" style={{ margin: '6px 0 0' }}>
               {s.outcome ? (
                 <strong className={confirmed ? 'voice-counter' : undefined}>{t(VERDICT[s.outcome]!)}</strong>
@@ -47,7 +47,7 @@ export function CounterLane({ steps, finished }: { steps: StepEvent[]; finished:
             {metric && (
               <p className="small muted tabular" style={{ margin: '4px 0 0' }}>
                 {metricLabel(metric.metric, language)}: {formatValue(metric.value, metric.unit)}
-                {metric.status !== 'VALID' && metric.note ? ` · ${metric.note}` : ''}
+                {metric.status !== 'VALID' && metric.note ? ` · ${t(metric.note)}` : ''}
               </p>
             )}
           </li>

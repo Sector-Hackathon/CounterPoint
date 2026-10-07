@@ -12,7 +12,7 @@ function Statements({ items, onOpen }: { items: Statement[]; onOpen: (id: string
     <ul style={{ margin: 0, paddingLeft: 18, display: 'grid', gap: 8 }}>
       {items.map((s, i) => (
         <li key={i}>
-          {s.text}{' '}
+          {t(s.text)}{' '}
           {s.evidenceIds[0] && <button className="quiet small" style={{ padding: '2px 8px' }} onClick={() => onOpen(s.evidenceIds[0]!)}>{t('Lihat sumber')}</button>}
         </li>
       ))}
@@ -31,7 +31,7 @@ function hypothesisResult(h: CounterpointHypothesis, t: ReturnType<typeof useLan
     case 'refuted':
       return t('Data tidak mendukung alasan tandingan ini.');
     case 'untestable':
-      return `${t('Belum dapat diuji')}: ${h.note ?? t('data tidak tersedia')}.`;
+      return `${t('Belum dapat diuji')}: ${t(h.note ?? 'data tidak tersedia')}.`;
     case 'not_applicable':
       return t('Tidak diuji karena klaim sudah gagal pada pemeriksaan dasarnya.');
     default:
@@ -67,8 +67,8 @@ export function VerdictCard({ quote, report, onOpen }: { quote: string; report: 
             <ul style={{ margin: report.weakens.length ? '12px 0 0' : 0, paddingLeft: 18, display: 'grid', gap: 8 }}>
               {counter.map((h) => (
                 <li key={h.checkId}>
-                  <strong>{h.hypothesis}</strong> <span className="small">{hypothesisResult(h, t)}</span>
-                  {h.statement && <div className="small muted">{h.statement.text}</div>}
+                  <strong>{t(h.hypothesis)}</strong> <span className="small">{hypothesisResult(h, t)}</span>
+                  {h.statement && <div className="small muted">{t(h.statement.text)}</div>}
                 </li>
               ))}
             </ul>
@@ -81,8 +81,8 @@ export function VerdictCard({ quote, report, onOpen }: { quote: string; report: 
         <div style={{ background: 'var(--hatch), var(--paper)', borderRadius: 'var(--r-chip)', padding: 16 }}>
           <div className="lane-title">{t('Data yang belum tersedia dan batasan')}</div>
           <ul style={{ margin: 0, paddingLeft: 18 }}>
-            {report.missing.map((m, i) => <li key={`m${i}`}>{m}</li>)}
-            {report.counterpoint?.openQuestions.map((q, i) => <li key={`q${i}`}>{q}</li>)}
+            {report.missing.map((m, i) => <li key={`m${i}`}>{t(m)}</li>)}
+            {report.counterpoint?.openQuestions.map((q, i) => <li key={`q${i}`}>{t(q)}</li>)}
           </ul>
         </div>
       )}
@@ -91,7 +91,7 @@ export function VerdictCard({ quote, report, onOpen }: { quote: string; report: 
         <details>
           <summary>{t('Perusahaan pembanding')} ({t('{count} perusahaan', { count: report.peerSet.included.length })}, {report.peerSet.period})</summary>
           <p className="small" >{t('Digunakan')}: {report.peerSet.included.join(', ')}</p>
-          <ul className="small">{report.peerSet.excluded.map((e) => <li key={e.ticker}>{e.ticker}: {e.reason}</li>)}</ul>
+          <ul className="small">{report.peerSet.excluded.map((e) => <li key={e.ticker}>{e.ticker}: {t(e.reason)}</li>)}</ul>
         </details>
       )}
     </article>

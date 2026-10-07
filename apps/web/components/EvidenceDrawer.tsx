@@ -51,11 +51,11 @@ export function EvidenceDrawer({ item, all, onClose }: { item: EvidenceItem | nu
           <h2 id="ev-title">{metricLabel(item.metric, language)}</h2>
           <p style={{ fontSize: '2rem', fontWeight: 700, margin: '8px 0' }}>{formatValue(item.value, item.unit)}</p>
           <dl style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '6px 16px' }}>
-            <dt className="muted">{t('Periode')}</dt><dd style={{ margin: 0 }}>{item.economicPeriod ?? item.observationDate ?? 'n/a'}{item.comparisonPeriod ? ` vs ${item.comparisonPeriod}` : ''}</dd>
+            <dt className="muted">{t('Periode')}</dt><dd style={{ margin: 0 }}>{item.economicPeriod ?? item.observationDate ?? t('tidak tersedia')}{item.comparisonPeriod ? ` ${t('vs')} ${item.comparisonPeriod}` : ''}</dd>
             <dt className="muted">{t('Sumber')}</dt><dd style={{ margin: 0, wordBreak: 'break-all' }}>{item.sourceLocator}</dd>
             <dt className="muted">{t('Data diambil')}</dt><dd style={{ margin: 0 }}>{new Date(item.retrievalTime).toLocaleString(language === 'id' ? 'id-ID' : 'en-GB', { timeZone: 'Asia/Jakarta' }) + ' WIB'}</dd>
             <dt className="muted">{t('Perhitungan')}</dt><dd style={{ margin: 0 }}>{item.calculationVersion ?? t('nilai dari sumber')}</dd>
-            {item.note && (<><dt className="muted">{t('Catatan')}</dt><dd style={{ margin: 0 }}>{item.note}</dd></>)}
+            {item.note && (<><dt className="muted">{t('Catatan')}</dt><dd style={{ margin: 0 }}>{t(item.note)}</dd></>)}
           </dl>
           {inputs.length > 0 && (
             <>

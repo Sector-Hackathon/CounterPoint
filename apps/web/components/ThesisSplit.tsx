@@ -46,7 +46,6 @@ export function ThesisSplit({ rawThesis, claims, settled }: { rawThesis: string;
               style={{ padding: '14px 18px', display: 'flex', gap: 14, alignItems: 'baseline', flexWrap: 'wrap' }}
             >
               <span style={{ fontWeight: 600 }}>“{c.originalText}”</span>
-              <span className="muted small">{c.normalizedText}</span>
               <span style={{ marginLeft: 'auto' }}><Status value={c.verifiability === 'NO' ? 'UNVERIFIABLE' : c.assessment} /></span>
             </motion.li>
           ))}

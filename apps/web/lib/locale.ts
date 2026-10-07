@@ -1,4 +1,5 @@
 import { landingEnglish } from './landing-copy';
+import { localizeBackendCopy } from './backend-copy';
 
 export type Language = 'id' | 'en';
 export const LANGUAGE_STORAGE_KEY = 'counterpoint.language';
@@ -344,6 +345,6 @@ const english: Record<string, string> = {
 export function translate(language: Language, message: string, values: Record<string, string | number> = {}): string {
   const disclaimer = 'Counterpoint checks the evidence behind claims you provide. It is information and analysis only, not investment advice, and does not recommend buying, selling, or holding any security.';
   const singular: Record<string, string> = { '{count} langkah': '{count} step', '{count} perusahaan': '{count} company', 'Membuka {count} pertanyaan lanjutan': 'Opens {count} follow-up question' };
-  const text = message === disclaimer && language === 'id' ? 'Counterpoint memeriksa bukti di balik klaim yang kamu berikan. Informasi dan analisis saja, bukan nasihat investasi, serta bukan rekomendasi membeli, menjual, atau menahan efek apa pun.' : language === 'en' ? (values.count === 1 ? singular[message] : undefined) ?? english[message] ?? message : message;
+  const text = message === disclaimer && language === 'id' ? 'Counterpoint memeriksa bukti di balik klaim yang kamu berikan. Informasi dan analisis saja, bukan nasihat investasi, serta bukan rekomendasi membeli, menjual, atau menahan efek apa pun.' : language === 'en' ? (values.count === 1 ? singular[message] : undefined) ?? english[message] ?? message : localizeBackendCopy(message);
   return text.replace(/\{(\w+)\}/g, (match, key: string) => values[key] === undefined ? match : String(values[key]));
 }

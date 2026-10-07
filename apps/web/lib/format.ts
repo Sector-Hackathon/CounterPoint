@@ -76,9 +76,9 @@ const CMP: Record<NonNullable<ChangeCondition['comparator']>, string> = {
 export function conditionText(c: ChangeCondition, language: Language = 'id'): string {
   const t = (message: string, values?: Record<string, string | number>) => translate(language, message, values);
   if (c.effect === 'missing_evidence' || c.comparator === null || c.threshold === null || c.current === null) {
-    return t('{label} belum tersedia. Data ini diperlukan untuk melengkapi pemeriksaan.', { label: c.label });
+    return t('{label} belum tersedia. Data ini diperlukan untuk melengkapi pemeriksaan.', { label: t(c.label) });
   }
   const effect = t(c.effect === 'would_support' ? 'agar mendukung klaim' : 'agar tidak lagi melemahkan klaim');
   const when = c.period ? ` (${c.period})` : '';
-  return t('{label} perlu {comparator} {threshold} {effect}. Saat ini {current}{period}.', { label: c.label, comparator: t(CMP[c.comparator]), threshold: formatValue(c.threshold, c.unit ?? 'percent'), effect, current: formatValue(c.current, c.unit ?? 'percent'), period: when });
+  return t('{label} perlu {comparator} {threshold} {effect}. Saat ini {current}{period}.', { label: t(c.label), comparator: t(CMP[c.comparator]), threshold: formatValue(c.threshold, c.unit ?? 'percent'), effect, current: formatValue(c.current, c.unit ?? 'percent'), period: when });
 }
