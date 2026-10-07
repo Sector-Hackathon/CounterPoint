@@ -1,8 +1,8 @@
 'use client';
-import Image from 'next/image';
 import { useState } from 'react';
 import { Composer } from '@/components/Composer';
 import { useLanguage } from '@/components/LanguageProvider';
+import { useAuth } from '@/components/AuthProvider';
 
 const EXAMPLES = {
   id: [
@@ -19,11 +19,16 @@ const EXAMPLES = {
 
 export default function Start() {
   const { language, t } = useLanguage();
+  const { user } = useAuth();
+  const firstName = user?.name.trim().split(/\s+/)[0] ?? '';
   const [prefill, setPrefill] = useState<{ text: string; nonce: number }>();
 
   return (
     <main id="main-content" className="start">
-      <div className="start-brand"><Image className="brand-logo" src="/brand/counterpoint-logo-concept.png" alt="Counterpoint" width={2172} height={724} priority /></div>
+      <div className="start-glow" aria-hidden="true" />
+      <h1 className="start-greeting">
+        {firstName ? <>{t('Halo')} <strong>{firstName}</strong>, {t('pesan saham apa yang mau kamu cek?')}</> : t('Pesan saham apa yang mau kamu cek?')}
+      </h1>
       <p className="start-lead">{t('Tempel pesan saham. Counterpoint memeriksa setiap klaim dengan data Sectors dan mencari bukti yang melemahkannya.')}</p>
       <Composer prefill={prefill} autoFocus />
       <div className="examples" role="group" aria-label={t('Contoh pesan')}>

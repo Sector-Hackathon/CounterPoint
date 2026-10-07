@@ -360,6 +360,9 @@ const english: Record<string, string> = {
   'Enter untuk memeriksa · Shift+Enter untuk baris baru · Sertakan nama saham dan alasannya.': 'Enter to check · Shift+Enter for a new line · Include the stock and the reasons.',
   'Contoh pesan': 'Example theses',
   'Lihat hasil': 'View results',
+  'Halo': 'Hi',
+  'pesan saham apa yang mau kamu cek?': 'which stock thesis do you want to check?',
+  'Pesan saham apa yang mau kamu cek?': 'Which stock thesis do you want to check?',
 };
 
 export function translate(language: Language, message: string, values: Record<string, string | number> = {}): string {
