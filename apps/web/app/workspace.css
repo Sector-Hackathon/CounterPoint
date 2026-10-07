@@ -1,3 +1,45 @@
+/* Signed-in workspace only (sidebar shell: check, history). Public pages keep globals.css.
+   Neutral greys; colour only where it carries meaning: blue = thesis / supported,
+   amber = counterpoint / partly supported, violet = not supported, hatch = cannot be checked.
+   Follows the site-wide theme setting: explicit light/dark, otherwise the device. */
+.shell {
+  --sidebar: #f9f9f9; --paper: #ffffff; --paper-raised: #ffffff; --surface-soft: #f4f4f4; --surface-highlight: #f9f9f9; --composer: #f4f4f4;
+  --ink: #0d0d0d; --ink-2: #3d3d3d; --quiet: #636363; --rule: #e5e5e5; --rule-strong: #d0d0d0;
+  --hover: rgb(0 0 0 / .045); --active: rgb(0 0 0 / .075);
+  --thesis: #2f52c4; --thesis-wash: #eef2fd; --counter: #8f4f08; --counter-wash: #fbf1e2; --resolve: #6a42ad; --resolve-wash: #f3eefb;
+  --focus: #2f52c4; --brand-gradient: #0d0d0d; --primary-ink: #ffffff; --card-shadow: none;
+  --preview-shadow: 0 16px 48px rgb(0 0 0 / .12); --brand-logo-filter: none; --surface-highlight-solid: #f9f9f9;
+  --hatch: repeating-linear-gradient(135deg, var(--rule) 0 1px, transparent 1px 7px);
+  --r-sheet: 14px; --r-chip: 8px; --r-tag: 6px; --r-composer: 26px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .shell {
+    --sidebar: #171717; --paper: #212121; --paper-raised: #2a2a2a; --surface-soft: #2f2f2f; --surface-highlight: #2a2a2a; --composer: #2f2f2f;
+    --ink: #ececec; --ink-2: #c5c5c5; --quiet: #a3a3a3; --rule: #383838; --rule-strong: #4a4a4a;
+    --hover: rgb(255 255 255 / .06); --active: rgb(255 255 255 / .1);
+    --thesis: #8eabff; --thesis-wash: #222b40; --counter: #e5b064; --counter-wash: #372d1d; --resolve: #bfa6f5; --resolve-wash: #2e283c;
+    --focus: #8eabff; --brand-gradient: #ececec; --primary-ink: #171717;
+    --preview-shadow: 0 16px 48px rgb(0 0 0 / .45); --brand-logo-filter: brightness(0) invert(1);
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] .shell {
+  --sidebar: #171717; --paper: #212121; --paper-raised: #2a2a2a; --surface-soft: #2f2f2f; --surface-highlight: #2a2a2a; --composer: #2f2f2f;
+  --ink: #ececec; --ink-2: #c5c5c5; --quiet: #a3a3a3; --rule: #383838; --rule-strong: #4a4a4a;
+  --hover: rgb(255 255 255 / .06); --active: rgb(255 255 255 / .1);
+  --thesis: #8eabff; --thesis-wash: #222b40; --counter: #e5b064; --counter-wash: #372d1d; --resolve: #bfa6f5; --resolve-wash: #2e283c;
+  --focus: #8eabff; --brand-gradient: #ececec; --primary-ink: #171717;
+  --preview-shadow: 0 16px 48px rgb(0 0 0 / .45); --brand-logo-filter: brightness(0) invert(1);
+  color-scheme: dark;
+}
+.shell { font-family: var(--font-ui), system-ui, sans-serif; font-size: 15px; line-height: 1.6; color: var(--ink); }
+.shell h1, .shell h2, .shell h3 { font-family: var(--font-ui), system-ui, sans-serif; font-weight: 600; letter-spacing: -0.015em; }
+.shell .lane-title { font-family: var(--font-ui), sans-serif; }
+.shell .eyebrow { font-size: .8rem; font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--quiet); }
+.shell .primary { background: var(--brand-gradient); color: var(--primary-ink); box-shadow: none; }
+.shell .sheet { box-shadow: none; }
+
 /* ---------- Workspace shell (sidebar + main) ---------- */
 .shell { display: grid; grid-template-columns: 260px minmax(0, 1fr); min-height: 100svh; background: var(--paper); }
 .shell[data-collapsed='true'] { grid-template-columns: minmax(0, 1fr); }
@@ -130,16 +172,3 @@
 .shell-main .page-heading p { font-size: .95rem; }
 .shell-main .history-card h2 { font-size: .95rem; font-weight: 500; }
 .shell-main .sheet { box-shadow: none; }
-
-/* ---------- Landing: neutral, one quiet accent ---------- */
-.hero-copy h1 > span { color: inherit; }
-.hero-preview::before { display: none; }
-.landing-kicker { background: var(--hover); color: var(--ink-2); }
-.landing-how { background: var(--surface-highlight); }
-.how-cards > li, .how-cards > li:first-child, .how-cards > li:nth-child(2), .how-cards > li:nth-child(3) { border-top: 1px solid var(--rule); box-shadow: none; }
-.story-question { background: var(--hover); border-left-color: var(--rule-strong); }
-.story-question .story-number { color: var(--ink); border-color: var(--rule-strong); }
-.landing-final { background: var(--paper-raised); border: 1px solid var(--rule); color: var(--ink); box-shadow: none; }
-.landing-final .eyebrow, .landing-final p { color: var(--quiet); }
-.trust-symbol, .trust-list article > span, .auth-icon { background: var(--hover); color: var(--ink); }
-.app-header { background: var(--paper); }
