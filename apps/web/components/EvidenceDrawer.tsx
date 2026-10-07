@@ -5,6 +5,13 @@ import { useEffect, useRef } from 'react';
 import { wrapFocus } from '@/lib/session-logic';
 import type { EvidenceItem } from '@/lib/api';
 import { formatValue, metricLabel } from '@/lib/format';
+import { sourceLink, type SourceLink } from '@/lib/source-link';
+import { ExternalLink } from 'lucide-react';
+
+function linkLabel(link: SourceLink, language: string): string {
+  if (link.kind === 'company') return language === 'id' ? `Buka ${link.subject} di Sectors` : `Open ${link.subject} on Sectors`;
+  return language === 'id' ? `Buka subsektor ${link.subject} di Sectors` : `Open the ${link.subject} subsector on Sectors`;
+}
 
 export function EvidenceDrawer({ item, all, onClose }: { item: EvidenceItem | null; all: EvidenceItem[]; onClose: () => void }) {
   const { language, t } = useLanguage();
@@ -36,6 +43,7 @@ export function EvidenceDrawer({ item, all, onClose }: { item: EvidenceItem | nu
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [open, onClose]);
+  const link = item ? sourceLink(item.sourceLocator) : null;
   const inputs = item ? item.derivedFrom.map((id) => all.find((e) => e.id === id)).filter((e): e is EvidenceItem => !!e) : [];
 
   return (
@@ -52,7 +60,15 @@ export function EvidenceDrawer({ item, all, onClose }: { item: EvidenceItem | nu
           <p style={{ fontSize: '2rem', fontWeight: 700, margin: '8px 0' }}>{formatValue(item.value, item.unit)}</p>
           <dl style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '6px 16px' }}>
             <dt className="muted">{t('Periode')}</dt><dd style={{ margin: 0 }}>{item.economicPeriod ?? item.observationDate ?? t('tidak tersedia')}{item.comparisonPeriod ? ` ${t('vs')} ${item.comparisonPeriod}` : ''}</dd>
-            <dt className="muted">{t('Sumber')}</dt><dd style={{ margin: 0, wordBreak: 'break-all' }}>{item.sourceLocator}</dd>
+            <dt className="muted">{t('Sumber')}</dt>
+            <dd style={{ margin: 0 }}>
+              {link && (
+                <a href={link.href} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontWeight: 600 }}>
+                  {linkLabel(link, language)}<ExternalLink size={14} aria-hidden="true" />
+                </a>
+              )}
+              <span className="small muted" style={{ display: 'block', wordBreak: 'break-all', marginTop: link ? 2 : 0 }}>{item.sourceLocator}</span>
+            </dd>
             <dt className="muted">{t('Data diambil')}</dt><dd style={{ margin: 0 }}>{new Date(item.retrievalTime).toLocaleString(language === 'id' ? 'id-ID' : 'en-GB', { timeZone: 'Asia/Jakarta' }) + ' WIB'}</dd>
             <dt className="muted">{t('Perhitungan')}</dt><dd style={{ margin: 0 }}>{item.calculationVersion ?? t('nilai dari sumber')}</dd>
             {item.note && (<><dt className="muted">{t('Catatan')}</dt><dd style={{ margin: 0 }}>{t(item.note)}</dd></>)}
