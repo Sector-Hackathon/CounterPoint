@@ -7,6 +7,7 @@ import { SECTORS_MODE } from '../sectors/sectors.module';
 import { toClaim, toTrace } from '../common/mappers';
 import { EventsService } from '../events/events.service';
 import { claimSeed, claimsEvent, statusEvent } from '../events/events.mappers';
+import type { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ThesisService {
@@ -25,12 +26,28 @@ export class ThesisService {
     this.events.publish(sessionId, statusEvent(status, error));
   }
 
-  async create(rawThesis: string) {
+  async create(rawThesis: string, userId?: string) {
     const session = await this.prisma.thesisSession.create({
-      data: { rawThesis, status: 'CREATED', dataMode: this.dataMode },
+      data: { rawThesis, status: 'CREATED', dataMode: this.dataMode, userId },
     });
     void this.analyze(session.id, rawThesis);
     return session;
+  }
+
+  async history(userId: string, input: { page: number; query: string; filter: string }) {
+    const where: Prisma.ThesisSessionWhereInput = { userId };
+    if (input.query) where.OR = [
+      { rawThesis: { contains: input.query, mode: 'insensitive' } },
+      { entities: { some: { ticker: { contains: input.query, mode: 'insensitive' } } } },
+    ];
+    if (input.filter === 'reports') where.finalReportId = { not: null };
+    if (input.filter === 'active') where.status = { notIn: ['COMPLETED', 'PARTIAL', 'FAILED'] };
+    if (input.filter === 'failed') where.status = 'FAILED';
+    const [rows, total] = await Promise.all([
+      this.prisma.thesisSession.findMany({ where, skip: (input.page - 1) * 12, take: 12, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], select: { id: true, rawThesis: true, createdAt: true, status: true, finalReportId: true, entities: { select: { ticker: true } } } }),
+      this.prisma.thesisSession.count({ where }),
+    ]);
+    return { total, page: input.page, pageSize: 12, items: rows.map((row) => ({ id: row.id, text: row.rawThesis, createdAt: row.createdAt.toISOString(), status: row.status, reportId: row.finalReportId, tickers: [...new Set(row.entities.flatMap((entity) => entity.ticker ? [entity.ticker] : []))] })) };
   }
 
   /** Entity resolution + claim decomposition. Pauses for confirmation instead of guessing. */
