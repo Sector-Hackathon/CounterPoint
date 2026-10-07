@@ -25,7 +25,6 @@ export default function Start() {
 
   return (
     <main id="main-content" className="start">
-      <div className="start-glow" aria-hidden="true" />
       <h1 className="start-greeting">
         {firstName ? <>{t('Halo')} <strong>{firstName}</strong>, {t('pesan saham apa yang mau kamu cek?')}</> : t('Pesan saham apa yang mau kamu cek?')}
       </h1>

@@ -42,6 +42,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <PanelLeftClose size={19} aria-hidden="true" style={{ transform: 'scaleX(-1)' }} />
         </button>
       )}
+      <div className="shell-atmos" data-variant={pathname === '/check' ? 'start' : 'page'} aria-hidden="true"><div className="shell-glow" /></div>
       <div className="shell-main">{children}</div>
     </div>
   );

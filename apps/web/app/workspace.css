@@ -121,37 +121,47 @@
 .start-foot { margin-top: 28px; font-size: .75rem; color: var(--quiet); text-align: center; max-width: 60ch; }
 @media (max-width: 900px) { .start { min-height: calc(100svh - 53px); padding: 32px 16px 24px; } .start-brand { width: 200px; height: 44px; } }
 
-/* Start screen atmosphere: a purple glow rising behind the composer over a faint grid.
-   Purple lives only here; in reports violet means "not supported". */
-.start {
+/* Workspace atmosphere: a purple glow rising from the bottom of the window over a faint grid,
+   behind every page of the checking feature (start, check, history). It is fixed to the window,
+   so long pages scroll over it. Purple is ambient only; in reports violet means "not supported". */
+.shell {
   --accent: #7c3aed; --accent-soft: rgb(124 58 237 / .14); --glow: rgb(139 92 246 / .4); --start-composer: #ffffff; --grid-line: rgb(0 0 0 / .045);
-  position: relative; isolation: isolate; overflow: hidden;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .start { --accent: #a78bfa; --accent-soft: rgb(167 139 250 / .18); --glow: rgb(139 92 246 / .45); --grid-line: rgb(255 255 255 / .04); --start-composer: #2f2f2f; } }
-:root[data-theme='dark'] .start { --accent: #a78bfa; --accent-soft: rgb(167 139 250 / .18); --glow: rgb(139 92 246 / .45); --grid-line: rgb(255 255 255 / .04); --start-composer: #2f2f2f; }
-.start > * { position: relative; z-index: 1; }
-.start::before {
-  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .shell { --accent: #a78bfa; --accent-soft: rgb(167 139 250 / .18); --glow: rgb(139 92 246 / .45); --grid-line: rgb(255 255 255 / .04); --start-composer: #2f2f2f; } }
+:root[data-theme='dark'] .shell { --accent: #a78bfa; --accent-soft: rgb(167 139 250 / .18); --glow: rgb(139 92 246 / .45); --grid-line: rgb(255 255 255 / .04); --start-composer: #2f2f2f; }
+.shell-main { position: relative; z-index: 1; }
+.shell-atmos { position: fixed; top: 0; bottom: 0; left: 260px; right: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.shell[data-collapsed='true'] .shell-atmos { left: 0; }
+.shell-atmos::before {
+  content: ''; position: absolute; inset: 0;
   background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 104px 104px; background-position: center;
   -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 55%, #000 30%, transparent 75%);
   mask-image: radial-gradient(ellipse 70% 60% at 50% 55%, #000 30%, transparent 75%);
 }
-.start > .start-glow {
-  position: absolute; z-index: 0; left: 50%; bottom: -34%; width: min(1600px, 150%); aspect-ratio: 2 / 1; pointer-events: none;
+.shell-glow {
+  position: absolute; left: 50%; bottom: -34%; width: min(1600px, 150%); aspect-ratio: 2 / 1;
   transform: translateX(-50%); border-radius: 50%;
   background: radial-gradient(ellipse at 50% 50%, var(--glow) 0%, rgb(139 92 246 / .16) 40%, transparent 70%);
   filter: blur(8px); animation: breathe 8s ease-in-out infinite;
 }
+/* Reading pages: same atmosphere, quieter, so it never competes with report text. */
+.shell-atmos[data-variant='page'] .shell-glow { bottom: -38%; width: min(1800px, 170%); }
+.shell-atmos[data-variant='page']::before { opacity: .85; }
 @keyframes breathe { 0%, 100% { opacity: .75; transform: translateX(-50%) scale(1); } 50% { opacity: 1; transform: translateX(-50%) scale(1.06); } }
-@media (prefers-reduced-motion: reduce) { .start > .start-glow { animation: none; } }
+.shell-atmos[data-variant='page'] .shell-glow { animation-name: breathe-quiet; }
+@keyframes breathe-quiet { 0%, 100% { opacity: .7; transform: translateX(-50%) scale(1); } 50% { opacity: .9; transform: translateX(-50%) scale(1.05); } }
+@media (prefers-reduced-motion: reduce) { .shell-glow { animation: none; } }
+@media (max-width: 900px) { .shell-atmos { left: 0; } }
 .shell .start-greeting { margin: 0 0 10px; font-size: clamp(1.4rem, 2.6vw, 1.85rem); font-weight: 400; letter-spacing: -.02em; text-align: center; text-wrap: balance; }
 .start-greeting strong { font-weight: 650; }
-.start .composer { border-color: color-mix(in srgb, var(--accent) 45%, var(--rule)); background: color-mix(in srgb, var(--start-composer) 94%, transparent); backdrop-filter: blur(6px); box-shadow: 0 10px 40px -12px var(--accent-soft); transition: border-color .2s, box-shadow .2s; }
-.start .composer:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft), 0 14px 48px -10px var(--glow); }
-.start .composer-send:not(:disabled) { background: var(--accent); color: #fff; }
+.shell .composer { border-color: color-mix(in srgb, var(--accent) 45%, var(--rule)); background: color-mix(in srgb, var(--start-composer) 94%, transparent); backdrop-filter: blur(6px); box-shadow: 0 10px 40px -12px var(--accent-soft); transition: border-color .2s, box-shadow .2s; }
+.shell .composer:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft), 0 14px 48px -10px var(--glow); }
+.shell .composer-send:not(:disabled) { background: var(--accent); color: #fff; }
 .start .examples button { background: color-mix(in srgb, var(--paper) 70%, transparent); backdrop-filter: blur(4px); }
 .start .examples button:hover { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 50%, var(--rule)); }
+/* Text that sits directly on the page (not on a card) gets a little frosting over the glow. */
+.thesis-block, .check .data-mode, .history-controls { backdrop-filter: blur(6px); }
 
 /* ---------- Check view: one column, report inline ---------- */
 .check { min-height: 100svh; display: flex; flex-direction: column; }
@@ -186,7 +196,7 @@
 .check .lane-title { font-size: .85rem; font-weight: 600; margin: 0; }
 .check .status { font-size: .8rem; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
 .check .agent-flow { border-radius: var(--r-sheet); }
-.check-foot { position: sticky; bottom: 0; padding: 12px 24px 16px; background: linear-gradient(transparent, var(--paper) 30%); display: grid; justify-items: center; }
+.check-foot { position: sticky; bottom: 0; padding: 12px 24px 16px; background: linear-gradient(transparent, color-mix(in srgb, var(--paper) 75%, transparent) 45%); display: grid; justify-items: center; }
 .check-foot .composer, .check-foot .composer-status { max-width: 772px; }
 .composer[data-compact='true'] { padding: 8px 8px 8px 16px; grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
 .composer[data-compact='true'] textarea { min-height: 28px; padding: 6px 0; }
