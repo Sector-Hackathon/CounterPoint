@@ -13,6 +13,10 @@ function serviceWithReplay(replay: () => Promise<SessionEvent[]>) {
 const report = (id: string): SessionEvent => ({ id, type: 'report.ready', reportId: 'x' });
 
 describe('EventsService.stream', () => {
+  it('returns 404 rather than an empty replay for a nonexistent session', async () => {
+    const s = new EventsService({ thesisSession: { findUnique: async () => null } } as never);
+    await expect(s.replay('missing')).rejects.toMatchObject({ status: 404 });
+  });
   it('replays stored events, then live ones, without duplicates', async () => {
     let release!: () => void;
     const gate = new Promise<void>((r) => (release = r));

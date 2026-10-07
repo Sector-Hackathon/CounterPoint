@@ -166,6 +166,7 @@ export interface EvidenceItem {
 
 export const eventsUrl = (id: string) => `${API_URL}/theses/${id}/events`;
 
+export class ApiError extends Error { constructor(message: string, public readonly status: number) { super(message); this.name = 'ApiError'; } }
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     ...init,
@@ -183,7 +184,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       // non-JSON error body; show it as-is
     }
     if (res.status === 401 && !path.startsWith('/auth/')) window.dispatchEvent(new Event('counterpoint.auth-required'));
-    throw new Error(message || `Request failed (${res.status})`);
+    throw new ApiError(message || `Request failed (${res.status})`, res.status);
   }
   return res.json() as Promise<T>;
 }
@@ -196,6 +197,7 @@ export const api = {
   getHistory: (page: number, query: string, filter: string, signal?: AbortSignal) => request<HistoryPage>(`/theses?${new URLSearchParams({ page: String(page), query, filter })}`, { signal }),
   createThesis: (thesis: string) => request<{ id: string; status?: string }>('/theses', { method: 'POST', body: JSON.stringify({ thesis }) }),
   getSession: (id: string) => request<SessionView>(`/theses/${id}`),
+  getSessionStatus: (id: string) => request<{ status: string; error: string | null; finalReportId: string | null; revision: string }>(`/theses/${id}/status`),
   getEventSnapshot: (id: string) => request<SessionEvent[]>(`/theses/${id}/event-snapshot`),
   confirmEntity: (id: string, entityId: string, ticker: string) =>
     request<SessionView>(`/theses/${id}/entities/${entityId}/confirm`, { method: 'POST', body: JSON.stringify({ ticker }) }),

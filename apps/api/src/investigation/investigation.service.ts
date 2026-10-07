@@ -85,11 +85,7 @@ export class InvestigationService {
                 expectationHeld: t.expectationHeld,
                 outcome: t.outcome,
               };
-            if (t.action.startsWith('get_')) {
-              await this.prisma.executionTrace.update({ where: { id: t.id }, data });
-            } else {
-              await this.prisma.executionTrace.create({ data });
-            }
+            await this.prisma.executionTrace.upsert({ where: { id: t.id }, create: data, update: data });
             this.events.publish(sessionId, stepEvent(t, items, claim.contractId));
           },
         });
@@ -125,6 +121,7 @@ export class InvestigationService {
       this.logger.log(JSON.stringify({ event: 'session_completed', sessionId, ms: Date.now() - started }));
     } catch (err) {
       this.logger.error(`investigation failed for ${sessionId}: ${(err as Error).stack}`);
+      await this.prisma.executionTrace.updateMany({ where: { claim: { sessionId }, resultStatus: 'RUNNING' }, data: { resultStatus: 'ERROR', stopReason: 'ERROR', finishedAt: new Date() } }).catch((cleanupError: Error) => this.logger.error(`trace cleanup failed: ${cleanupError.message}`));
       await this.prisma.thesisSession.update({
         where: { id: sessionId },
         data: { status: 'FAILED', error: (err as Error).message },

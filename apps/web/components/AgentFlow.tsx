@@ -1,30 +1,41 @@
 'use client';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, Check, Circle, CircleAlert, GitBranch, LoaderCircle, Minus, Plus, Search, X } from 'lucide-react';
 import { buildAgentFlow, NODE_STATUS_LABEL, type AgentNode, type NodeStatus } from '@/lib/agent-flow';
 import type { SessionState } from '@/lib/session-state';
 import { formatValue, metricLabel, stepHeadline } from '@/lib/format';
 import { useLanguage } from './LanguageProvider';
 import { Status } from './Status';
+import { stopReasonLabel } from '@/lib/display-copy';
+import type { ConnectionStatus } from '@/lib/use-session-events';
 
 const ICONS: Record<NodeStatus, typeof Circle> = {
   waiting: Circle, running: LoaderCircle, done: Check, warning: CircleAlert,
   failed: X, skipped: Minus, interrupted: CircleAlert,
 };
 
-export function AgentFlow({ state, connection }: { state: SessionState; connection: 'live' | 'polling' | 'closed' }) {
+export function AgentFlow({ state, connection }: { state: SessionState; connection: ConnectionStatus }) {
   const { language, t } = useLanguage();
   const flow = useMemo(() => buildAgentFlow(state), [state]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
   const detailRef = useRef<HTMLElement>(null);
   const nodeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const selectedClaim = useRef<string | undefined>(undefined);
   const selected = flow.nodes.find((node) => node.id === selectedId);
   const label = (node: AgentNode) => node.step ? node.step.question ?? stepHeadline(node.step, language) : t(node.title);
   const select = (node: AgentNode) => {
+    selectedClaim.current = node.claimId;
     setSelectedId(node.id);
     requestAnimationFrame(() => detailRef.current?.focus());
   };
+  useEffect(() => {
+    if (!selectedId || flow.nodes.some((node) => node.id === selectedId)) return;
+    const replacement = flow.nodes.find((node) => node.claimId && node.claimId === selectedClaim.current);
+    setSelectedId(replacement?.id ?? null);
+    requestAnimationFrame(() => replacement ? detailRef.current?.focus() : canvasRef.current?.focus());
+  }, [selectedId, flow]);
   const renderNode = (node: AgentNode) => {
     const Icon = ICONS[node.status];
     return <button key={node.id} type="button" className="agent-node" data-status={node.status} aria-pressed={selectedId === node.id} onClick={(event) => { nodeButtonRef.current = event.currentTarget; select(node); }}>
@@ -44,9 +55,9 @@ export function AgentFlow({ state, connection }: { state: SessionState; connecti
         <button className="quiet" disabled={zoom >= 1.5} aria-label={t('Perbesar diagram')} onClick={() => setZoom((z) => Math.min(1.5, z + .25))}><Plus size={16} aria-hidden="true" /></button>
       </div>
     </header>
-    <p className="flow-connection small" role="status">{t(connection === 'polling' ? 'Mode polling: diagram mengikuti snapshot terbaru, bukan koneksi langsung.' : connection === 'closed' ? 'Sesi berakhir. Diagram menunjukkan langkah yang tercatat.' : 'Terhubung langsung ke event pemeriksaan.')}</p>
+    <p className="flow-connection small" role="status">{t(connection === 'polling' ? 'Mode polling: diagram mengikuti snapshot terbaru, bukan koneksi langsung.' : connection === 'closed' ? 'Sesi berakhir. Diagram menunjukkan langkah yang tercatat.' : connection === 'connecting' ? 'Menghubungkan ke event pemeriksaan…' : connection === 'reconnecting' ? 'Menghubungkan ulang ke event pemeriksaan…' : connection === 'error' ? 'Koneksi pemeriksaan terhenti. Muat ulang halaman untuk mencoba lagi.' : 'Terhubung langsung ke event pemeriksaan.')}</p>
     <div className="flow-workspace">
-      <div className="flow-canvas" tabIndex={0} role="region" aria-label={t('Diagram proses agent, geser untuk melihat semua node')}>
+      <div className="flow-canvas" ref={canvasRef} tabIndex={0} role="region" aria-label={t('Diagram proses agent, geser untuk melihat semua node')}>
         <div className="flow-canvas-content" style={{ zoom }}>
           <div className="flow-stage"><span className="eyebrow">{t('Persiapan')}</span>{renderNode(flow.preparation)}</div>
           <div className="flow-stage-arrow" aria-hidden="true">↓</div>
@@ -60,13 +71,13 @@ export function AgentFlow({ state, connection }: { state: SessionState; connecti
         </div>
       </div>
       {selected ? <aside className="flow-inspector" ref={detailRef} tabIndex={-1} aria-labelledby="node-detail-title">
-        <header><span className="eyebrow">{t('Detail node')}</span><button className="quiet" aria-label={t('Tutup detail node')} onClick={() => { setSelectedId(null); nodeButtonRef.current?.focus(); }}><X size={16} aria-hidden="true" /></button></header>
+        <header><span className="eyebrow">{t('Detail node')}</span><button className="quiet" aria-label={t('Tutup detail node')} onClick={() => { setSelectedId(null); if (nodeButtonRef.current?.isConnected) nodeButtonRef.current.focus(); else canvasRef.current?.focus(); }}><X size={16} aria-hidden="true" /></button></header>
         <h3 id="node-detail-title">{label(selected)}</h3>
         <span className="node-status" data-status={selected.status}>{t(NODE_STATUS_LABEL[selected.status])}</span>
         <h4>{t('Alasan pemeriksaan')}</h4><p>{selected.step ? selected.description : t(selected.description)}</p>
         {selected.step?.rule && <><h4>{t('Aturan penilaian')}</h4><p>{selected.step.rule}</p></>}
         {selected.step?.effect && <><h4>{t('Hasil pemeriksaan')}</h4><p>{selected.step.effect}</p></>}
-        {selected.step?.stopReason && <p className="small muted">{t('Alasan berhenti')}: {t(selected.step.stopReason)}</p>}
+        {selected.step?.stopReason && <p className="small muted">{t('Alasan berhenti')}: {stopReasonLabel(selected.step.stopReason, language)}</p>}
         {selected.step?.startedAt && <p className="small muted">{t('Mulai')}: {new Date(selected.step.startedAt).toLocaleTimeString(language === 'id' ? 'id-ID' : 'en-GB')}{selected.step.finishedAt && <> · {t('Durasi')}: {Math.max(0, (Date.parse(selected.step.finishedAt) - Date.parse(selected.step.startedAt)) / 1000).toFixed(1)} s</>}</p>}
         {!!selected.step?.evidence.length && <><h4>{t('Data yang digunakan')}</h4><ul className="flow-evidence">{selected.step.evidence.map((item) => <li key={item.id}><strong>{metricLabel(item.metric, language)}</strong><span className="tabular">{formatValue(item.value, item.unit)}</span><span className="small muted">{[item.economicPeriod, item.comparisonPeriod].filter(Boolean).join(' / ')}</span>{item.note && <span className="small muted">{item.note}</span>}</li>)}</ul></>}
         {!!selected.step?.opened.length && <><h4>{t('Pertanyaan lanjutan')}</h4><ul>{selected.step.opened.map((question) => <li key={question}>{question}</li>)}</ul></>}

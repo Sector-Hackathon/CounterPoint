@@ -97,4 +97,7 @@ export class ThesisController {
   trace(@Param('id', ParseUUIDPipe) id: string) {
     return this.theses.trace(id);
   }
+
+  @Get(':id/status')
+  status(@Param('id', ParseUUIDPipe) id: string) { return this.theses.status(id); }
 }

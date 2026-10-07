@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Observable, Subject } from 'rxjs';
 import type { Assessment, Coverage } from '@counterpoint/domain';
 import { PrismaService } from '../prisma/prisma.service';
@@ -69,7 +69,7 @@ export class EventsService {
         claims: { orderBy: { ordinal: 'asc' }, include: { trace: { orderBy: { sequence: 'asc' } }, evidence: true } },
       },
     });
-    if (!session) return [];
+    if (!session) throw new NotFoundException('session not found');
     const out: SessionEvent[] = [];
     if (session.claims.length) {
       out.push(claimsEvent(session.rawThesis, session.claims.map((row) => claimSeed(toClaim(row), row.ordinal))));

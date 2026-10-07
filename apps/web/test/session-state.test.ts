@@ -15,6 +15,27 @@ const step = (seq: number, action: string, extra: Partial<Extract<SessionEvent, 
 });
 
 describe('session reducer', () => {
+  it('replaces running with final at the same sequence without duplicating a step', () => {
+    let s = reduce(initialState, claims);
+    s = reduce(s, step(0, 'get_quarterly_financials', { id: 'trace:0:started', resultStatus: 'RUNNING' }));
+    s = reduce(s, step(0, 'get_quarterly_financials'));
+    s = reduce(s, step(0, 'get_quarterly_financials'));
+    expect(s.claims[0]!.steps).toHaveLength(1);
+    expect(s.claims[0]!.steps[0]!.resultStatus).toBe('OK');
+  });
+  it('does not regress a final step when a buffered start arrives later', () => {
+    let s = reduce(initialState, step(0, 'get_quarterly_financials'));
+    s = reduce(s, step(0, 'get_quarterly_financials', { id: 'trace:0:started', resultStatus: 'RUNNING' }));
+    s = reduce(s, claims);
+    expect(s.claims[0]!.steps).toHaveLength(1);
+    expect(s.claims[0]!.steps[0]!.resultStatus).toBe('OK');
+  });
+  it('keeps equal sequence numbers on different claims independent', () => {
+    let s = reduce(initialState, claims);
+    s = reduce(s, step(0, 'PLAN'));
+    s = reduce(s, step(0, 'STOP', { claimId: 'c2', id: 'trace:c2:0' }));
+    expect(s.claims.map((c) => c.steps.length)).toEqual([1, 1]);
+  });
   it('keeps claims without a span', () => {
     const s = reduce(initialState, claims);
     expect(s.claims).toHaveLength(2);

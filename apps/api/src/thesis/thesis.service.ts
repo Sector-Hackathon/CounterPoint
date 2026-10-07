@@ -50,6 +50,15 @@ export class ThesisService {
     return { total, page: input.page, pageSize: 12, items: rows.map((row) => ({ id: row.id, text: row.rawThesis, createdAt: row.createdAt.toISOString(), status: row.status, reportId: row.finalReportId, tickers: [...new Set(row.entities.flatMap((entity) => entity.ticker ? [entity.ticker] : []))] })) };
   }
 
+  async status(id: string) {
+    const session = await this.prisma.thesisSession.findUnique({ where: { id }, select: {
+      status: true, error: true, finalReportId: true, updatedAt: true,
+      claims: { orderBy: { ordinal: 'asc' }, select: { id: true, assessment: true, _count: { select: { trace: true } }, trace: { orderBy: { sequence: 'desc' }, take: 1, select: { id: true, resultStatus: true, finishedAt: true } } } },
+    } });
+    if (!session) throw new NotFoundException('session not found');
+    return { status: session.status, error: session.error, finalReportId: session.finalReportId, revision: JSON.stringify([session.updatedAt, session.claims]) };
+  }
+
   /** Entity resolution + claim decomposition. Pauses for confirmation instead of guessing. */
   private async analyze(sessionId: string, thesis: string) {
     try {

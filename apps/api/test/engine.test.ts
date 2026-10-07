@@ -35,6 +35,15 @@ const toolPath = (r: Awaited<ReturnType<typeof run>>) =>
   r.trace.filter((t) => !['EVALUATE'].includes(t.action)).map((t) => t.action);
 
 describe('investigation engine', () => {
+  it('awaits the running trace before retrieval and finalizes the same id and sequence', async () => {
+    const starts = new Map<string, { sequence: number }>();
+    const finished = new Set<string>();
+    const result = await investigateClaim(claim({}), { source, planner: new DeterministicPlanner(), newId: randomUUID,
+      onTraceStart: async (entry) => { expect(entry.resultStatus).toBe('RUNNING'); expect(entry.finishedAt).toBeNull(); starts.set(entry.id, entry); },
+      onTrace: async (entry) => { if (entry.action.startsWith('get_')) { expect(starts.get(entry.id)?.sequence).toBe(entry.sequence); expect(entry.resultStatus).not.toBe('RUNNING'); expect(entry.finishedAt).not.toBeNull(); finished.add(entry.id); } },
+    });
+    expect(starts.size).toBeGreaterThan(0); expect(finished.size).toBe(starts.size); expect(result.assessment).toBe('PARTIALLY_SUPPORTED');
+  });
   it('follows a contradiction-driven branch for diverging revenue/earnings (BBRI)', async () => {
     const r = await run(claim({}));
     expect(toolPath(r)).toContain('REPLAN');
