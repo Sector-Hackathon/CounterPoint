@@ -13,6 +13,10 @@ import { UsageLimiter } from './thesis/usage-limiter';
 import { EvidenceController } from './evidence/evidence.controller';
 import { EventsModule } from './events/events.module';
 import { AuthModule } from './auth/auth.module';
+import { IntegrationsController } from './telegram/integrations.controller';
+import { TelegramBot } from './telegram/telegram.bot';
+import { LinkCodeService } from './telegram/link-codes';
+import { TelegramLinkService } from './telegram/telegram-links';
 
 @Controller()
 class HealthController {
@@ -34,7 +38,7 @@ class HealthController {
 
 @Module({
   imports: [PrismaModule, SectorsModule, EventsModule, AuthModule],
-  controllers: [HealthController, ThesisController, EvidenceController],
-  providers: [LlmService, ClaimsService, EntityService, ReportsService, InvestigationService, ThesisService, UsageLimiter],
+  controllers: [HealthController, ThesisController, EvidenceController, IntegrationsController],
+  providers: [LlmService, ClaimsService, EntityService, ReportsService, InvestigationService, ThesisService, UsageLimiter, LinkCodeService, TelegramLinkService, TelegramBot],
 })
 export class AppModule {}
