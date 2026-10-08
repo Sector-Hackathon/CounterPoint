@@ -42,10 +42,15 @@ describe('landing page copy', () => {
     expect(html).toContain('XYZ dan semua angka di sini adalah ilustrasi');
     // The product checks company data only; the mockup's news and analyst sources would overclaim.
     expect(html).not.toMatch(/Berita Media|Analisis Independen/);
+    // Section 2: peers are compared by median, and evidence comes from Sectors data, not annual reports.
+    expect(html).not.toMatch(/rata-rata sektor|Annual Report|Peer comparison/);
+    // Section 3's report uses illustrative figures, so it must not present itself as live Sectors data.
+    expect(html).toContain('Contoh laporan, angka ilustrasi');
+    expect(html).not.toContain('Data dari Sectors API');
   });
 
   it('links every section the header navigation points to', () => {
     const html = renderToStaticMarkup(createElement(LandingPage));
-    for (const id of ['why-counterpoint', 'how-it-works', 'faq']) expect(html).toContain(`id="${id}"`);
+    for (const id of ['how-it-works', 'reading-results', 'faq']) expect(html).toContain(`id="${id}"`);
   });
 });

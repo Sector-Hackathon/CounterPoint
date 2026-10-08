@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { AlertCircle, Check, LoaderCircle, LogOut, Menu, Monitor, Moon, PanelLeftClose, Search, SquarePen, Sun, X } from 'lucide-react';
+import { AlertCircle, Check, House, LoaderCircle, LogOut, Menu, Monitor, Moon, PanelLeftClose, Search, SquarePen, Sun, X } from 'lucide-react';
 import { api, type HistoryEntry } from '@/lib/api';
 import { GROUP_LABEL, groupByDate } from '@/lib/history-groups';
 import { useAuth } from './AuthProvider';
@@ -32,7 +32,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <a className="skip-link" href="#main-content">{t('Langsung ke konten')}</a>
       <div className="shell-topbar">
         <button type="button" className="icon-button" aria-label={t('Buka menu')} aria-expanded={open} onClick={() => setOpen(true)}><Menu size={20} aria-hidden="true" /></button>
-        <Link href="/check" className="shell-brand" aria-label="Counterpoint"><Image className="brand-logo" src="/brand/counterpoint-logo-concept.png" alt="Counterpoint" width={2172} height={724} priority /></Link>
+        <Link href="/" className="shell-brand" aria-label={t('Beranda Counterpoint')}><Image className="brand-logo" src="/brand/counterpoint-logo-concept.png" alt="Counterpoint" width={2172} height={724} priority /></Link>
         <Link href="/check" className="icon-button" aria-label={t('Pemeriksaan baru')}><SquarePen size={19} aria-hidden="true" /></Link>
       </div>
       {open && <div className="shell-scrim" onClick={() => setOpen(false)} aria-hidden="true" />}
@@ -81,7 +81,7 @@ function Sidebar({ open, onClose, onCollapse }: { open: boolean; onClose: () => 
   return (
     <nav className="sidebar" data-open={open} aria-label={t('Riwayat pemeriksaan')}>
       <div className="sidebar-top">
-        <Link href="/check" className="sidebar-brand" aria-label="Counterpoint"><Image className="brand-logo" src="/brand/counterpoint-logo-concept.png" alt="Counterpoint" width={2172} height={724} priority /></Link>
+        <Link href="/" className="sidebar-brand" aria-label={t('Beranda Counterpoint')}><Image className="brand-logo" src="/brand/counterpoint-logo-concept.png" alt="Counterpoint" width={2172} height={724} priority /></Link>
         <button type="button" className="icon-button sidebar-close" aria-label={t('Tutup menu')} onClick={onClose}><X size={19} aria-hidden="true" /></button>
         <button type="button" className="icon-button sidebar-collapse" aria-label={t('Sembunyikan riwayat')} onClick={onCollapse}><PanelLeftClose size={19} aria-hidden="true" /></button>
       </div>
@@ -114,6 +114,8 @@ function Sidebar({ open, onClose, onCollapse }: { open: boolean; onClose: () => 
         ))}
         {entries && entries.length > 0 && <Link href="/history" className="sidebar-all">{t('Lihat semua riwayat')}</Link>}
       </div>
+      {/* The logo also leads home, but a labelled link makes the way back obvious. */}
+      <Link href="/" className="sidebar-home"><House size={17} aria-hidden="true" />{t('Kembali ke beranda')}</Link>
       <AccountMenu />
     </nav>
   );
