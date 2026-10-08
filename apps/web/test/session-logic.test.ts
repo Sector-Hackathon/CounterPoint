@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isVisibleStep, pollToEvents, shouldFallBack, streamSilent, wrapFocus } from '../lib/session-logic';
+import { isVisibleStep, pollToEvents, shouldFallBack, streamSilent, streamsLiveEvents, wrapFocus } from '../lib/session-logic';
 
 describe('SSE fallback (final review Important 1)', () => {
   it('falls back immediately when the browser has closed the stream', () => {
@@ -20,6 +20,18 @@ describe('silent stream', () => {
   it('keeps waiting briefly, and keeps a stream that has delivered events', () => {
     expect(streamSilent(0, 1000)).toBe(false);
     expect(streamSilent(2, 60_000)).toBe(false);
+  });
+});
+
+describe('streamsLiveEvents', () => {
+  // Vercel's /api rewrite passes the stream on in 16 KB blocks, so the last events of a check
+  // (assessment, report, final status) can wait forever. Behind the proxy the page polls.
+  it('polls when the API is reached through the same-site /api proxy', () => {
+    expect(streamsLiveEvents('/api')).toBe(false);
+  });
+  it('streams when the page talks to the API directly', () => {
+    expect(streamsLiveEvents('http://localhost:4000')).toBe(true);
+    expect(streamsLiveEvents('https://counterpoint-api.onrender.com')).toBe(true);
   });
 });
 

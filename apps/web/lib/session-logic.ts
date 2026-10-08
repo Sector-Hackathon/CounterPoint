@@ -9,6 +9,15 @@ export function shouldFallBack(readyState: number, errors: number): boolean {
   return readyState === CLOSED || errors >= 3;
 }
 
+/**
+ * Whether to use the live event stream. Through the same-site /api proxy (NEXT_PUBLIC_API_URL=/api
+ * on Vercel) the stream arrives in 16 KB blocks, so a check's last events can be held back
+ * indefinitely; the page polls instead.
+ */
+export function streamsLiveEvents(apiUrl: string): boolean {
+  return !apiUrl.startsWith('/');
+}
+
 /** How long an open stream may stay silent. The API replays stored events at once, so silence means a buffering proxy. */
 export const SILENT_STREAM_MS = 4000;
 
