@@ -32,6 +32,16 @@ Deploy the API first: the web app needs the API's public URL at build time.
 3. Under **Environment Variables**, add `NEXT_PUBLIC_API_URL` = `https://<api-domain>` from Railway. Never put secret keys in Vercel variables for this app: anything prefixed `NEXT_PUBLIC_` is visible to every visitor.
 4. Deploy, then copy the production URL into Railway's `WEB_ORIGIN` (Railway redeploys automatically).
 
+## Telegram bot (optional)
+
+1. In Telegram, open @BotFather, send `/newbot` and pick a name and a username ending in `bot`. Keep the token secret.
+2. On the Railway API service, add `TELEGRAM_BOT_TOKEN` (the production bot's token) and `PUBLIC_WEB_URL` (the Vercel URL, used for links in bot messages).
+3. Keep exactly **one replica**. The bot uses long polling, and Telegram allows only one poller per token; during a redeploy the old and new instance overlap briefly, which the API logs and retries.
+4. Use a **different bot** for local development. Running the same token locally and on Railway makes the two fight over updates.
+5. Check: the API log says `Telegram bot @<name> is polling`, and the website's **Integrasi** page shows **Hubungkan Telegram**.
+
+Without `TELEGRAM_BOT_TOKEN` the bot stays off and the Integrations page shows "Belum tersedia".
+
 ## 3. Smoke test
 
 1. Open the Vercel URL, click **Use example**, then **Verify thesis**.

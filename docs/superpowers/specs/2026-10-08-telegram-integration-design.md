@@ -86,7 +86,7 @@ Errors: an expired or used code → "Kode kedaluwarsa atau sudah dipakai. Buat k
   - `AWAITING_CONFIRMATION` → for each ambiguous entity, send "Yang kamu maksud <mention>?" with up to 4 candidate-ticker buttons. A tap calls `ThesisService.confirmEntity`.
   - `report.ready`, or a final status (`COMPLETED`, `PARTIAL`) → load the latest report and send the scoreboard.
   - `FAILED` → "Pemeriksaan terhenti: <reason>" with the website link.
-  - A watch is dropped after `SESSION_DEADLINE_MS` + 2 minutes, with a "cek hasilnya di website" message.
+  - A watch is dropped after 15 minutes (ticker confirmation waits on the user), with a "cek hasilnya di website" message.
 - **Scoreboard:**
 
   ```
