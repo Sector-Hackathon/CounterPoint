@@ -26,9 +26,9 @@ export class ThesisService {
     this.events.publish(sessionId, statusEvent(status, error));
   }
 
-  async create(rawThesis: string, userId?: string) {
+  async create(rawThesis: string, userId?: string, origin: { source?: 'web' | 'telegram'; telegramChatId?: string } = {}) {
     const session = await this.prisma.thesisSession.create({
-      data: { rawThesis, status: 'CREATED', dataMode: this.dataMode, userId },
+      data: { rawThesis, status: 'CREATED', dataMode: this.dataMode, userId, source: origin.source ?? 'web', telegramChatId: origin.telegramChatId ?? null },
     });
     void this.analyze(session.id, rawThesis);
     return session;
@@ -44,10 +44,10 @@ export class ThesisService {
     if (input.filter === 'active') where.status = { notIn: ['COMPLETED', 'PARTIAL', 'FAILED'] };
     if (input.filter === 'failed') where.status = 'FAILED';
     const [rows, total] = await Promise.all([
-      this.prisma.thesisSession.findMany({ where, skip: (input.page - 1) * 12, take: 12, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], select: { id: true, rawThesis: true, createdAt: true, status: true, finalReportId: true, entities: { select: { ticker: true } } } }),
+      this.prisma.thesisSession.findMany({ where, skip: (input.page - 1) * 12, take: 12, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], select: { id: true, rawThesis: true, createdAt: true, status: true, source: true, finalReportId: true, entities: { select: { ticker: true } } } }),
       this.prisma.thesisSession.count({ where }),
     ]);
-    return { total, page: input.page, pageSize: 12, items: rows.map((row) => ({ id: row.id, text: row.rawThesis, createdAt: row.createdAt.toISOString(), status: row.status, reportId: row.finalReportId, tickers: [...new Set(row.entities.flatMap((entity) => entity.ticker ? [entity.ticker] : []))] })) };
+    return { total, page: input.page, pageSize: 12, items: rows.map((row) => ({ id: row.id, text: row.rawThesis, createdAt: row.createdAt.toISOString(), status: row.status, source: row.source, reportId: row.finalReportId, tickers: [...new Set(row.entities.flatMap((entity) => entity.ticker ? [entity.ticker] : []))] })) };
   }
 
   async status(id: string) {

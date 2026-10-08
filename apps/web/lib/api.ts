@@ -209,5 +209,5 @@ export const api = {
 };
 
 export interface PublicUser { id: string; name: string; email: string }
-export interface HistoryEntry { id: string; text: string; createdAt: string; status: string; reportId: string | null; tickers: string[] }
+export interface HistoryEntry { id: string; text: string; createdAt: string; status: string; reportId: string | null; tickers: string[]; source?: string }
 export interface HistoryPage { items: HistoryEntry[]; total: number; page: number; pageSize: number }
