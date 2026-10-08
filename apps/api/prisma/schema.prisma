@@ -8,13 +8,15 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
+  id           String          @id @default(uuid())
+  email        String          @unique
   name         String
   passwordHash String
-  createdAt    DateTime @default(now())
+  createdAt    DateTime        @default(now())
   sessions     AuthSession[]
   theses       ThesisSession[]
+  telegramLink TelegramLink?
+  linkCodes    LinkCode[]
 }
 
 model AuthSession {
@@ -30,21 +32,25 @@ model AuthSession {
 }
 
 model ThesisSession {
-  id            String   @id @default(uuid())
-  rawThesis     String
-  status        String
-  dataMode      String
-  error         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  finalReportId String?
-  userId        String?
-  user          User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  id             String   @id @default(uuid())
+  rawThesis      String
+  status         String
+  dataMode       String
+  error          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  finalReportId  String?
+  userId         String?
+  source         String   @default("web")
+  telegramChatId String?
+  user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   entities Entity[]
   claims   Claim[]
   reports  Report[]
+
   @@index([userId, createdAt])
+  @@index([source, status])
 }
 
 model Entity {
@@ -117,17 +123,17 @@ model EvidenceItem {
 }
 
 model ExecutionTrace {
-  id           String    @id @default(uuid())
-  claimId      String
-  sequence     Int
-  action       String
-  reason       String
-  startedAt    DateTime
-  finishedAt   DateTime?
-  evidenceIds  String[]
-  resultStatus String
-  stopReason   String?
-  planner      String?
+  id              String    @id @default(uuid())
+  claimId         String
+  sequence        Int
+  action          String
+  reason          String
+  startedAt       DateTime
+  finishedAt      DateTime?
+  evidenceIds     String[]
+  resultStatus    String
+  stopReason      String?
+  planner         String?
   checkId         String?
   expectation     String?
   expectationHeld Boolean?
@@ -151,4 +157,26 @@ model Report {
   session ThesisSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   @@index([sessionId])
+}
+
+model TelegramLink {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  telegramUserId String   @unique
+  chatId         String
+  username       String?
+  linkedAt       DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model LinkCode {
+  id        String    @id @default(uuid())
+  codeHash  String    @unique
+  userId    String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
