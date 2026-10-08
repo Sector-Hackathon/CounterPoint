@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { AlertCircle, Check, LoaderCircle, LogOut, Menu, Monitor, Moon, PanelLeftClose, Search, SquarePen, Sun, X } from 'lucide-react';
+import { AlertCircle, Check, LoaderCircle, LogOut, Menu, Monitor, Moon, PanelLeftClose, Plug, Search, Send, SquarePen, Sun, X } from 'lucide-react';
 import { api, type HistoryEntry } from '@/lib/api';
 import { GROUP_LABEL, groupByDate } from '@/lib/history-groups';
 import { useAuth } from './AuthProvider';
@@ -104,6 +104,7 @@ function Sidebar({ open, onClose, onCollapse }: { open: boolean; onClose: () => 
                   <Link href={`/t/${e.id}`} className="sidebar-item" aria-current={e.id === currentId ? 'page' : undefined} title={e.text}>
                     {e.tickers[0] && <span className="sidebar-ticker">{e.tickers[0]}</span>}
                     <span className="sidebar-text">{e.text}</span>
+                    {e.source === 'telegram' && <Send size={13} className="sidebar-mark" aria-label={t('Dari Telegram')} />}
                     {ACTIVE.has(e.status) && <LoaderCircle size={14} className="spin sidebar-mark" aria-label={t('Sedang diperiksa')} />}
                     {e.status === 'FAILED' && <AlertCircle size={14} className="sidebar-mark" aria-label={t('Terhenti')} />}
                   </Link>
@@ -113,6 +114,7 @@ function Sidebar({ open, onClose, onCollapse }: { open: boolean; onClose: () => 
           </section>
         ))}
         {entries && entries.length > 0 && <Link href="/history" className="sidebar-all">{t('Lihat semua riwayat')}</Link>}
+        <Link href="/integrations" className="sidebar-integrations" aria-current={pathname === '/integrations' ? 'page' : undefined}><Plug size={15} aria-hidden="true" />{t('Integrasi')}</Link>
       </div>
       <AccountMenu />
     </nav>
@@ -150,6 +152,7 @@ function AccountMenu() {
       {open && (
         <div className="account-menu" role="group" aria-label={t('Pengaturan akun')}>
           <p className="account-email" title={user.email}>{user.email}</p>
+          <Link href="/integrations" className="account-link" onClick={() => setOpen(false)}><Plug size={15} aria-hidden="true" />{t('Integrasi')}</Link>
           <span className="account-label">{t('Tema tampilan')}</span>
           <div className="segmented">
             {themes.map(({ value, label, Icon }) => (

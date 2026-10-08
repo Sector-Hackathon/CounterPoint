@@ -214,3 +214,24 @@
 .shell-main .page-heading p { font-size: .95rem; }
 .shell-main .history-card h2 { font-size: .95rem; font-weight: 500; }
 .shell-main .sheet { box-shadow: none; }
+
+/* Integrations */
+.sidebar-integrations { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; padding: 8px 10px; border-radius: 8px; font-size: .8rem; color: var(--quiet); text-decoration: none; }
+.sidebar-integrations:hover, .sidebar-integrations[aria-current="page"] { background: var(--hover); color: var(--ink); }
+.account-link { display: flex; align-items: center; gap: 8px; padding: 8px 6px; border-radius: 8px; color: var(--ink); text-decoration: none; font-size: .875rem; }
+.account-link:hover { background: var(--hover); }
+.history-source { display: inline-flex; align-items: center; gap: 4px; font-size: .75rem; color: var(--quiet); }
+.integrations-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); margin-top: 24px; }
+.integration-card { display: flex; flex-direction: column; gap: 16px; padding: 20px; }
+.integration-card.is-soon { opacity: .7; }
+.integration-head { display: flex; gap: 12px; align-items: flex-start; }
+.integration-head h2 { margin: 0 0 4px; font-size: 1.05rem; }
+.integration-head p { margin: 0; }
+.integration-icon { display: grid; place-items: center; width: 40px; height: 40px; flex: none; border-radius: 10px; background: var(--hover); color: var(--ink); }
+.integration-row { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.integration-row p { margin: 0; }
+.integration-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.integration-waiting { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.integration-waiting p { margin: 0 0 8px; }
+.integration-qr { border-radius: 8px; background: #fff; padding: 6px; }
+.integrations-page .button { align-self: flex-start; }

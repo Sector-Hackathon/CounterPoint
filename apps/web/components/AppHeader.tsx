@@ -5,6 +5,7 @@ import { ArrowRight, History, Plus, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { LanguageSwitcher, useLanguage } from './LanguageProvider';
+import { isWorkspacePath } from '@/lib/routes';
 import { ThemeSwitcher } from './ThemeProvider';
 import { useAuth } from './AuthProvider';
 
@@ -17,7 +18,7 @@ export function AppHeader() {
   const isLanding = pathname === '/';
   const isAuth = pathname === '/sign-in' || pathname === '/sign-up';
   // Signed-in workspace screens use the sidebar shell instead of this header.
-  const inWorkspace = pathname === '/check' || pathname === '/history' || pathname.startsWith('/t/');
+  const inWorkspace = isWorkspacePath(pathname);
   async function logout() {
     setBusy(true); setError('');
     try { await signOut(); } catch { setError(t('Keluar gagal. Coba lagi.')); }
