@@ -2,7 +2,7 @@
 import { useEffect, useReducer, useState } from 'react';
 import { api, ApiError, eventsUrl, type SessionEvent } from './api';
 import { initialState, reduce } from './session-state';
-import { permanentSessionError, shouldFallBack } from './session-logic';
+import { permanentSessionError, shouldFallBack, SILENT_STREAM_MS, streamSilent } from './session-logic';
 
 const TERMINAL = new Set(['COMPLETED', 'PARTIAL', 'FAILED']);
 export type ConnectionStatus = 'connecting' | 'reconnecting' | 'live' | 'polling' | 'closed' | 'error';
@@ -10,7 +10,8 @@ export type ConnectionStatus = 'connecting' | 'reconnecting' | 'live' | 'polling
 /**
  * Subscribes to the session's SSE stream. The server replays stored events first, so a
  * reload or reconnect rebuilds the same state. Falls back to polling the session endpoint
- * (status and report id) when the browser closes the stream or after repeated errors.
+ * (status and report id) when the browser closes the stream, after repeated errors, or when the
+ * stream stays silent (a proxy that buffers it).
  */
 export function useSessionEvents(id: string) {
   const [state, dispatch] = useReducer(reduce, initialState);
@@ -24,11 +25,14 @@ export function useSessionEvents(id: string) {
     let disposed = false;
     let polling = false;
     let revision: string | null = null;
+    let received = 0;
+    const startedAt = Date.now();
     const es = new EventSource(eventsUrl(id), { withCredentials: true });
     es.onopen = () => { if (!disposed) { errors = 0; setConnection('live'); } };
     es.onmessage = (m) => {
       if (disposed) return;
       errors = 0;
+      received++;
       const e = JSON.parse(m.data) as SessionEvent;
       dispatch(e);
       if (e.type === 'session.status' && TERMINAL.has(e.status)) {
@@ -40,7 +44,10 @@ export function useSessionEvents(id: string) {
       if (disposed) return;
       setConnection('reconnecting');
       // EventSource retries transient errors itself, but gives up for good on a non-200 reply.
-      if (!shouldFallBack(es.readyState, ++errors)) return;
+      if (shouldFallBack(es.readyState, ++errors)) fallBack();
+    };
+    const silence = setTimeout(() => { if (!disposed && streamSilent(received, Date.now() - startedAt)) fallBack(); }, SILENT_STREAM_MS);
+    function fallBack() {
       if (poll) return;
       es.close();
       setConnection('polling');
@@ -78,9 +85,10 @@ export function useSessionEvents(id: string) {
       };
       poll = setInterval(() => void refresh(), 1500);
       void refresh();
-    };
+    }
     return () => {
       disposed = true;
+      clearTimeout(silence);
       es.close();
       if (poll) clearInterval(poll);
     };

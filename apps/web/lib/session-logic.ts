@@ -9,6 +9,14 @@ export function shouldFallBack(readyState: number, errors: number): boolean {
   return readyState === CLOSED || errors >= 3;
 }
 
+/** How long an open stream may stay silent. The API replays stored events at once, so silence means a buffering proxy. */
+export const SILENT_STREAM_MS = 4000;
+
+/** Fall back to polling when the stream has delivered no event at all after SILENT_STREAM_MS. */
+export function streamSilent(eventsReceived: number, msSinceStart: number): boolean {
+  return eventsReceived === 0 && msSinceStart >= SILENT_STREAM_MS;
+}
+
 /** Events a status poll can vouch for. report.ready comes first so the report link exists before a terminal status. */
 export function pollToEvents(s: { status: string; error: string | null; finalReportId: string | null }): SessionEvent[] {
   const events: SessionEvent[] = [];

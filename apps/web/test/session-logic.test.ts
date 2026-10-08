@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isVisibleStep, pollToEvents, shouldFallBack, wrapFocus } from '../lib/session-logic';
+import { isVisibleStep, pollToEvents, shouldFallBack, streamSilent, wrapFocus } from '../lib/session-logic';
 
 describe('SSE fallback (final review Important 1)', () => {
   it('falls back immediately when the browser has closed the stream', () => {
@@ -8,6 +8,18 @@ describe('SSE fallback (final review Important 1)', () => {
   it('lets EventSource retry a transient error before falling back', () => {
     expect(shouldFallBack(0, 1)).toBe(false);
     expect(shouldFallBack(0, 3)).toBe(true);
+  });
+});
+
+describe('silent stream', () => {
+  // A proxy that buffers the stream (Vercel's /api rewrite) answers 200 and then delivers nothing,
+  // not even the stored events the API replays at once. The page must not wait on it forever.
+  it('falls back when a stream delivered no event within a few seconds', () => {
+    expect(streamSilent(0, 4000)).toBe(true);
+  });
+  it('keeps waiting briefly, and keeps a stream that has delivered events', () => {
+    expect(streamSilent(0, 1000)).toBe(false);
+    expect(streamSilent(2, 60_000)).toBe(false);
   });
 });
 
