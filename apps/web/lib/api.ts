@@ -195,6 +195,9 @@ export const api = {
   signUp: (name: string, email: string, password: string) => request<{ user: PublicUser }>('/auth/sign-up', { method: 'POST', body: JSON.stringify({ name, email, password }) }),
   signOut: () => request<{ ok: boolean }>('/auth/sign-out', { method: 'POST' }),
   getHistory: (page: number, query: string, filter: string, signal?: AbortSignal) => request<HistoryPage>(`/theses?${new URLSearchParams({ page: String(page), query, filter })}`, { signal }),
+  getIntegrations: (signal?: AbortSignal) => request<IntegrationsView>('/integrations', { signal }),
+  linkTelegram: () => request<{ url: string; expiresAt: string }>('/integrations/telegram/link', { method: 'POST' }),
+  unlinkTelegram: () => request<{ ok: boolean }>('/integrations/telegram', { method: 'DELETE' }),
   createThesis: (thesis: string) => request<{ id: string; status?: string }>('/theses', { method: 'POST', body: JSON.stringify({ thesis }) }),
   getSession: (id: string) => request<SessionView>(`/theses/${id}`),
   getSessionStatus: (id: string) => request<{ status: string; error: string | null; finalReportId: string | null; revision: string }>(`/theses/${id}/status`),
@@ -211,3 +214,7 @@ export const api = {
 export interface PublicUser { id: string; name: string; email: string }
 export interface HistoryEntry { id: string; text: string; createdAt: string; status: string; reportId: string | null; tickers: string[]; source?: string }
 export interface HistoryPage { items: HistoryEntry[]; total: number; page: number; pageSize: number }
+export interface IntegrationsView {
+  telegram: { configured: boolean; botUsername: string | null; linked: { username: string | null; linkedAt: string } | null };
+  discord: { configured: boolean };
+}
