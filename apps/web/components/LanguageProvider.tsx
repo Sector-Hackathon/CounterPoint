@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useId, useMemo, useState } from 'react';
 import { LANGUAGE_STORAGE_KEY, parseLanguage, translate, type Language } from '@/lib/locale';
 
 const LanguageContext = createContext({
@@ -33,15 +33,33 @@ export function LanguageProvider({ children, initialLanguage }: { children: Reac
 
 export const useLanguage = () => useContext(LanguageContext);
 
+function FlagIndonesia() {
+  return <svg viewBox="0 0 3 2" preserveAspectRatio="xMidYMid slice"><rect width="3" height="1" fill="#ce1126" /><rect y="1" width="3" height="1" fill="#fff" /></svg>;
+}
+
+function FlagUnitedKingdom() {
+  const clip = useId();
+  return <svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice">
+    <clipPath id={clip}><path d="M30 15h30v15zv15H0zH0V0zV0h30z" /></clipPath>
+    <rect width="60" height="30" fill="#012169" />
+    <path d="M0 0l60 30m0-30L0 30" stroke="#fff" strokeWidth="6" />
+    <path d="M0 0l60 30m0-30L0 30" clipPath={`url(#${clip})`} stroke="#c8102e" strokeWidth="4" />
+    <path d="M30 0v30M0 15h60" stroke="#fff" strokeWidth="10" />
+    <path d="M30 0v30M0 15h60" stroke="#c8102e" strokeWidth="6" />
+  </svg>;
+}
+
+const LANGUAGE_FLAGS = [
+  { value: 'id', label: 'Bahasa Indonesia', Flag: FlagIndonesia },
+  { value: 'en', label: 'English', Flag: FlagUnitedKingdom },
+] as const;
+
+/** The display language as two flags; the pressed one is the language in use. */
 export function LanguageSwitcher() {
   const { language, setLanguage, t } = useLanguage();
-  return <div className="language-control">
-    <label>
-      <span className="visually-hidden">{t('Bahasa tampilan')}</span>
-      <select value={language} onChange={(e) => setLanguage(parseLanguage(e.target.value))}>
-        <option value="id" aria-label="Bahasa Indonesia">ID</option>
-        <option value="en" aria-label="English">EN</option>
-      </select>
-    </label>
+  return <div className="language-flags" role="group" aria-label={t('Bahasa tampilan')}>
+    {LANGUAGE_FLAGS.map(({ value, label, Flag }) => <button key={value} type="button" lang={value} aria-pressed={language === value} aria-label={label} title={label} onClick={() => setLanguage(value)}>
+      <span className="language-flag" aria-hidden="true"><Flag /></span>
+    </button>)}
   </div>;
 }

@@ -57,7 +57,9 @@
 .sidebar-brand, .shell-brand { position: relative; display: block; width: 138px; height: 28px; overflow: hidden; }
 .sidebar-close { display: none; }
 .sidebar-new { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: var(--ink); text-decoration: none; font-size: .9rem; font-weight: 500; }
-.sidebar-new:hover, .sidebar-item:hover, .sidebar-all:hover { background: var(--hover); }
+.sidebar-new:hover, .sidebar-item:hover, .sidebar-all:hover, .sidebar-home:hover { background: var(--hover); }
+.sidebar-home { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: var(--ink-2); text-decoration: none; font-size: .875rem; font-weight: 500; }
+.sidebar-home:hover { color: var(--ink); }
 .sidebar-new[aria-current='page'] { background: var(--active); }
 .sidebar-search { display: flex; align-items: center; gap: 8px; margin: 2px 0 8px; padding: 8px 10px; border-radius: 8px; color: var(--quiet); background: var(--hover); }
 .sidebar-search:focus-within { outline: 2px solid var(--focus); outline-offset: 1px; }
