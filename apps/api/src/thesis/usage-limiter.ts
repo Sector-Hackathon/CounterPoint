@@ -2,8 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 /**
- * Protects paid Sectors/LLM credits on a public deployment: a per-IP hourly limit (in memory,
- * per instance) and a global daily cap on new theses (counted in the database, survives restarts).
+ * Protects paid Sectors/LLM credits on a public deployment: an hourly limit per key (a signed-in
+ * user or a Telegram account; in memory, per instance) and a global daily cap on new theses (counted in the database, survives restarts).
  */
 @Injectable()
 export class UsageLimiter {
@@ -13,9 +13,9 @@ export class UsageLimiter {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  async check(ip: string): Promise<void> {
+  async check(key: string): Promise<void> {
     const now = Date.now();
-    const recent = (this.hits.get(ip) ?? []).filter((t) => now - t < 3_600_000);
+    const recent = (this.hits.get(key) ?? []).filter((t) => now - t < 3_600_000);
     if (recent.length >= this.perHour) {
       throw new HttpException(
         `Rate limit reached: at most ${this.perHour} theses per hour. Please try again later.`,
@@ -31,6 +31,6 @@ export class UsageLimiter {
     }
 
     recent.push(now);
-    this.hits.set(ip, recent);
+    this.hits.set(key, recent);
   }
 }

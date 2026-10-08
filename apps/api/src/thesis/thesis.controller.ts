@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, HttpCode, Ip, type MessageEvent, NotFoundException, Param, ParseUUIDPipe, Post, Query, Req, Sse, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpCode, type MessageEvent, NotFoundException, Param, ParseUUIDPipe, Post, Query, Req, Sse, UseGuards } from '@nestjs/common';
 import { AuthGuard, ThesisOwnerGuard } from '../auth/auth.guard';
 import type { AuthRequest } from '../auth/auth.service';
 import type { Observable } from 'rxjs';
@@ -36,18 +36,18 @@ export class ThesisController {
   ) {}
 
   @Post()
-  async create(@Body() body: unknown, @Ip() ip: string, @Req() request: AuthRequest) {
+  async create(@Body() body: unknown, @Req() request: AuthRequest) {
     const { thesis } = parse(CreateThesis, body);
-    await this.limiter.check(ip);
+    await this.limiter.check(`user:${request.user.id}`);
     const session = await this.theses.create(thesis, request.user.id);
     return { id: session.id, status: session.status };
   }
 
   /** Transcribes a screenshot of a post. Not persisted; the user confirms the text before checking it. */
   @Post('extract-text')
-  async extractText(@Body() body: unknown, @Ip() ip: string) {
+  async extractText(@Body() body: unknown, @Req() request: AuthRequest) {
     const { imageBase64, mimeType } = parse(ExtractTextBody, body);
-    await this.limiter.check(ip);
+    await this.limiter.check(`user:${request.user.id}`);
     return { text: await this.llm.readImageText(imageBase64, mimeType) };
   }
 

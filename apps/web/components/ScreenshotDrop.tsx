@@ -3,6 +3,7 @@ import { useLanguage } from '@/components/LanguageProvider';
 import { useImperativeHandle, useRef, useState, type Ref } from 'react';
 import { Upload, LoaderCircle, Check, Paperclip } from 'lucide-react';
 import { api } from '@/lib/api';
+import { imageForUpload } from '@/lib/image-upload';
 
 /** Lets the owner hand over an image from elsewhere, such as a paste into the composer. */
 export interface ScreenshotReader {
@@ -21,19 +22,20 @@ export function ScreenshotDrop({ onText, disabled = false, onBusyChange, variant
     if (disabled || inFlight.current) return;
     setFilename(null);
     if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) return setError('Gunakan screenshot PNG, JPEG, atau WebP.');
-    if (file.size > 4 * 1024 * 1024) return setError('Screenshot melebihi 4 MB. Potong gambar lalu coba lagi.');
     setBusy(true);
     inFlight.current = true;
     onBusyChange?.(true);
     setError(null);
     try {
+      const image = await imageForUpload(file).catch(() => file);
+      if (image.size > 4 * 1024 * 1024) throw new Error('Screenshot melebihi 4 MB. Potong gambar lalu coba lagi.');
       const b64 = await new Promise<string>((res, rej) => {
         const r = new FileReader();
         r.onload = () => res(String(r.result).split(',')[1] ?? '');
         r.onerror = () => rej(new Error('File tidak dapat dibaca.'));
-        r.readAsDataURL(file);
+        r.readAsDataURL(image);
       });
-      const { text } = await api.extractText(b64, file.type);
+      const { text } = await api.extractText(b64, image.type);
       onText(text);
       setFilename(file.name);
     } catch (e) {

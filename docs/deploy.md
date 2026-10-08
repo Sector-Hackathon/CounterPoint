@@ -1,56 +1,72 @@
-# Deploying: Railway (API + Postgres) and Vercel (web)
+# Deploying for free: Neon + Render + Vercel
 
-Deploy the API first: the web app needs the API's public URL at build time.
+| Part | Service | Free plan |
+| --- | --- | --- |
+| Postgres | Neon | Small, enough for this app. Pauses when idle and wakes on the next query. |
+| API and Telegram bot | Render web service (`render.yaml`) | 512 MB, 750 hours a month. Sleeps after 15 minutes without HTTP traffic. |
+| Web | Vercel | Forwards `/api/*` to Render, so the browser only talks to one site. |
+| Keep the API awake | cron-job.org or UptimeRobot | Calls `/health` every 10 minutes. |
 
-## 1. Railway: Postgres and API
+Why the forwarding: with the web on `vercel.app` and the API on `onrender.com`, the login cookie would be a third-party cookie, which Safari (every iPhone) blocks. Through `/api` it is first-party.
 
-1. Go to railway.com → **New Project** → **Deploy from GitHub repo** → choose `Sector-Hackathon/CounterPoint`.
-   - Railway reads `railway.json` at the repo root, which sets the build command, the start command (it runs `prisma db push` first) and the `/health` healthcheck.
-   - Leave **Root Directory** empty (repo root): the API depends on the workspace packages.
-2. In the same project: **New** → **Database** → **PostgreSQL**.
-3. Open the API service → **Variables** and add:
+Order: Neon, then Render, then Vercel, then back to Render for the web URL.
+
+## 1. Neon: the database
+
+1. neon.tech → sign up → **Create project**. Region: **AWS Asia Pacific (Singapore)**.
+2. On the project dashboard click **Connect**, turn **Connection pooling off**, and copy the connection string (`postgresql://…?sslmode=require`). This is `DATABASE_URL`. The pooled string breaks `prisma db push`.
+
+## 2. Render: the API
+
+1. render.com → sign up with GitHub → **New** → **Blueprint** → choose `Sector-Hackathon/CounterPoint`. Render reads `render.yaml` and creates `counterpoint-api` (free plan, Singapore).
+2. It asks for the secret variables:
 
    | Variable | Value |
    | --- | --- |
-   | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (Railway reference variable) |
+   | `DATABASE_URL` | the Neon string from step 1 |
    | `SECTORS_API_KEY` | your Sectors key |
-   | `SECTORS_BASE_URL` | `https://api.sectors.app/v2` |
-   | `LLM_PROVIDER` | `openai` |
    | `OPENAI_API_KEY` | your OpenAI key |
-   | `OPENAI_MODEL` | `gpt-4.1-mini` |
-   | `WEB_ORIGIN` | your Vercel URL from step 2, e.g. `https://counterpoint.vercel.app` (comma-separate several) |
-   | `RATE_LIMIT_PER_HOUR` | `10` |
-   | `DAILY_THESIS_CAP` | `200` |
+   | `WEB_ORIGIN` | for now `https://example.com`; set it in step 4 |
+   | `PUBLIC_WEB_URL` | the same; set it in step 4 |
+   | `TELEGRAM_BOT_TOKEN` | a **production** bot from @BotFather (`/newbot`), not the one in your local `.env`. Leave empty to keep the bot off. |
 
-   Don't set `PORT`: Railway provides it.
-4. **Settings** → **Networking** → **Generate Domain**. Check that `https://<api-domain>/health` returns `"dataMode":"live"` and `"llm":"openai/gpt-4.1-mini"`.
+3. **Apply**. The first build takes a few minutes. When it is live, open `https://<service>.onrender.com/health`: it should return `"dataMode":"live"` and `"llm":"openai/gpt-4.1-mini"`. Note the URL.
 
-## 2. Vercel: web
+Keep the service at one instance (the free plan always is): Telegram allows one poller per bot token.
 
-1. Go to vercel.com → **Add New** → **Project** → import the same repo.
-2. Set **Root Directory** to `apps/web`. The framework (Next.js) and pnpm are detected automatically.
-3. Under **Environment Variables**, add `NEXT_PUBLIC_API_URL` = `https://<api-domain>` from Railway. Never put secret keys in Vercel variables for this app: anything prefixed `NEXT_PUBLIC_` is visible to every visitor.
-4. Deploy, then copy the production URL into Railway's `WEB_ORIGIN` (Railway redeploys automatically).
+## 3. Vercel: the web
 
-## Telegram bot (optional)
+1. vercel.com → sign up with GitHub → **Add New** → **Project** → import the repo.
+2. **Root Directory**: `apps/web`. Next.js and pnpm are detected.
+3. **Environment Variables**:
 
-1. In Telegram, open @BotFather, send `/newbot` and pick a name and a username ending in `bot`. Keep the token secret.
-2. On the Railway API service, add `TELEGRAM_BOT_TOKEN` (the production bot's token) and `PUBLIC_WEB_URL` (the Vercel URL, used for links in bot messages).
-3. Keep exactly **one replica**. The bot uses long polling, and Telegram allows only one poller per token; during a redeploy the old and new instance overlap briefly, which the API logs and retries.
-4. Use a **different bot** for local development. Running the same token locally and on Railway makes the two fight over updates.
-5. Check: the API log says `Telegram bot @<name> is polling`, and the website's **Integrasi** page shows **Hubungkan Telegram**.
+   | Variable | Value |
+   | --- | --- |
+   | `NEXT_PUBLIC_API_URL` | `/api` |
+   | `API_PROXY_TARGET` | `https://<service>.onrender.com` (no trailing slash) |
 
-Without `TELEGRAM_BOT_TOKEN` the bot stays off and the Integrations page shows "Belum tersedia".
+   Never put secret keys here. Both are read at build time, so redeploy after changing them.
+4. **Deploy** and copy the production URL, e.g. `https://counterpoint.vercel.app`.
 
-## 3. Smoke test
+## 4. Render again: the web URL
 
-1. Open the Vercel URL, click **Use example**, then **Verify thesis**.
-2. Confirm the claims appear, then click **Investigate evidence** and watch the trace fill in.
-3. Open the evidence report and expand **Evidence provenance**. Locators should start with `sectors:`, not `fixture:`.
+In the Render service → **Environment**, set `WEB_ORIGIN` and `PUBLIC_WEB_URL` to the Vercel URL, then **Save, rebuild and deploy**. `WEB_ORIGIN` is checked on every sign-in and check, so a wrong value shows "Origin tidak diizinkan".
+
+## 5. Keep the API awake
+
+At cron-job.org (or UptimeRobot), create a job that opens `https://<service>.onrender.com/health` every **10 minutes**. Without it, Render puts the API to sleep after 15 quiet minutes and the Telegram bot stops answering. One service running all month uses about 744 of the 750 free hours.
+
+## 6. Smoke test
+
+1. Open the Vercel URL, sign up, and check a message such as "BBCA laba naik 10% tahun ini." The steps should appear live, then the result.
+2. Paste a screenshot into the box: its text should appear for editing.
+3. With a bot token set: the Render log shows `Telegram bot @<name> is polling`. On **Integrasi**, connect Telegram and send the bot a message.
 
 ## Operating notes
 
-- **Cost guard**: each thesis makes roughly 5–20 Sectors calls and a handful of LLM calls. The per-IP hourly limit and the global daily cap return HTTP 429 with a readable message. Raise them for judging if needed.
+- **Cold start**: after a deploy, or if the pinger misses, the first request waits up to a minute while Render wakes the API.
+- **Cost guard**: each check makes roughly 5 to 20 Sectors calls and a few LLM calls. Each signed-in account (and each Telegram account) may start `RATE_LIMIT_PER_HOUR` checks an hour, and `DAILY_THESIS_CAP` caps all checks per day. Both return HTTP 429 with a readable message.
+- **Screenshots** are shrunk in the browser before upload, because Vercel limits a forwarded request body to about 4.5 MB.
 - **Schema changes**: the start command runs `prisma db push`, which refuses destructive changes. Handle those manually.
-- **Background jobs** run inside the API process. If you redeploy mid-investigation, that session stays in `INVESTIGATING`; resubmit the thesis.
-- **Freeze**: the PRD requires the app to stay frozen after submission. Turn off auto-deploys on both platforms once you submit.
+- **Background jobs** run inside the API process. A check that is running during a redeploy stays unfinished; send it again.
+- **Freeze**: once you submit, turn off auto-deploy on Render (**Settings** → **Auto-Deploy**) and Vercel.
