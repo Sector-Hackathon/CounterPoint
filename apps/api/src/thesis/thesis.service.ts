@@ -63,7 +63,7 @@ export class ThesisService {
   private async analyze(sessionId: string, thesis: string) {
     try {
       const { extraction, extractor } = await this.claims.extract(thesis);
-      const resolved = await this.entities.resolveAll(thesis, extraction.entities.map((e) => e.mention));
+      const resolved = await this.entities.resolveAll(thesis, extraction.entities);
       const primary = resolved.find((r) => r.ticker);
 
       await this.prisma.entity.createMany({
