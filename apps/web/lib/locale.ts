@@ -359,7 +359,7 @@ const english: Record<string, string> = {
   'Teks dari screenshot siap diedit.': 'Text from the screenshot is ready to edit.',
   'Tempel pesan saham. Counterpoint memeriksa setiap klaim dengan data Sectors dan mencari bukti yang melemahkannya.': 'Paste a stock thesis. Counterpoint checks every claim against Sectors data and looks for the evidence against it.',
   'Tempel pesan saham yang ingin kamu periksa…': 'Paste the stock thesis you want to check…',
-  'Enter untuk memeriksa · Shift+Enter untuk baris baru · Sertakan nama saham dan alasannya.': 'Enter to check · Shift+Enter for a new line · Include the stock and the reasons.',
+  'Enter untuk memeriksa · Shift+Enter untuk baris baru · Tempel teks atau screenshot berisi nama saham dan alasannya.': 'Enter to check · Shift+Enter for a new line · Paste text or a screenshot with the stock and the reasons.',
   'Contoh pesan': 'Example theses',
   'Lihat hasil': 'View results',
   'Halo': 'Hi',

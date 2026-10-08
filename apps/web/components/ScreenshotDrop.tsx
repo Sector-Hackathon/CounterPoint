@@ -1,15 +1,21 @@
 'use client';
 import { useLanguage } from '@/components/LanguageProvider';
-import { useRef, useState } from 'react';
+import { useImperativeHandle, useRef, useState, type Ref } from 'react';
 import { Upload, LoaderCircle, Check, Paperclip } from 'lucide-react';
 import { api } from '@/lib/api';
 
-export function ScreenshotDrop({ onText, disabled = false, onBusyChange, variant = 'zone' }: { onText: (text: string) => void; disabled?: boolean; onBusyChange?: (busy: boolean) => void; variant?: 'zone' | 'icon' }) {
+/** Lets the owner hand over an image from elsewhere, such as a paste into the composer. */
+export interface ScreenshotReader {
+  read: (file: File) => void;
+}
+
+export function ScreenshotDrop({ onText, disabled = false, onBusyChange, variant = 'zone', ref }: { onText: (text: string) => void; disabled?: boolean; onBusyChange?: (busy: boolean) => void; variant?: 'zone' | 'icon'; ref?: Ref<ScreenshotReader> }) {
   const { t } = useLanguage();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [filename, setFilename] = useState<string | null>(null);
   const inFlight = useRef(false);
+  useImperativeHandle(ref, () => ({ read: (file) => void read(file) }));
 
   async function read(file: File) {
     if (disabled || inFlight.current) return;

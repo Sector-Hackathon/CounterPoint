@@ -4,14 +4,15 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowUp, LoaderCircle } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useLanguage } from './LanguageProvider';
-import { ScreenshotDrop } from './ScreenshotDrop';
+import { pastedImage } from '@/lib/pasted-image';
+import { ScreenshotDrop, type ScreenshotReader } from './ScreenshotDrop';
 
 const MIN = 10;
 const MAX = 2000;
 
 /**
  * The thesis input: grows with its text, Enter checks, Shift+Enter adds a line, the paperclip
- * reads a screenshot into the box for the user to edit first. Used on the start screen and at
+ * (or a pasted image) reads a screenshot into the box for the user to edit first. Used on the start screen and at
  * the foot of a check.
  */
 export function Composer({ prefill, compact = false, autoFocus = false }: {
@@ -26,6 +27,7 @@ export function Composer({ prefill, compact = false, autoFocus = false }: {
   const [readingImage, setReadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const screenshot = useRef<ScreenshotReader>(null);
 
   useEffect(() => {
     if (!prefill) return;
@@ -76,12 +78,16 @@ export function Composer({ prefill, compact = false, autoFocus = false }: {
           placeholder={t(compact ? 'Periksa pesan saham lain…' : 'Tempel pesan saham yang ingin kamu periksa…')}
           aria-describedby={hintId}
           onChange={(e) => setThesis(e.target.value)}
+          onPaste={(e) => {
+            const image = pastedImage(e.clipboardData);
+            if (image) { e.preventDefault(); screenshot.current?.read(image); }
+          }}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); void submit(); }
           }}
         />
         <div className="composer-bar">
-          <ScreenshotDrop variant="icon" disabled={busy} onBusyChange={setReadingImage} onText={(text) => { setThesis(text); setError(null); inputRef.current?.focus(); }} />
+          <ScreenshotDrop ref={screenshot} variant="icon" disabled={busy} onBusyChange={setReadingImage} onText={(text) => { setThesis(text); setError(null); inputRef.current?.focus(); }} />
           <span className="tabular">{thesis.length > 0 ? `${thesis.length}/${MAX}` : ''}</span>
           <button type="submit" className="composer-send" disabled={blocked || tooShort || tooLong} aria-label={t('Cek klaim')} title={t('Cek klaim')}>
             {busy ? <LoaderCircle size={18} className="spin" aria-hidden="true" /> : <ArrowUp size={18} aria-hidden="true" />}
@@ -90,7 +96,7 @@ export function Composer({ prefill, compact = false, autoFocus = false }: {
       </form>
       <div className="composer-status">
         <p id={hintId} className="small muted" style={{ margin: 0 }}>
-          {t(tooLong ? 'Pesan melebihi 2000 karakter. Ringkas teks sebelum memeriksa.' : 'Enter untuk memeriksa · Shift+Enter untuk baris baru · Sertakan nama saham dan alasannya.')}
+          {t(tooLong ? 'Pesan melebihi 2000 karakter. Ringkas teks sebelum memeriksa.' : 'Enter untuk memeriksa · Shift+Enter untuk baris baru · Tempel teks atau screenshot berisi nama saham dan alasannya.')}
         </p>
         {error && <p className="notice" role="alert">{error}</p>}
       </div>
