@@ -14,7 +14,8 @@ export class RateLimitedError extends Error {
 export interface Checks {
   /** Applies the usage limit and creates the check; throws RateLimitedError when over the limit. Returns the session id. */
   start(text: string, userId: string, chatId: string, limiterKey: string): Promise<string>;
-  readImage(base64: string, mimeType: string): Promise<string>;
+  /** Applies the usage limit (throws RateLimitedError), then transcribes the screenshot. */
+  readImage(base64: string, mimeType: string, limiterKey: string): Promise<string>;
   recent(userId: string): Promise<{ id: string; text: string; status: string }[]>;
 }
 
@@ -84,8 +85,9 @@ export class TelegramConversation {
     let text = '';
     try {
       const photo = await this.deps.port.downloadPhoto(fileId);
-      text = (await this.deps.checks.readImage(photo.base64, photo.mimeType)).trim().slice(0, 2000);
+      text = (await this.deps.checks.readImage(photo.base64, photo.mimeType, `tg:${from.telegramUserId}`)).trim().slice(0, 2000);
     } catch (err) {
+      if (err instanceof RateLimitedError) return this.send(from.chatId, COPY.rateLimited);
       this.logger.warn(`screenshot read failed: ${(err as Error).message}`);
     }
     if (text.length < 10) return this.send(from.chatId, COPY.imageFailed);

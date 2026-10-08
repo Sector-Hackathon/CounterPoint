@@ -7,20 +7,27 @@ import type { UsageLimiter } from '../thesis/usage-limiter';
 import { RateLimitedError, type Checks } from './conversation';
 import type { PendingEntity, WatchedSessions } from './check-watcher';
 
+async function limit(limiter: UsageLimiter, key: string): Promise<void> {
+  try {
+    await limiter.check(key);
+  } catch (err) {
+    if (err instanceof HttpException && err.getStatus() === 429) throw new RateLimitedError();
+    throw err;
+  }
+}
+
 /** Adapts the existing services to what the conversation needs. */
 export function telegramChecks(theses: ThesisService, llm: LlmService, limiter: UsageLimiter): Checks {
   return {
     async start(text, userId, chatId, limiterKey) {
-      try {
-        await limiter.check(limiterKey);
-      } catch (err) {
-        if (err instanceof HttpException && err.getStatus() === 429) throw new RateLimitedError();
-        throw err;
-      }
+      await limit(limiter, limiterKey);
       const session = await theses.create(text, userId, { source: 'telegram', telegramChatId: chatId });
       return session.id;
     },
-    readImage: (base64, mimeType) => llm.readImageText(base64, mimeType),
+    async readImage(base64, mimeType, limiterKey) {
+      await limit(limiter, limiterKey);
+      return llm.readImageText(base64, mimeType);
+    },
     async recent(userId) {
       const page = await theses.history(userId, { page: 1, query: '', filter: 'all' });
       return page.items.slice(0, 5).map((item) => ({ id: item.id, text: item.text, status: item.status }));

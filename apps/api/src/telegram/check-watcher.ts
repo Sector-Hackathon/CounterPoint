@@ -56,11 +56,15 @@ export class CheckWatcher {
     const [, promptId, index] = data.split(':');
     const prompt = promptId ? this.prompts.get(promptId) : undefined;
     const ticker = prompt?.tickers[Number(index)];
-    if (!prompt || prompt.chatId !== chatId || !ticker) {
+    if (promptId) this.prompts.delete(promptId);
+    // A stale button (company already picked on the website, or check finished) must not reset the check.
+    const stillPending = prompt && prompt.chatId === chatId && ticker
+      ? (await this.deps.sessions.ambiguous(prompt.sessionId)).some((e) => e.id === prompt.entityId)
+      : false;
+    if (!prompt || !ticker || !stillPending) {
       await this.deps.port.send(chatId, COPY.choiceExpired);
       return;
     }
-    this.prompts.delete(promptId!);
     await this.deps.sessions.confirm(prompt.sessionId, prompt.entityId, ticker);
     await this.deps.port.send(chatId, COPY.chosen(ticker));
     this.watch(prompt.sessionId, chatId);
@@ -80,7 +84,7 @@ export class CheckWatcher {
 
   private async onEvent(watch: Watch, event: SessionEvent): Promise<void> {
     if (watch.done) return;
-    if (event.type === 'report.ready') return this.finish(watch, 'ok');
+    // report.ready is published before the final status row is written, so the scoreboard waits for the status.
     if (event.type !== 'session.status') return;
     if (event.status === 'CLAIMS_EXTRACTED') {
       await this.deps.sessions.startInvestigation(watch.sessionId);
@@ -88,7 +92,7 @@ export class CheckWatcher {
       watch.prompted = true;
       await this.askTicker(watch);
     } else if (FINAL_OK.has(event.status)) {
-      await this.finish(watch, 'ok');
+      await this.finish(watch, 'ok', null, event.status);
     } else if (event.status === 'FAILED') {
       await this.finish(watch, 'failed', event.error);
     }
@@ -109,14 +113,18 @@ export class CheckWatcher {
     }
   }
 
-  private async finish(watch: Watch, outcome: 'ok' | 'failed' | 'timeout' | 'quiet', reason: string | null = null): Promise<void> {
+  private async finish(watch: Watch, outcome: 'ok' | 'failed' | 'timeout' | 'quiet', reason: string | null = null, finalStatus?: string): Promise<void> {
     if (watch.done) return;
     watch.done = true;
     if (watch.timer) clearTimeout(watch.timer);
     watch.sub?.unsubscribe();
     if (this.byChat.get(watch.chatId) === watch) this.byChat.delete(watch.chatId);
+    if (outcome === 'ok' || outcome === 'failed') {
+      for (const [id, prompt] of this.prompts) if (prompt.sessionId === watch.sessionId) this.prompts.delete(id);
+    }
     if (outcome === 'ok') {
-      await this.deps.port.send(watch.chatId, scoreboard(await this.deps.sessions.scoreboard(watch.sessionId)), this.link(watch.sessionId));
+      const board = await this.deps.sessions.scoreboard(watch.sessionId);
+      await this.deps.port.send(watch.chatId, scoreboard({ ...board, status: finalStatus ?? board.status }), this.link(watch.sessionId));
     } else if (outcome === 'failed') {
       await this.deps.port.send(watch.chatId, COPY.failed(reason), this.link(watch.sessionId));
     } else if (outcome === 'timeout') {

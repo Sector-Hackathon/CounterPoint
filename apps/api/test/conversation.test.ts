@@ -5,7 +5,7 @@ import type { Button } from '../src/telegram/bot-copy';
 const me: Sender = { telegramUserId: '42', chatId: '42', username: 'farrel' };
 const CLAIM = 'BBCA growth kuat dan dividennya stabil, layak dikoleksi.';
 
-function setup(opts: { linked?: boolean; busy?: boolean; startError?: Error; imageText?: string } = {}) {
+function setup(opts: { linked?: boolean; busy?: boolean; startError?: Error; imageText?: string; imageError?: Error } = {}) {
   const sent: { text: string; buttons: Button[][] }[] = [];
   let linked = opts.linked ?? true;
   const started: string[] = [];
@@ -21,7 +21,7 @@ function setup(opts: { linked?: boolean; busy?: boolean; startError?: Error; ima
     },
     checks: {
       start: async (text) => { if (opts.startError) throw opts.startError; started.push(text); return 'sess-1'; },
-      readImage: async () => opts.imageText ?? CLAIM,
+      readImage: async () => { if (opts.imageError) throw opts.imageError; return opts.imageText ?? CLAIM; },
       recent: async () => [{ id: 'sess-0', text: 'TLKM dividen tinggi', status: 'COMPLETED' }],
     },
     watcher: { isBusy: () => opts.busy ?? false, watch: (id) => { watched.push(id); }, choose: async (_chat, data) => { chosen.push(data); } },
@@ -134,5 +134,10 @@ describe('TelegramConversation', () => {
     const t = setup();
     await t.convo.onButton(me, 'menu:history');
     expect(t.last().text).toContain('https://counterpoint.app/t/sess-0');
+  });
+  it('rate-limits screenshot reading', async () => {
+    const t = setup({ imageError: new RateLimitedError() });
+    await t.convo.onPhoto(me, 'file-1', 200_000);
+    expect(t.last().text).toContain('Batas pemeriksaan');
   });
 });

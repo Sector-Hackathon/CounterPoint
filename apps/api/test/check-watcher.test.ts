@@ -6,7 +6,8 @@ import type { SessionEvent } from '../src/events/events.types';
 
 const flush = () => new Promise((r) => setTimeout(r, 0));
 
-function setup(opts: { entities?: PendingEntity[]; timeoutMs?: number } = {}) {
+function setup(opts: { entities?: PendingEntity[]; timeoutMs?: number; storedStatus?: string } = {}) {
+  const state = { entities: opts.entities ?? [{ id: 'ent-1', mention: 'BCA', candidates: [{ ticker: 'BBCA', name: 'Bank Central Asia' }, { ticker: 'BACA', name: 'Bank Capital' }] }] as PendingEntity[] };
   const streams = new Map<string, Subject<{ data: SessionEvent }>>();
   const sent: { chatId: string; text: string; buttons: Button[][] }[] = [];
   const started: string[] = [];
@@ -15,10 +16,10 @@ function setup(opts: { entities?: PendingEntity[]; timeoutMs?: number } = {}) {
     port: { send: async (chatId, text, buttons = []) => { sent.push({ chatId, text, buttons }); }, downloadPhoto: async () => { throw new Error('unused'); } },
     events: { stream: (id) => { const s = new Subject<{ data: SessionEvent }>(); streams.set(id, s); return s; } },
     sessions: {
-      ambiguous: async () => opts.entities ?? [{ id: 'ent-1', mention: 'BCA', candidates: [{ ticker: 'BBCA', name: 'Bank Central Asia' }, { ticker: 'BACA', name: 'Bank Capital' }] }],
+      ambiguous: async () => state.entities,
       confirm: async (_id, _entity, ticker) => { confirmed.push(ticker); },
       startInvestigation: async (id) => { started.push(id); return true; },
-      scoreboard: async () => ({ tickers: ['TLKM'], status: 'COMPLETED', claims: [{ text: 'Dividen tinggi', assessment: 'PARTIALLY_SUPPORTED' }] }),
+      scoreboard: async () => ({ tickers: ['TLKM'], status: opts.storedStatus ?? 'COMPLETED', claims: [{ text: 'Dividen tinggi', assessment: 'PARTIALLY_SUPPORTED' }] }),
       unfinishedTelegram: async () => [{ id: 'old', telegramChatId: '7' }],
     },
     webUrl: 'https://counterpoint.app',
@@ -27,7 +28,7 @@ function setup(opts: { entities?: PendingEntity[]; timeoutMs?: number } = {}) {
   const status = (id: string, value: string, error: string | null = null) =>
     streams.get(id)!.next({ data: { id: `status:${value}`, type: 'session.status', status: value, error } });
   const reportReady = (id: string) => streams.get(id)!.next({ data: { id: 'report', type: 'report.ready', reportId: 'r1' } });
-  return { watcher, sent, started, confirmed, status, reportReady, streams };
+  return { watcher, sent, started, confirmed, status, reportReady, streams, state };
 }
 
 describe('CheckWatcher', () => {
@@ -118,5 +119,39 @@ describe('CheckWatcher', () => {
     const t = setup();
     await t.watcher.resume();
     expect(t.watcher.isBusy('7')).toBe(true);
+  });
+  it('ignores a stale ticker button once the company is no longer pending', async () => {
+    const t = setup();
+    t.watcher.watch('s1', '42');
+    t.status('s1', 'AWAITING_CONFIRMATION');
+    await flush();
+    const data = t.sent.at(-1)!.buttons[0]![0]!.data!;
+    t.state.entities = []; // picked on the website meanwhile
+    await t.watcher.choose('42', data);
+    expect(t.confirmed).toEqual([]);
+    expect(t.sent.at(-1)!.text).toContain('tidak berlaku');
+  });
+
+  it('forgets ticker buttons once the check is finished', async () => {
+    const t = setup();
+    t.watcher.watch('s1', '42');
+    t.status('s1', 'AWAITING_CONFIRMATION');
+    await flush();
+    const data = t.sent.at(-1)!.buttons[0]![0]!.data!;
+    t.status('s1', 'COMPLETED');
+    await flush();
+    await t.watcher.choose('42', data);
+    expect(t.confirmed).toEqual([]);
+  });
+
+  it('waits for the final status and labels the scoreboard with it', async () => {
+    const t = setup({ storedStatus: 'INVESTIGATING' }); // report.ready arrives before the status row is written
+    t.watcher.watch('s1', '42');
+    t.reportReady('s1');
+    await flush();
+    expect(t.sent.filter((m) => m.text.includes('Pemeriksaan selesai'))).toHaveLength(0);
+    t.status('s1', 'PARTIAL');
+    await flush();
+    expect(t.sent.at(-1)!.text.startsWith('⚠️ Pemeriksaan selesai sebagian')).toBe(true);
   });
 });
